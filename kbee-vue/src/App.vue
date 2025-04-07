@@ -1,18 +1,19 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <!-- <RouterView />  -->
-  <div class="flex-1">
+  <div class="flex flex-col min-h-screen">
     <Header />
-    <div class="flex flex grow">
-      <Sidebar>
+    <div class="flex flex-1">
+      <Sidebar />
+      <main class="flex-1 p-4 pt-20">
         <RouterView />
-      </Sidebar>
+      </main>
     </div>
   </div>
 </template>
+
 <style scoped></style>
