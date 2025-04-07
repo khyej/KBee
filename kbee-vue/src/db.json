@@ -1,18 +1,17 @@
 {
   "user": {
-    "name": "홍길동",
+    "id": "1",
+    "nickname": "gildong_2",
+    "username": "홍길동",
     "email": "hong@gmail.com",
+    "password": "test",
     "phone": "010-1234-5678",
-    "username": "gildong2"
+    "Set Budget": 100000
   },
   "expenses": [
     {
-<<<<<<< Updated upstream
-      "id": 1,
-=======
-      "id": "101",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "1",
+      "user_id": "1",
       "amount": 12000,
       "category": "식비",
       "payment_method": "카드",
@@ -20,21 +19,8 @@
       "date": "2025-04-01"
     },
     {
-<<<<<<< Updated upstream
-      "id": 3,
-=======
-      "id": "102",
-      "user_id": 1,
-      "amount": 3800,
-      "category": "교통",
-      "payment_method": "카드",
-      "description": "지하철 요금",
-      "date": "2025-04-01"
-    },
-    {
-      "id": "103",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "3",
+      "user_id": "1",
       "amount": 45000,
       "category": "문화생활",
       "payment_method": "현금",
@@ -42,21 +28,8 @@
       "date": "2025-04-02"
     },
     {
-<<<<<<< Updated upstream
-      "id": 5,
-=======
-      "id": "104",
-      "user_id": 1,
-      "amount": 62000,
-      "category": "쇼핑",
-      "payment_method": "카드",
-      "description": "봄 옷 구매",
-      "date": "2025-04-02"
-    },
-    {
-      "id": "105",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "5",
+      "user_id": "1",
       "amount": 23000,
       "category": "식비",
       "payment_method": "카드",
@@ -64,21 +37,8 @@
       "date": "2025-04-03"
     },
     {
-<<<<<<< Updated upstream
-      "id": 7,
-=======
-      "id": "106",
-      "user_id": 1,
-      "amount": 9000,
-      "category": "카페/디저트",
-      "payment_method": "카드",
-      "description": "스타벅스 아이스아메리카노",
-      "date": "2025-04-03"
-    },
-    {
-      "id": "107",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "7",
+      "user_id": "1",
       "amount": 30000,
       "category": "식비",
       "payment_method": "현금",
@@ -86,21 +46,8 @@
       "date": "2025-04-04"
     },
     {
-<<<<<<< Updated upstream
-      "id": 9,
-=======
-      "id": "108",
-      "user_id": 1,
-      "amount": 50000,
-      "category": "의료/건강",
-      "payment_method": "카드",
-      "description": "한의원 침치료",
-      "date": "2025-04-04"
-    },
-    {
-      "id": "109",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "9",
+      "user_id": "1",
       "amount": 150000,
       "category": "주거/공과금",
       "payment_method": "계좌이체",
@@ -108,9 +55,8 @@
       "date": "2025-04-01"
     },
     {
-<<<<<<< Updated upstream
-      "id": 11,
-      "user_id": 1,
+      "id": "11",
+      "user_id": "1",
       "amount": 3800,
       "category": "교통",
       "payment_method": "카드",
@@ -118,8 +64,8 @@
       "date": "2025-04-01"
     },
     {
-      "id": 13,
-      "user_id": 1,
+      "id": "13",
+      "user_id": "1",
       "amount": 62000,
       "category": "쇼핑",
       "payment_method": "카드",
@@ -127,8 +73,8 @@
       "date": "2025-04-02"
     },
     {
-      "id": 15,
-      "user_id": 1,
+      "id": "15",
+      "user_id": "1",
       "amount": 9000,
       "category": "카페/디저트",
       "payment_method": "카드",
@@ -136,8 +82,8 @@
       "date": "2025-04-03"
     },
     {
-      "id": 17,
-      "user_id": 1,
+      "id": "17",
+      "user_id": "1",
       "amount": 50000,
       "category": "의료/건강",
       "payment_method": "카드",
@@ -145,11 +91,8 @@
       "date": "2025-04-04"
     },
     {
-      "id": 19,
-=======
-      "id": "110",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "19",
+      "user_id": "1",
       "amount": 12000,
       "category": "통신비",
       "payment_method": "계좌이체",
@@ -159,100 +102,80 @@
   ],
   "incomes": [
     {
-<<<<<<< Updated upstream
-      "id": 2,
-=======
-      "id": "201",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "2",
+      "user_id": "1",
       "amount": 3000000,
       "category": "급여",
       "description": "3월 급여",
       "date": "2025-03-25"
     },
     {
-<<<<<<< Updated upstream
-      "id": 4,
-=======
-      "id": "202",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "4",
+      "user_id": "1",
       "amount": 150000,
       "category": "용돈",
       "description": "부모님 용돈",
       "date": "2025-04-01"
     },
     {
-<<<<<<< Updated upstream
-      "id": 6,
-=======
-      "id": "203",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "6",
+      "user_id": "1",
       "amount": 50000,
       "category": "기타",
       "description": "중고나라 판매 수익",
       "date": "2025-04-02"
     },
     {
-<<<<<<< Updated upstream
-      "id": 8,
-=======
-      "id": "204",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "8",
+      "user_id": "1",
       "amount": 200000,
       "category": "투자수익",
       "description": "배당금 수익",
       "date": "2025-04-03"
     },
     {
-<<<<<<< Updated upstream
-      "id": 10,
-=======
-      "id": "205",
->>>>>>> Stashed changes
-      "user_id": 1,
+      "id": "10",
+      "user_id": "1",
       "amount": 100000,
       "category": "상금",
       "description": "해커톤 수상",
       "date": "2025-04-04"
     },
     {
-      "id": 12,
-      "user_id": 1,
+      "id": "12",
+      "user_id": "1",
       "amount": 0,
       "category": "기타",
       "description": "보너스 없음",
       "date": "2025-04-05"
     },
     {
-      "id": 14,
-      "user_id": 1,
+      "id": "14",
+      "user_id": "1",
       "amount": 1000000,
       "category": "기타",
       "description": "수수료 환급",
       "date": "2025-04-06"
     },
     {
-      "id": 16,
-      "user_id": 1,
+      "id": "16",
+      "user_id": "1",
       "amount": 20000,
       "category": "이자",
       "description": "예금 이자",
       "date": "2025-04-06"
     },
     {
-      "id": 18,
-      "user_id": 1,
+      "id": "18",
+      "user_id": "1",
       "amount": 80000,
       "category": "프리랜서",
       "description": "알바 수익",
       "date": "2025-04-06"
     },
     {
-      "id": 20,
-      "user_id": 1,
+      "id": "20",
+      "user_id": "1",
       "amount": 150000,
       "category": "상여",
       "description": "성과급",
