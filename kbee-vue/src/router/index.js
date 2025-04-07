@@ -1,24 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import HomeView from '../views/HomeView.vue';
+// import HomeView from '../views/HomeView.vue';
 import StatsView from '../views/StatsView.vue';
-import HistoryView from '../views/HistoryView.vue';
-import LoginView from '../views/LoginView.vue';
-import Logout from '../components/Logout.vue';
-import MypageView from '@/views/MypageView.vue';
+// import HistoryView from '../views/HistoryView.vue';
+// import MypageView from '@/views/MypageView.vue';
 
 const routes = [
-  { path: '/', component: HomeView },
-  { path: '/stats', component: StatsView },
-  { path: '/history', component: HistoryView },
-  { path: '/login', component: LoginView },
-  { path: '/logout', component: Logout },
-  { path: '/mypage', component: MypageView },
+    { path: '/', component: StatsView },
+    { path: '/calender', component: () => import('../views/HomeView.vue') },
+    { path: '/history', component: () => import('../views/HistoryView.vue') },
+    { path: '/mypage', component: () => import('../views/MypageView.vue') },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 });
 
 export default router;
