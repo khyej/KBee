@@ -13,56 +13,41 @@ import { RouterLink, RouterView } from 'vue-router';
             to="/logout"
             class="flex items-center p-2 text-base font-normal text-black rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             aria-current="page"
-            >Logout</RouterLink
+            >대시 보드</RouterLink
           >
         </li>
         <li class="flex items-center">
           <span class="w-2 h-11 bg-gray-700 mr-3"></span>
           <RouterLink
-            to="/income"
+            to="/home"
             class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >Income</RouterLink
-          >
+            >달력
+          </RouterLink>
         </li>
-        <li class="flex items-center">
-          <span class="w-2 h-11 bg-gray-700 mr-3"></span>
-          <RouterLink
-            to="/expense"
-            class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >Expense</RouterLink
-          >
-        </li>
+
         <li class="flex items-center">
           <span class="w-2 h-11 bg-gray-700 mr-3"></span>
           <RouterLink
             to="/stats"
             class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >Stats</RouterLink
-          >
+            >Stats
+          </RouterLink>
         </li>
         <li class="flex items-center">
           <span class="w-2 h-11 bg-gray-700 mr-3"></span>
           <RouterLink
             to="/history"
             class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >History</RouterLink
-          >
+            >목록
+          </RouterLink>
         </li>
         <li class="flex items-center">
           <span class="w-2 h-11 bg-gray-700 mr-3"></span>
           <RouterLink
             to="/login"
             class="text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >Login</RouterLink
-          >
-        </li>
-        <li class="flex items-center">
-          <span class="w-2 h-11 bg-gray-700 mr-3"></span>
-          <RouterLink
-            to="/"
-            class="text-black dark:text-whitehover:bg-gray-100 dark:hover:bg-gray-700"
-            >Home</RouterLink
-          >
+            >Login
+          </RouterLink>
         </li>
         <li class="flex items-center">
           <span class="w-2 h-11 bg-gray-700 mr-3"></span>

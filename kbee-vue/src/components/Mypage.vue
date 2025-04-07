@@ -8,28 +8,96 @@
         <tbody>
           <tr>
             <th>닉네임</th>
-            <td>gildong_2</td>
+            <td>
+              <input
+                v-if="editMode"
+                v-model="form.username"
+                class="border p-1 w-full"
+              />
+              <span v-else>{{ user.username }}</span>
+            </td>
           </tr>
           <tr>
             <th>이름</th>
-            <td>홍길동</td>
+            <td>
+              <input
+                v-if="editMode"
+                v-model="form.name"
+                class="border p-1 w-full"
+              />
+              <span v-else>{{ user.name }}</span>
+            </td>
           </tr>
           <tr>
             <th>이메일</th>
-            <td>hong@gmail.com</td>
+            <td>
+              <input
+                v-if="editMode"
+                v-model="form.email"
+                class="border p-1 w-full"
+              />
+              <span v-else>{{ user.email }}</span>
+            </td>
           </tr>
           <tr>
             <th>연락처</th>
-            <td>010-1234-5678</td>
+            <td>
+              <input
+                v-if="editMode"
+                v-model="form.phone"
+                class="border p-1 w-full"
+              />
+              <span v-else>{{ user.phone }}</span>
+            </td>
           </tr>
         </tbody>
       </table>
       <div class="btn-wrapper">
-        <button class="edit-button">수정</button>
+        <button
+          @click="toggleEdit"
+          class="px-4 py-2 bg-yellow-400 text-white rounded"
+        >
+          {{ editMode ? '저장' : '수정' }}
+        </button>
       </div>
     </div>
   </main>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const userId = 1; // 현재 로그인된 유저 ID (고정)
+const user = ref({});
+const form = ref({});
+const editMode = ref(false);
+
+const fetchUser = async () => {
+  const res = await axios.get(`http://localhost:3001/user`);
+  user.value = res.data;
+  form.value = {
+    username: res.data.username,
+    name: res.data.name || '',
+    email: res.data.email || '',
+    phone: res.data.phone || '',
+  };
+};
+
+const toggleEdit = async () => {
+  if (editMode.value) {
+    // 저장
+    await axios.put(`http://localhost:3001/user`, {
+      ...user.value,
+      ...form.value,
+    });
+    await fetchUser();
+  }
+  editMode.value = !editMode.value;
+};
+
+onMounted(fetchUser);
+</script>
 
 <style scoped>
 @font-face {

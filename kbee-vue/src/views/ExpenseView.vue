@@ -1,9 +1,9 @@
 <script setup>
-import Expense from '../components/Expense.vue'
+import Income from '../components/Expense.vue'
 </script>
 
 <template>
     <main>
-        <Expense />
+        <Income />
     </main>
 </template>
