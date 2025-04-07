@@ -8,6 +8,7 @@
       <RouterLink to="/history">History</RouterLink>
       <RouterLink to="/login">Login</RouterLink>
       <RouterLink to="/logout">Logout</RouterLink>
+      <RouterLink to="/mypage">Mypage</RouterLink>
     </nav>
   </header>
 
