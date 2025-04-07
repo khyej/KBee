@@ -62,6 +62,13 @@ import Sidebar from './Sidebar.vue';
             >
           </li>
           <li>
+            <RouterLink
+              to="/mypage"
+              class="text-gray-900 dark:text-white hover:underline"
+              >Mypage</RouterLink
+            >
+          </li>
+          <li>
             여기는 로그인 유무에 따라 v-if 사용해서 로그인 로그아웃 처리할거임
           </li>
         </ul>

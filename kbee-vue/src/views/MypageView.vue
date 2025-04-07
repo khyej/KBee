@@ -1,9 +1,9 @@
 <script setup>
-import UserProfile from '../components/UserProfile.vue'
+import Mypage from '../components/Mypage.vue';
 </script>
 
 <template>
-    <main>
-        <UserProfile />
-    </main>
+  <main>
+    <Mypage />
+  </main>
 </template>
