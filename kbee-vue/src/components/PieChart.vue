@@ -45,13 +45,14 @@ onMounted(async () => {
     console.log('✅ data:', data);
 
     const backgroundColors = [
-      '#f87171',
-      '#60a5fa',
-      '#facc15',
-      '#34d399',
-      '#a78bfa',
-      '#fbbf24',
-      '#818cf8',
+      '#FCA5A5', // 연한 빨강 (식비 등)
+      '#60A5FA', // 중간 파랑 (주거·공과금)
+      '#6EE7B7', // 연한 초록 (교통 등)
+      '#FCD34D', // 연한 노랑 (쇼핑 등)
+      '#A5B4FC', // 연한 보라 (문화생활 등)
+      '#FB7185', // 진한 핑크 (카페·디저트)
+      '#67E8F9', // 연한 청록
+      '#BEF264', // 연한 라임그린
     ];
 
     chartData.value = {

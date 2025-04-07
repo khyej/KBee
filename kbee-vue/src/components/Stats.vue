@@ -24,12 +24,21 @@
         </div>
         <br />
         <!--막대-->
-        <div class="bar bg-white rounded-xl shadow p-4 w-full">
+        <div class="bar bg-white rounded-xl shadow p-4">
           <h2 class="text-center font-semibold mb-2">막대 그래프</h2>
           <BarChart />
         </div>
+      </div>
+
+      <!-- 그래프 영역: 오른쪽 -->
+      <!-- 파이 그래프 -->
+      <div class="flex flex-col gap-10">
+        <div class="bg-white rounded-xl shadow p-4 w-full">
+          <h2 class="text-center font-semibold mb-2">월별 지출</h2>
+          <PieChart />
+        </div>
         <!-- 지출 TOP 5 -->
-        <div class="w-1/3 pl-6 border-l">
+        <div class="pl-6 border-l">
           <h2 class="text-lg font-semibold mb-2">지출 TOP 5</h2>
           <ul class="text-sm space-y-1">
             <li
@@ -42,18 +51,10 @@
                 >{{ item.amount.toLocaleString() }}원</span
               >
             </li>
+            <br />
           </ul>
         </div>
       </div>
-
-      <!-- 그래프 영역: 오른쪽 -->
-      <!-- 파이 그래프 -->
-      <div class="bg-white rounded-xl shadow p-4 w-full">
-        <h2 class="text-center font-semibold mb-2">파이 그래프</h2>
-        <PieChart />
-      </div>
-      <br />
-      <!-- 막대 그래프 -->
     </div>
   </div>
 </template>
@@ -82,8 +83,4 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
-div {
-  width: 400px;
-}
-</style>
+<style scoped></style>
