@@ -3,7 +3,9 @@ import { RouterLink, RouterView } from 'vue-router';
 import Sidebar from './Sidebar.vue';
 </script>
 <template>
-  <header class="bg-gray-800 text-white p-4 fixed top-0 w-full shadow-md">
+  <header
+    class="bg-white dark:bg-gray-800 text-black dark:text-white p-4 fixed top-0 w-full shadow-md border-3 border-[#FFBC00]"
+  >
     <div class="max-w-screen-xl px-4 py-3 mx-auto">
       <div class="flex items-center">
         <ul
