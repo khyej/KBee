@@ -11,17 +11,21 @@
             <td>
               <input
                 v-if="editMode"
-                v-model="form.username"
+                v-model="form.nickname"
                 class="input-field"
               />
-              <span v-else>{{ userStore.user?.username }}</span>
+              <span v-else>{{ userStore.user?.nickname }}</span>
             </td>
           </tr>
           <tr>
             <th>이름</th>
             <td>
-              <input v-if="editMode" v-model="form.name" class="input-field" />
-              <span v-else>{{ userStore.user?.name }}</span>
+              <input
+                v-if="editMode"
+                v-model="form.username"
+                class="input-field"
+              />
+              <span v-else>{{ userStore.user?.username }}</span>
             </td>
           </tr>
           <tr>
