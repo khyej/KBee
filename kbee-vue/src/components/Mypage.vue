@@ -2,7 +2,7 @@
   <main class="main">
     <div class="card">
       <div class="icon-box">
-        <i class="fa-solid fa-circle-user user-icon"></i>
+        <i class="user-icon fa-solid fa-circle-user"></i>
       </div>
       <table class="info-table">
         <tbody>
@@ -12,51 +12,36 @@
               <input
                 v-if="editMode"
                 v-model="form.username"
-                class="border p-1 w-full"
+                class="input-field"
               />
-              <span v-else>{{ user.username }}</span>
+              <span v-else>{{ userStore.user?.username }}</span>
             </td>
           </tr>
           <tr>
             <th>이름</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.name"
-                class="border p-1 w-full"
-              />
-              <span v-else>{{ user.name }}</span>
+              <input v-if="editMode" v-model="form.name" class="input-field" />
+              <span v-else>{{ userStore.user?.name }}</span>
             </td>
           </tr>
           <tr>
             <th>이메일</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.email"
-                class="border p-1 w-full"
-              />
-              <span v-else>{{ user.email }}</span>
+              <input v-if="editMode" v-model="form.email" class="input-field" />
+              <span v-else>{{ userStore.user?.email }}</span>
             </td>
           </tr>
           <tr>
             <th>연락처</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.phone"
-                class="border p-1 w-full"
-              />
-              <span v-else>{{ user.phone }}</span>
+              <input v-if="editMode" v-model="form.phone" class="input-field" />
+              <span v-else>{{ userStore.user?.phone }}</span>
             </td>
           </tr>
         </tbody>
       </table>
       <div class="btn-wrapper">
-        <button
-          @click="toggleEdit"
-          class="px-4 py-2 bg-yellow-400 text-white rounded"
-        >
+        <button @click="toggleEdit" class="edit-button">
           {{ editMode ? '저장' : '수정' }}
         </button>
       </div>
@@ -65,38 +50,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref, onMounted, watch } from 'vue';
+import { useUserStore } from '@/stores/user';
 
-const userId = 1; // 현재 로그인된 유저 ID (고정)
-const user = ref({});
+const userStore = useUserStore();
 const form = ref({});
 const editMode = ref(false);
 
-const fetchUser = async () => {
-  const res = await axios.get(`http://localhost:3001/user`);
-  user.value = res.data;
-  form.value = {
-    username: res.data.username,
-    name: res.data.name || '',
-    email: res.data.email || '',
-    phone: res.data.phone || '',
-  };
-};
+onMounted(async () => {
+  await userStore.fetchUser();
+  form.value = { ...userStore.user }; // 초기값 복사
+});
+
+// userStore.user가 바뀌면 form도 같이 바뀌게
+watch(
+  () => userStore.user,
+  (newVal) => {
+    if (newVal) {
+      form.value = { ...newVal };
+    }
+  }
+);
 
 const toggleEdit = async () => {
   if (editMode.value) {
-    // 저장
-    await axios.put(`http://localhost:3001/user`, {
-      ...user.value,
-      ...form.value,
-    });
-    await fetchUser();
+    await userStore.updateUser(form.value);
   }
   editMode.value = !editMode.value;
 };
-
-onMounted(fetchUser);
 </script>
 
 <style scoped>
@@ -108,22 +89,17 @@ onMounted(fetchUser);
   font-style: normal;
 }
 
-main {
+* {
   font-family: 'S-CoreDream-3Light';
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-  font-family: sans-serif;
+  box-sizing: border-box;
 }
 
 .main {
-  flex: 1;
-  background-color: #f4f7fb;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f7fb;
 }
 
 .card {
@@ -163,17 +139,29 @@ main {
   width: 30%;
 }
 
+.input-field {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .btn-wrapper {
   text-align: right;
 }
 
 .edit-button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   background-color: #ffc107;
   color: white;
   border: none;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
 }
 </style>
