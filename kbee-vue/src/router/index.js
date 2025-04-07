@@ -15,12 +15,12 @@ const routes = [
   { path: '/stats', component: StatsView },
   { path: '/history', component: HistoryView },
   { path: '/login', component: LoginView },
-  { path: '/logout', component: Logout }
+  { path: '/logout', component: Logout },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 export default router;
