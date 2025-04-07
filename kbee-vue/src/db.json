@@ -10,7 +10,7 @@
   },
   "expenses": [
     {
-      "id": 101,
+      "id": 1,
       "user_id": 1,
       "amount": 12000,
       "category": "식비",
@@ -19,16 +19,7 @@
       "date": "2025-04-01"
     },
     {
-      "id": 102,
-      "user_id": 1,
-      "amount": 3800,
-      "category": "교통",
-      "payment_method": "카드",
-      "description": "지하철 요금",
-      "date": "2025-04-01"
-    },
-    {
-      "id": 103,
+      "id": 3,
       "user_id": 1,
       "amount": 45000,
       "category": "문화생활",
@@ -37,16 +28,7 @@
       "date": "2025-04-02"
     },
     {
-      "id": 104,
-      "user_id": 1,
-      "amount": 62000,
-      "category": "쇼핑",
-      "payment_method": "카드",
-      "description": "봄 옷 구매",
-      "date": "2025-04-02"
-    },
-    {
-      "id": 105,
+      "id": 5,
       "user_id": 1,
       "amount": 23000,
       "category": "식비",
@@ -55,16 +37,7 @@
       "date": "2025-04-03"
     },
     {
-      "id": 106,
-      "user_id": 1,
-      "amount": 9000,
-      "category": "카페/디저트",
-      "payment_method": "카드",
-      "description": "스타벅스 아이스아메리카노",
-      "date": "2025-04-03"
-    },
-    {
-      "id": 107,
+      "id": 7,
       "user_id": 1,
       "amount": 30000,
       "category": "식비",
@@ -73,16 +46,7 @@
       "date": "2025-04-04"
     },
     {
-      "id": 108,
-      "user_id": 1,
-      "amount": 50000,
-      "category": "의료/건강",
-      "payment_method": "카드",
-      "description": "한의원 침치료",
-      "date": "2025-04-04"
-    },
-    {
-      "id": 109,
+      "id": 9,
       "user_id": 1,
       "amount": 150000,
       "category": "주거/공과금",
@@ -91,7 +55,43 @@
       "date": "2025-04-01"
     },
     {
-      "id": 110,
+      "id": 11,
+      "user_id": 1,
+      "amount": 3800,
+      "category": "교통",
+      "payment_method": "카드",
+      "description": "지하철 요금",
+      "date": "2025-04-01"
+    },
+    {
+      "id": 13,
+      "user_id": 1,
+      "amount": 62000,
+      "category": "쇼핑",
+      "payment_method": "카드",
+      "description": "봄 옷 구매",
+      "date": "2025-04-02"
+    },
+    {
+      "id": 15,
+      "user_id": 1,
+      "amount": 9000,
+      "category": "카페/디저트",
+      "payment_method": "카드",
+      "description": "스타벅스 아이스아메리카노",
+      "date": "2025-04-03"
+    },
+    {
+      "id": 17,
+      "user_id": 1,
+      "amount": 50000,
+      "category": "의료/건강",
+      "payment_method": "카드",
+      "description": "한의원 침치료",
+      "date": "2025-04-04"
+    },
+    {
+      "id": 19,
       "user_id": 1,
       "amount": 12000,
       "category": "통신비",
@@ -102,7 +102,7 @@
   ],
   "incomes": [
     {
-      "id": 201,
+      "id": 2,
       "user_id": 1,
       "amount": 3000000,
       "category": "급여",
@@ -110,7 +110,7 @@
       "date": "2025-03-25"
     },
     {
-      "id": 202,
+      "id": 4,
       "user_id": 1,
       "amount": 150000,
       "category": "용돈",
@@ -118,7 +118,7 @@
       "date": "2025-04-01"
     },
     {
-      "id": 203,
+      "id": 6,
       "user_id": 1,
       "amount": 50000,
       "category": "기타",
@@ -126,7 +126,7 @@
       "date": "2025-04-02"
     },
     {
-      "id": 204,
+      "id": 8,
       "user_id": 1,
       "amount": 200000,
       "category": "투자수익",
@@ -134,12 +134,52 @@
       "date": "2025-04-03"
     },
     {
-      "id": 205,
+      "id": 10,
       "user_id": 1,
       "amount": 100000,
       "category": "상금",
       "description": "해커톤 수상",
       "date": "2025-04-04"
+    },
+    {
+      "id": 12,
+      "user_id": 1,
+      "amount": 0,
+      "category": "기타",
+      "description": "보너스 없음",
+      "date": "2025-04-05"
+    },
+    {
+      "id": 14,
+      "user_id": 1,
+      "amount": 1000000,
+      "category": "기타",
+      "description": "수수료 환급",
+      "date": "2025-04-06"
+    },
+    {
+      "id": 16,
+      "user_id": 1,
+      "amount": 20000,
+      "category": "이자",
+      "description": "예금 이자",
+      "date": "2025-04-06"
+    },
+    {
+      "id": 18,
+      "user_id": 1,
+      "amount": 80000,
+      "category": "프리랜서",
+      "description": "알바 수익",
+      "date": "2025-04-06"
+    },
+    {
+      "id": 20,
+      "user_id": 1,
+      "amount": 150000,
+      "category": "상여",
+      "description": "성과급",
+      "date": "2025-04-06"
     }
   ]
 }
