@@ -1,19 +1,18 @@
-<template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/income">Income</RouterLink>
-      <RouterLink to="/expense">Expense</RouterLink>
-      <RouterLink to="/stats">Stats</RouterLink>
-      <RouterLink to="/history">History</RouterLink>
-      <RouterLink to="/login">Login</RouterLink>
-      <RouterLink to="/logout">Logout</RouterLink>
-    </nav>
-  </header>
-
-  <RouterView />
-</template>
-
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
+import Header from './components/Header.vue';
+import Sidebar from './components/Sidebar.vue';
 </script>
+
+<template>
+  <!-- <RouterView />  -->
+  <div class="flex-1">
+    <Header />
+    <div class="flex flex grow">
+      <Sidebar>
+        <RouterView />
+      </Sidebar>
+    </div>
+  </div>
+</template>
+<style scoped></style>

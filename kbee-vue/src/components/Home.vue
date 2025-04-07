@@ -1,7 +1,7 @@
 <style scoped></style>
 
 <template>
-    <div class="h-40 w-40 bg-blue-600">홈 컴포넌트입니다</div>
+  <!-- <div class="h-40 w-40 bg-blue-600">홈 컴포넌트입니다</div> -->
 </template>
 
 <script setup>
