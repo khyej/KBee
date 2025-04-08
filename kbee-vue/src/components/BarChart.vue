@@ -1,6 +1,6 @@
 <template>
-  <div class="relative">
-    <canvas ref="barCanvas"></canvas>
+  <div class="relative w-full h-[300px] md:h-[400px]">
+    <canvas ref="barCanvas" class="w-full h-full"></canvas>
   </div>
 </template>
 
@@ -97,6 +97,7 @@ const renderChart = async () => {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           position: 'bottom',

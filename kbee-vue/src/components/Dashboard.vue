@@ -1,6 +1,7 @@
+<!-- Dashboard.vue -->
 <template>
   <div class="bg-gray-100 min-h-screen py-10">
-    <!-- 🔘 월 선택 드롭다운 -->
+    <!-- 🔘 월 선택 -->
     <div class="text-center mb-6">
       <label class="mr-2 text-gray-700 font-semibold">월 선택:</label>
       <select
@@ -13,16 +14,15 @@
       </select>
     </div>
 
-    <!-- 📌 상단 제목 -->
+    <!-- 📌 제목 -->
     <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
       2025년 {{ selectedMonth }}월 가계부
     </h2>
 
     <div class="flex justify-center">
-      <div class="max-w-screen-xl w-full flex md:flex-row gap-10 px-4">
-        <!-- 수입/지출 영역 -->
-        <div class="flex flex-col gap-10 w-full">
-          <!-- 수입 -->
+      <div class="max-w-screen-xl w-full flex flex-col md:flex-row gap-10 px-4">
+        <!-- 수입/지출 + 바차트 -->
+        <div class="flex flex-col gap-10 w-full md:w-1/2">
           <div
             class="bg-white px-6 py-10 shadow text-center border-b-2 border-green-200"
           >
@@ -32,7 +32,6 @@
             </p>
           </div>
 
-          <!-- 지출 -->
           <div
             class="bg-white px-6 py-10 shadow text-center border-b-2 border-red-200"
           >
@@ -42,30 +41,35 @@
             </p>
           </div>
 
-          <!-- 막대 그래프 -->
           <div class="bar bg-white rounded-xl shadow p-4">
-            <h2 class="text-center font-semibold mb-2">막대 그래프</h2>
+            <h2 class="text-center font-semibold mb-2">
+              {{ selectedMonth }}월 지출 및 수입
+            </h2>
             <BarChart :month="selectedMonth" />
           </div>
         </div>
 
-        <!-- 오른쪽 영역 -->
-        <div class="flex flex-col gap-10">
-          <div class="bg-white rounded-xl shadow p-4 w-full">
-            <h2 class="text-center font-semibold mb-2">월별 지출</h2>
-            <PieChart :month="selectedMonth" />
+        <!-- PieChart + 지출 TOP5 (모바일에서 아래로) -->
+        <div class="flex flex-col-reverse md:flex-col gap-10 w-full md:w-1/2">
+          <!-- PieChart -->
+          <div class="bg-white rounded-xl shadow p-4 overflow-x-auto">
+            <h2 class="text-center font-semibold text-base md:text-lg mb-4">
+              카테고리별 지출
+            </h2>
+            <div class="min-w-[300px] max-w-full mx-auto">
+              <PieChart :month="selectedMonth" />
+            </div>
           </div>
-
           <!-- 지출 TOP 5 -->
-          <div class="pl-6 border-l">
-            <h2 class="text-lg font-semibold mb-2">지출 TOP 5</h2>
-            <ul class="text-sm space-y-1">
+          <div class="bg-white rounded-xl shadow p-4">
+            <h2 class="text-lg font-semibold mb-3 text-left">지출 TOP 5</h2>
+            <ul class="text-xs md:text-sm space-y-2">
               <li
                 v-for="(item, index) in topExpenses"
                 :key="index"
                 class="flex justify-between"
               >
-                <span>{{ item.category }}</span>
+                <span class="truncate">{{ item.category }}</span>
                 <span class="text-red-500 font-medium">
                   {{ item.amount.toLocaleString() }}원
                 </span>
