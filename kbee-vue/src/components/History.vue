@@ -557,9 +557,9 @@ watch(
 
 <style scoped>
 .subBox {
-    height: calc(100vh - 80px);
+    height: calc(100vh - 120px);
     margin: 15px;
-    padding: 30px;
+    padding: 15px;
     background-color: white;
     display: flex;
     flex-direction: column;
