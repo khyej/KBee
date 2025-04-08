@@ -8,12 +8,21 @@
       <div class="input-group">
         <div class="input-row">
           <label>ID</label>
-          <input v-model="form.id" placeholder="아이디를 입력해주세요" @keyup.enter="login" />
+          <input
+            v-model="form.id"
+            placeholder="아이디를 입력해주세요"
+            @keyup.enter="login"
+          />
         </div>
         <div class="divider"></div>
         <div class="input-row">
           <label>PW</label>
-          <input v-model="form.pw" type="password" placeholder="비밀번호를 입력해주세요" @keyup.enter="login" />
+          <input
+            v-model="form.pw"
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            @keyup.enter="login"
+          />
         </div>
       </div>
 
@@ -21,7 +30,9 @@
         <button @click="login" class="login-button">Login</button>
       </div>
 
-      <div class="signup"><a @click.prevent="router.push('/signup')">회원가입</a></div>
+      <div class="signup">
+        <a @click.prevent="router.push('/signup')">회원가입</a>
+      </div>
     </div>
   </div>
 </template>
@@ -42,11 +53,11 @@ const form = ref({
 
 const login = async () => {
   try {
-    const res = await axios.get('http://localhost:3001/users');
+    const res = await axios.get('/api/users');
     const users = res.data;
 
     const matchedUser = users.find(
-      u => u.email === form.value.id && u.password === form.value.pw
+      (u) => u.email === form.value.id && u.password === form.value.pw
     );
 
     if (matchedUser) {
@@ -62,7 +73,6 @@ const login = async () => {
   }
 };
 </script>
-
 
 <style scoped>
 .main {
