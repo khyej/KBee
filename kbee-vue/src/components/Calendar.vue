@@ -14,18 +14,8 @@
             class="mr-2 px-2 py-1 bg-gray-300 rounded"
             aria-label="Previous Month"
           >
-          <button
-            @click="goToPreviousMonth"
-            class="mr-2 px-2 py-1 bg-gray-300 rounded"
-            aria-label="Previous Month"
-          >
             &lt;
           </button>
-          <button
-            @click="goToNextMonth"
-            class="px-2 py-1 bg-gray-300 rounded"
-            aria-label="Next Month"
-          >
           <button
             @click="goToNextMonth"
             class="px-2 py-1 bg-gray-300 rounded"
@@ -38,16 +28,10 @@
       <div
         class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
-      <div
-        class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
-      >
         <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
           <div v-for="day in daysOfWeek" :key="day" class="p-2">{{ day }}</div>
         </div>
         <div class="grid grid-cols-7 divide-gray-200">
-          <button
-            v-for="date in calendarDays"
-            :key="date.id"
           <button
             v-for="date in calendarDays"
             :key="date.id"
@@ -56,14 +40,6 @@
               'text-gray-400': date.outside,
               'bg-indigo-100': date.isToday,
               'bg-yellow-200': isSelected(date),
-              'outside-disabled': isOutsideDisabled(date),
-            }"
-            @click="selectDate(date)"
-          >
-            <span
-              class="text-xs font-semibold flex items-center justify-center w-7 h-7 rounded-full"
-              :class="{ 'bg-indigo-600 text-white': date.isToday }"
-            >
             }"
             @click="selectDate(date)"
           >
@@ -90,22 +66,6 @@ import SecondScreen from './SecondScreen.vue';
 
 // Constants
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-// const monthNames = [
-//   'January',
-//   'February',
-//   'March',
-//   'April',
-//   'May',
-//   'June',
-//   'July',
-//   'August',
-//   'September',
-//   'October',
-//   'November',
-//   'December',
-// ];
-
-// const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 const monthNames = [
   '1월',
   '2월',
@@ -120,9 +80,9 @@ const monthNames = [
   '11월',
   '12월',
 ];
+
 // Reactive state
 const currentDate = ref(new Date());
-const selectedDate = ref(null);
 const selectedDay = ref(null);
 const selectedMonth = ref(null);
 const selectedYear = ref(null);
@@ -200,9 +160,6 @@ const formattedSelectedDate = computed(() => {
     return `${monthNames[selectedMonth.value]} ${selectedDay.value}, ${
       selectedYear.value
     }`;
-    return `${monthNames[selectedMonth.value]} ${selectedDay.value}, ${
-      selectedYear.value
-    }`;
   }
   return '';
 });
@@ -262,35 +219,32 @@ const isSelected = (date) => {
   ) {
     return false;
   }
-  if (date.outside) {
-    if (date.id.startsWith('prev')) {
-      return (
-        selectedDay.value === date.day &&
-        selectedMonth.value === (month.value - 1 < 0 ? 11 : month.value - 1) &&
-        selectedYear.value ===
-          (month.value - 1 < 0 ? year.value - 1 : year.value)
-          (month.value - 1 < 0 ? year.value - 1 : year.value)
-      );
-    } else {
-      return (
-        selectedDay.value === date.day &&
-        selectedMonth.value === (month.value + 1 > 11 ? 0 : month.value + 1) &&
-        selectedYear.value ===
-          (month.value + 1 > 11 ? year.value + 1 : year.value)
-          (month.value + 1 > 11 ? year.value + 1 : year.value)
-      );
-    }
-  } else {
-    return (
-      selectedDay.value === date.day &&
-      selectedMonth.value === month.value &&
-      selectedYear.value === year.value
-    );
-  }
-};
 
-const isOutsideDisabled = (date) => {
-  return date.outside;
+  const targetMonth = date.outside
+    ? date.id.startsWith('prev')
+      ? month.value - 1 < 0
+        ? 11
+        : month.value - 1
+      : month.value + 1 > 11
+      ? 0
+      : month.value + 1
+    : month.value;
+
+  const targetYear = date.outside
+    ? date.id.startsWith('prev')
+      ? month.value - 1 < 0
+        ? year.value - 1
+        : year.value
+      : month.value + 1 > 11
+      ? year.value + 1
+      : year.value
+    : year.value;
+
+  return (
+    selectedDay.value === date.day &&
+    selectedMonth.value === targetMonth &&
+    selectedYear.value === targetYear
+  );
 };
 </script>
 
@@ -305,10 +259,5 @@ const isOutsideDisabled = (date) => {
   border-bottom-right-radius: 0.5rem;
   /* Adjust the radius as needed */
   overflow: hidden;
-}
-
-.outside-disabled {
-  pointer-events: none;
-  opacity: 0.5;
 }
 </style>
