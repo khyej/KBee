@@ -1,19 +1,34 @@
 <template>
-  <div
-    class="h-screen flex flex-col items-center justify-center bg-green-200 p-4"
-  >
+  <div>
+    <h2>Second Screen</h2>
+    <p>Selected Date: {{ selectedDate }}</p>
+    <!-- <Income :selectedDate="selectedDate" @income-loaded="handleIncomeLoaded" /> -->
     <Income />
-    <p class="text-lg font-semibold mb-4">{{ selectedDate }}</p>
-    <button
-      class="px-4 py-2 bg-green-500 text-white rounded"
-      @click="$emit('close')"
-    >
-      Hide Me
-    </button>
+    <div v-if="parentIncomeList.length > 0">
+      <h2>Income Data in Parent</h2>
+      <ul>
+        <li v-for="item in parentIncomeList" :key="item.id">
+          {{ item.description }} - {{ item.amount }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { ref, defineProps } from 'vue';
 import Income from './Income.vue';
-defineProps({ selectedDate: String });
+
+const props = defineProps({
+  selectedDate: {
+    type: String,
+    required: true,
+  },
+});
+
+const parentIncomeList = ref([]);
+
+const handleIncomeLoaded = (incomeData) => {
+  parentIncomeList.value = incomeData;
+};
 </script>
