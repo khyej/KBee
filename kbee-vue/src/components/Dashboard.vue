@@ -170,7 +170,7 @@ watch(selectedMonth, fetchData);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 15px;
+  padding: 5px;
   box-sizing: border-box;
   overflow: hidden; /* 스크롤 제거 */
 }
@@ -185,7 +185,7 @@ watch(selectedMonth, fetchData);
   /* wrap보다 padding 고려해서 height 줄이기 */
   height: calc(100% - 40px); /* wrap의 padding 20px*2 = 40px 빼줌 */
 
-  padding: 30px;
+  padding: 15px;
   box-sizing: border-box;
 
   display: flex;
