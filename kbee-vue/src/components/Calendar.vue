@@ -1,18 +1,22 @@
 <template>
   <div class="h-screen flex">
-    <div
+    <!-- <div
       class="flex flex-col items-center justify-center bg-blue-200 p-4"
       :class="showSecondScreen ? 'w-5/7' : 'w-full'"
+      style="height: 100vh"
+    > -->
+    <div
+      class="flex flex-col items-center justify-center bg-blue-200 p-4 w-5/7"
       style="height: 100vh"
     >
       <div class="flex items-center justify-between mb-4 w-full">
         <div class="flex items-center">
-          <button
+          <!-- <button
             class="px-4 py-2 bg-blue-500 text-white rounded mr-4"
             @click="showSecondScreen = !showSecondScreen"
           >
             {{ showSecondScreen ? 'Hide Details' : 'Show Details' }}
-          </button>
+          </button> -->
           <h2 v-if="selectedDate" class="text-xl font-semibold">
             Selected Date: {{ formattedSelectedDate }}
           </h2>
@@ -37,7 +41,9 @@
           </button>
         </div>
       </div>
-      <div class="w-full max-w-md mx-auto">
+      <div
+        class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white"
+      >
         <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
           <div v-for="day in daysOfWeek" :key="day" class="p-2">{{ day }}</div>
         </div>
@@ -65,10 +71,13 @@
     </div>
 
     <div v-if="showSecondScreen" class="w-2/7 h-screen">
-      <SecondScreen
+      <!-- <SecondScreen
+
         :selectedDate="formattedSelectedDate"
         @close="showSecondScreen = false"
-      />
+      /> -->
+
+      <SecondScreen :selectedDate="formattedSelectedDate" />
     </div>
   </div>
 </template>
@@ -96,8 +105,14 @@ const monthNames = [
 
 // Reactive state
 const currentDate = ref(new Date());
-const selectedDate = ref(null);
-const showSecondScreen = ref(false);
+const selectedDate = ref({
+  day: new Date().getDate(),
+  id: `current-${new Date().getDate()}`,
+  outside: false,
+  isToday: true,
+});
+// const showSecondScreen = ref(false);
+const showSecondScreen = ref(true);
 
 // Computed properties for date information
 const year = computed(() => currentDate.value.getFullYear());
@@ -165,7 +180,11 @@ const calendarDays = computed(() => [
 const formattedSelectedDate = computed(() => {
   if (selectedDate.value) {
     const selectedYear = year.value;
-    const selectedMonth = month.value;
+    const selectedMonth = selectedDate.value.outside
+      ? selectedDate.value.id.startsWith('prev')
+        ? month.value - 1
+        : month.value + 1
+      : month.value;
     const selectedDay = selectedDate.value.day;
     return `${monthNames[selectedMonth]} ${selectedDay}, ${selectedYear}`;
   }
@@ -192,11 +211,13 @@ const goToNextMonth = () => {
 const selectDate = (date) => {
   if (!date.outside) {
     if (selectedDate.value?.id === date.id) {
-      selectedDate.value = null;
-      showSecondScreen.value = false;
+      // selectedDate.value = null;
+      showSecondScreen.value = true;
     } else {
       selectedDate.value = date;
       showSecondScreen.value = true;
+    }
+    if (date.outside) {
     }
   }
 };
