@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import EditHistory from '@/components/EditHistory.vue'
+import EditHistory from '@/components/EditHistory.vue';
 </script>
