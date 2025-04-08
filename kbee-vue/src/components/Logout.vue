@@ -1,5 +1,16 @@
 <template>
-  <div class="h-40 w-40 bg-blue-600">로그아웃.</div>
+  <button @click="logout">로그아웃</button>
 </template>
 
-<style scoped></style>
+<script setup>
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+
+const router = useRouter();
+const userStore = useUserStore();
+
+const logout = () => {
+  userStore.logout();
+  router.push('/');
+};
+</script>

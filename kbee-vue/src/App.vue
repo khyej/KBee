@@ -1,23 +1,31 @@
 <script setup>
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
-import { RouterView } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
 
 import { onMounted } from 'vue';
 import { useUserStore } from './stores/user';
+
+const route = useRoute();
 const userStore = useUserStore();
 
 onMounted(() => {
   userStore.restoreUser();
 });
+
+// 헤더, 사이드바를 제외할 경로 리스트
+const noLayoutPages = ['/', '/login'];
 </script>
 
 <template>
   <div class="layout">
-    <Header />
+    <Header v-if="!noLayoutPages.includes(route.path)" />
     <div class="contentBox">
-      <Sidebar />
-      <main class="mainBox">
+      <Sidebar v-if="!noLayoutPages.includes(route.path)" />
+      <main
+        class="mainBox"
+        :class="{ fullPage: noLayoutPages.includes(route.path) }"
+      >
         <RouterView />
       </main>
     </div>
