@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import {
   Chart,
   BarElement,
@@ -25,26 +25,40 @@ Chart.register(
   Legend
 );
 
-const barCanvas = ref(null);
+const props = defineProps({
+  month: String,
+});
 
-onMounted(async () => {
+const barCanvas = ref(null);
+let chartInstance = null;
+
+const renderChart = async () => {
   const [expensesRes, incomesRes] = await Promise.all([
-    fetch('http://localhost:3000/expenses'),
-    fetch('http://localhost:3000/incomes'),
+    fetch('/api/expenses'),
+    fetch('/api/incomes'),
   ]);
 
   const expenses = await expensesRes.json();
   const incomes = await incomesRes.json();
 
+  const getMonth = (dateStr) => dateStr.split('-')[1];
+
+  const filteredExpenses = expenses.filter(
+    (item) => getMonth(item.date) === props.month
+  );
+  const filteredIncomes = incomes.filter(
+    (item) => getMonth(item.date) === props.month
+  );
+
   const expenseCategories = {};
   const incomeCategories = {};
 
-  expenses.forEach((item) => {
+  filteredExpenses.forEach((item) => {
     expenseCategories[item.category] =
       (expenseCategories[item.category] || 0) + item.amount;
   });
 
-  incomes.forEach((item) => {
+  filteredIncomes.forEach((item) => {
     incomeCategories[item.category] =
       (incomeCategories[item.category] || 0) + item.amount;
   });
@@ -59,7 +73,12 @@ onMounted(async () => {
   const expenseData = allCategories.map((cat) => expenseCategories[cat] || 0);
   const incomeData = allCategories.map((cat) => incomeCategories[cat] || 0);
 
-  new Chart(barCanvas.value, {
+  // 기존 차트 제거
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+
+  chartInstance = new Chart(barCanvas.value, {
     type: 'bar',
     data: {
       labels: allCategories,
@@ -78,7 +97,6 @@ onMounted(async () => {
     },
     options: {
       responsive: true,
-
       plugins: {
         legend: {
           position: 'bottom',
@@ -86,5 +104,8 @@ onMounted(async () => {
       },
     },
   });
-});
+};
+
+onMounted(renderChart);
+watch(() => props.month, renderChart);
 </script>
