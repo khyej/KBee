@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-100">
     <!-- 🔘 월 선택 -->
-    <div class="text-start mb-6 px-4 py-2">
+    <div class="text-start mb-6 px-1">
       <label class="mr-2 text-gray-700 font-semibold">월 선택:</label>
       <select
         v-model="selectedMonth"
@@ -14,14 +14,14 @@
     </div>
 
     <!-- 📌 제목 -->
-    <h2 class="text-2xl font-bold text-start text-gray-800 mb-6 px-4">
+    <h2 class="text-2xl font-bold text-start text-gray-800 px-4">
       2025년 {{ selectedMonth }}월 가계부
     </h2>
     <br />
 
     <!-- 메인 내용 -->
-    <div class="flex justify-center px-4">
-      <div class="max-w-screen-xl w-full flex flex-col md:flex-row gap-10">
+    <div class="px-4">
+      <div class="w-full flex flex-col md:flex-row gap-10">
         <!-- 왼쪽 영역 -->
         <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1">
           <div
