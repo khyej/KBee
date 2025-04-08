@@ -5,22 +5,36 @@
       :class="showSecondScreen ? 'w-5/7' : 'w-full'"
       style="height: 100vh"
     >
-      <div class="flex items-center justify-between mb-4">
-        <h2 v-if="selectedDate" class="text-xl font-semibold">
-          Selected Date: {{ formattedSelectedDate }}
-        </h2>
-        <button v-else>
-          {{ showSecondScreen ? 'Hide Second Screen' : 'Show Second Screen' }}
-        </button>
-        <h2 v-if="selectedDate" class="text-xl font-semibold">
-          Selected Date: {{ formattedSelectedDate }}
-        </h2>
-        <h5 class="text-xl leading-8 font-semibold text-gray-900">
-          {{ currentMonth }} {{ currentYear }}
-        </h5>
-        <div>
-          <button @click="goToPreviousMonth" class="mr-2">&lt;</button>
-          <button @click="goToNextMonth">&gt;</button>
+      <div class="flex items-center justify-between mb-4 w-full">
+        <div class="flex items-center">
+          <button
+            class="px-4 py-2 bg-blue-500 text-white rounded mr-4"
+            @click="showSecondScreen = !showSecondScreen"
+          >
+            {{ showSecondScreen ? 'Hide Details' : 'Show Details' }}
+          </button>
+          <h2 v-if="selectedDate" class="text-xl font-semibold">
+            Selected Date: {{ formattedSelectedDate }}
+          </h2>
+        </div>
+        <div class="flex items-center">
+          <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
+            {{ currentMonth }} {{ currentYear }}
+          </h5>
+          <button
+            @click="goToPreviousMonth"
+            class="mr-2 px-2 py-1 bg-gray-300 rounded"
+            aria-label="Previous Month"
+          >
+            &lt;
+          </button>
+          <button
+            @click="goToNextMonth"
+            class="px-2 py-1 bg-gray-300 rounded"
+            aria-label="Next Month"
+          >
+            &gt;
+          </button>
         </div>
       </div>
       <div class="w-full max-w-md mx-auto">
@@ -50,7 +64,7 @@
       </div>
     </div>
 
-    <div v-if="showSecondScreen && selectedDate" class="w-2/7 h-screen">
+    <div v-if="showSecondScreen" class="w-2/7 h-screen">
       <SecondScreen
         :selectedDate="formattedSelectedDate"
         @close="showSecondScreen = false"
@@ -63,15 +77,8 @@
 import { ref, computed } from 'vue';
 import SecondScreen from './SecondScreen.vue';
 
+// Constants
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const currentDate = ref(new Date()); // Use ref for reactivity
-const selectedDate = ref(null);
-const showSecondScreen = ref(false);
-const year = computed(() => currentDate.value.getFullYear());
-const month = computed(() => currentDate.value.getMonth());
-const today = computed(() => new Date().getDate());
-
-// Define currentMonth and currentYear here
 const monthNames = [
   'January',
   'February',
@@ -86,12 +93,24 @@ const monthNames = [
   'November',
   'December',
 ];
+
+// Reactive state
+const currentDate = ref(new Date());
+const selectedDate = ref(null);
+const showSecondScreen = ref(false);
+
+// Computed properties for date information
+const year = computed(() => currentDate.value.getFullYear());
+const month = computed(() => currentDate.value.getMonth());
+const today = computed(() => new Date().getDate());
 const currentMonth = computed(() => monthNames[month.value]);
 const currentYear = computed(() => year.value);
 
+// Helper functions for calendar calculations
 const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 
+// Computed properties for calendar days
 const daysInCurrentMonth = computed(() =>
   getDaysInMonth(year.value, month.value)
 );
@@ -142,7 +161,18 @@ const calendarDays = computed(() => [
   ...nextMonthDays.value,
 ]);
 
-// Function to go to the previous month
+// Computed property for formatted selected date
+const formattedSelectedDate = computed(() => {
+  if (selectedDate.value) {
+    const selectedYear = year.value;
+    const selectedMonth = month.value;
+    const selectedDay = selectedDate.value.day;
+    return `${monthNames[selectedMonth]} ${selectedDay}, ${selectedYear}`;
+  }
+  return '';
+});
+
+// Methods
 const goToPreviousMonth = () => {
   currentDate.value = new Date(
     currentDate.value.getFullYear(),
@@ -151,7 +181,6 @@ const goToPreviousMonth = () => {
   );
 };
 
-// Function to go to the next month
 const goToNextMonth = () => {
   currentDate.value = new Date(
     currentDate.value.getFullYear(),
@@ -159,6 +188,7 @@ const goToNextMonth = () => {
     1
   );
 };
+
 const selectDate = (date) => {
   if (!date.outside) {
     if (selectedDate.value?.id === date.id) {
@@ -174,16 +204,6 @@ const selectDate = (date) => {
 const isSelected = (date) => {
   return selectedDate.value?.id === date.id;
 };
-
-const formattedSelectedDate = computed(() => {
-  if (selectedDate.value) {
-    const selectedYear = year.value;
-    const selectedMonth = month.value;
-    const selectedDay = selectedDate.value.day;
-    return `${monthNames[selectedMonth]} ${selectedDay}, ${selectedYear}`;
-  }
-  return '';
-});
 </script>
 
 <style scoped>
