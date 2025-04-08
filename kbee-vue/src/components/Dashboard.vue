@@ -3,23 +3,23 @@
     <div class="max-w-screen-xl w-full flex md:flex-row gap-10 px-4">
       <!-- 수입/지출 영역 -->
       <div class="flex flex-col gap-10 w-full">
-        <!-- 총 수입 -->
+        <!-- 4월 수입 -->
         <div
-          class="bg-white px-6 py-10 shadow text-center border-b-2 border-green-300"
+          class="bg-white px-6 py-10 shadow text-center border-b-2 border-green-200"
         >
-          <p class="text-gray-500 text-sm">총 수입</p>
-          <p class="text-3xl font-bold text-green-500">
-            +{{ totalIncome.toLocaleString() }}원
+          <p class="text-gray-500 text-sm">4월 수입</p>
+          <p class="text-2xl font-semibold text-green-600">
+            +{{ aprilIncome.toLocaleString() }}원
           </p>
         </div>
 
-        <!-- 총 지출 -->
+        <!-- 4월 지출 -->
         <div
-          class="bg-white px-6 py-10 shadow text-center border-b-2 border-red-300"
+          class="bg-white px-6 py-10 shadow text-center border-b-2 border-red-200"
         >
-          <p class="text-gray-500 text-sm">총 지출</p>
-          <p class="text-3xl font-bold text-red-500">
-            -{{ totalExpense.toLocaleString() }}원
+          <p class="text-gray-500 text-sm">4월 지출</p>
+          <p class="text-2xl font-semibold text-red-600">
+            -{{ aprilExpense.toLocaleString() }}원
           </p>
         </div>
 
@@ -66,6 +66,8 @@ import { ref, onMounted } from 'vue';
 
 const totalIncome = ref(0);
 const totalExpense = ref(0);
+const aprilIncome = ref(0);
+const aprilExpense = ref(0);
 const topExpenses = ref([]);
 
 onMounted(async () => {
@@ -78,10 +80,37 @@ onMounted(async () => {
     const incomes = incomeRes.data;
     const expenses = expenseRes.data;
 
+    // 전체 총합 계산
     totalIncome.value = incomes.reduce((sum, item) => sum + item.amount, 0);
     totalExpense.value = expenses.reduce((sum, item) => sum + item.amount, 0);
 
-    topExpenses.value = expenses
+    // 월 추출 함수: 'YYYY-MM-DD' → '04'
+    const getMonth = (dateStr) => dateStr.split('-')[1];
+
+    // 4월 필터링 (문자열로 '04')
+    const aprilIncomes = incomes.filter((item) => getMonth(item.date) === '04');
+    const aprilExpenses = expenses.filter(
+      (item) => getMonth(item.date) === '04'
+    );
+
+    // 4월 수입/지출 합계
+    aprilIncome.value = aprilIncomes.reduce(
+      (sum, item) => sum + item.amount,
+      0
+    );
+    aprilExpense.value = aprilExpenses.reduce(
+      (sum, item) => sum + item.amount,
+      0
+    );
+
+    // 4월 지출 TOP5 (카테고리별 합산 후 정렬)
+    const categorySums = aprilExpenses.reduce((acc, cur) => {
+      acc[cur.category] = (acc[cur.category] || 0) + cur.amount;
+      return acc;
+    }, {});
+
+    topExpenses.value = Object.entries(categorySums)
+      .map(([category, amount]) => ({ category, amount }))
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 5);
   } catch (error) {
