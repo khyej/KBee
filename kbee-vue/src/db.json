@@ -1,204 +1,198 @@
 {
-  "users": [
-    {
-      "id": "1",
-      "nickname": "gildong_2",
-      "username": "홍길동",
-      "email": "hong@gmail.com",
-      "password": "test",
-      "phone": "010-1234-5678",
-      "Set Budget": 100000
-    },
-    {
-      "id": "2",
-      "nickname": "1111",
-      "username": "1111",
-      "email": "1111",
-      "password": "1111",
-      "phone": "1111"
-    },
-    {
-      "id": "3",
-      "nickname": "111",
-      "username": "111",
-      "email": "111",
-      "password": "111",
-      "phone": "111"
-    }
-  ],
-  "expenses": [
-    {
-      "id": "1",
-      "user_id": "1",
-      "amount": 12001,
-      "category": "식비",
-      "payment_method": "카드",
-      "description": "편의점 간식",
-      "date": "2025-04-01",
-      "type": "expense"
-    },
-    {
-      "id": "3",
-      "user_id": "1",
-      "amount": 45000,
-      "category": "문화생활",
-      "payment_method": "현금",
-      "description": "영화관람 - CGV",
-      "date": "2025-04-02"
-    },
-    {
-      "id": "5",
-      "user_id": "1",
-      "amount": 23000,
-      "category": "식비",
-      "payment_method": "카드",
-      "description": "점심 - 김밥천국",
-      "date": "2025-04-03"
-    },
-    {
-      "id": "7",
-      "user_id": "1",
-      "amount": 30000,
-      "category": "식비",
-      "payment_method": "현금",
-      "description": "저녁 회식비",
-      "date": "2025-04-04"
-    },
-    {
-      "id": "9",
-      "user_id": "1",
-      "amount": 150000,
-      "category": "주거/공과금",
-      "payment_method": "계좌이체",
-      "description": "월세",
-      "date": "2025-04-01"
-    },
-    {
-      "id": "11",
-      "user_id": "1",
-      "amount": 3800,
-      "category": "교통",
-      "payment_method": "카드",
-      "description": "지하철 요금",
-      "date": "2025-04-01"
-    },
-    {
-      "id": "13",
-      "user_id": "1",
-      "amount": 62000,
-      "category": "쇼핑",
-      "payment_method": "카드",
-      "description": "봄 옷 구매",
-      "date": "2025-04-02"
-    },
-    {
-      "id": "15",
-      "user_id": "1",
-      "amount": 9000,
-      "category": "카페/디저트",
-      "payment_method": "카드",
-      "description": "스타벅스 아이스아메리카노",
-      "date": "2025-04-03"
-    },
-    {
-      "id": "17",
-      "user_id": "1",
-      "amount": 50000,
-      "category": "의료/건강",
-      "payment_method": "카드",
-      "description": "한의원 침치료",
-      "date": "2025-04-04"
-    },
-    {
-      "id": "19",
-      "user_id": "1",
-      "amount": 12000,
-      "category": "통신비",
-      "payment_method": "계좌이체",
-      "description": "휴대폰 요금",
-      "date": "2025-04-02"
-    }
-  ],
-  "incomes": [
-    {
-      "id": "2",
-      "user_id": "1",
-      "amount": 3000000,
-      "category": "급여",
-      "description": "3월 급여",
-      "date": "2025-03-25"
-    },
-    {
-      "id": "4",
-      "user_id": "1",
-      "amount": 150000,
-      "category": "용돈",
-      "description": "부모님 용돈",
-      "date": "2025-04-01"
-    },
-    {
-      "id": "6",
-      "user_id": "1",
-      "amount": 50000,
-      "category": "기타",
-      "description": "중고나라 판매 수익",
-      "date": "2025-04-02"
-    },
-    {
-      "id": "8",
-      "user_id": "1",
-      "amount": 200000,
-      "category": "투자수익",
-      "description": "배당금 수익",
-      "date": "2025-04-03"
-    },
-    {
-      "id": "10",
-      "user_id": "1",
-      "amount": 100000,
-      "category": "상금",
-      "description": "해커톤 수상",
-      "date": "2025-04-04"
-    },
-    {
-      "id": "12",
-      "user_id": "1",
-      "amount": 0,
-      "category": "기타",
-      "description": "보너스 없음",
-      "date": "2025-04-05"
-    },
-    {
-      "id": "14",
-      "user_id": "1",
-      "amount": 1000000,
-      "category": "기타",
-      "description": "수수료 환급",
-      "date": "2025-04-06"
-    },
-    {
-      "id": "16",
-      "user_id": "1",
-      "amount": 20000,
-      "category": "이자",
-      "description": "예금 이자",
-      "date": "2025-04-06"
-    },
-    {
-      "id": "18",
-      "user_id": "1",
-      "amount": 80000,
-      "category": "프리랜서",
-      "description": "알바 수익",
-      "date": "2025-04-06"
-    },
-    {
-      "id": "20",
-      "user_id": "1",
-      "amount": 150000,
-      "category": "상여",
-      "description": "성과급",
-      "date": "2025-04-06"
-    }
-  ]
+    "users": [
+        {
+            "id": "1",
+            "nickname": "gildong_2",
+            "username": "홍길동",
+            "email": "hong@gmail.com",
+            "password": "test",
+            "phone": "010-1234-5678",
+            "Set Budget": 100000
+        },
+        {
+            "id": "2",
+            "nickname": "1111",
+            "username": "1111",
+            "email": "1111",
+            "password": "1111",
+            "phone": "1111"
+        },
+        {
+            "id": "3",
+            "nickname": "111",
+            "username": "111",
+            "email": "111",
+            "password": "111",
+            "phone": "111"
+        }
+    ],
+    "expenses": [
+        {
+            "id": "1",
+            "user_id": "1",
+            "amount": 12001,
+            "category": "식비",
+            "payment_method": "카드",
+            "description": "편의점 간식",
+            "date": "2025-04-01",
+            "type": "expense"
+        },
+        {
+            "id": "3",
+            "user_id": "1",
+            "amount": 45000,
+            "category": "문화생활",
+            "payment_method": "현금",
+            "description": "영화관람 - CGV",
+            "date": "2025-04-02"
+        },
+        {
+            "id": "5",
+            "user_id": "1",
+            "amount": 23000,
+            "category": "식비",
+            "payment_method": "카드",
+            "description": "점심 - 김밥천국",
+            "date": "2025-04-03"
+        },
+        {
+            "id": "7",
+            "user_id": "1",
+            "amount": 30000,
+            "category": "식비",
+            "payment_method": "현금",
+            "description": "저녁 회식비",
+            "date": "2025-04-04"
+        },
+        {
+            "id": "9",
+            "user_id": "1",
+            "amount": 150000,
+            "category": "주거/공과금",
+            "payment_method": "계좌이체",
+            "description": "월세",
+            "date": "2025-04-01"
+        },
+        {
+            "id": "11",
+            "user_id": "1",
+            "amount": 3800,
+            "category": "교통",
+            "payment_method": "카드",
+            "description": "지하철 요금",
+            "date": "2025-04-01"
+        },
+        {
+            "id": "13",
+            "user_id": "1",
+            "amount": 62000,
+            "category": "쇼핑",
+            "payment_method": "카드",
+            "description": "봄 옷 구매",
+            "date": "2025-04-02"
+        },
+        {
+            "id": "15",
+            "user_id": "1",
+            "amount": 9000,
+            "category": "카페/디저트",
+            "payment_method": "카드",
+            "description": "스타벅스 아이스아메리카노",
+            "date": "2025-04-03"
+        },
+        {
+            "id": "17",
+            "user_id": "1",
+            "amount": 50000,
+            "category": "의료/건강",
+            "payment_method": "카드",
+            "description": "한의원 침치료",
+            "date": "2025-04-04"
+        },
+        {
+            "id": "19",
+            "user_id": "1",
+            "amount": 12000,
+            "category": "통신비",
+            "payment_method": "계좌이체",
+            "description": "휴대폰 요금",
+            "date": "2025-04-02"
+        }
+    ],
+    "incomes": [
+        {
+            "id": "2",
+            "user_id": "1",
+            "amount": 3000000,
+            "category": "급여",
+            "description": "3월 급여",
+            "date": "2025-03-25"
+        },
+        {
+            "id": "6",
+            "type": "income",
+            "amount": 50000,
+            "category": "기타",
+            "payment_method": "카드",
+            "description": "중고나라 판매 수익",
+            "date": "2025-04-02",
+            "user_id": "1"
+        },
+        {
+            "id": "8",
+            "user_id": "1",
+            "amount": 200000,
+            "category": "투자수익",
+            "description": "배당금 수익",
+            "date": "2025-04-03"
+        },
+        {
+            "id": "10",
+            "user_id": "1",
+            "amount": 100000,
+            "category": "상금",
+            "description": "해커톤 수상",
+            "date": "2025-04-04"
+        },
+        {
+            "id": "12",
+            "user_id": "1",
+            "amount": 0,
+            "category": "기타",
+            "description": "보너스 없음",
+            "date": "2025-04-05"
+        },
+        {
+            "id": "14",
+            "user_id": "1",
+            "amount": 1000000,
+            "category": "기타",
+            "description": "수수료 환급",
+            "date": "2025-04-06"
+        },
+        {
+            "id": "16",
+            "user_id": "1",
+            "amount": 20000,
+            "category": "이자",
+            "description": "예금 이자",
+            "date": "2025-04-06"
+        },
+        {
+            "id": "18",
+            "user_id": "1",
+            "amount": 80000,
+            "category": "프리랜서",
+            "description": "알바 수익",
+            "date": "2025-04-06"
+        },
+        {
+            "id": "20",
+            "user_id": "1",
+            "amount": 150000,
+            "category": "상여",
+            "description": "성과급",
+            "date": "2025-04-06"
+        }
+    ]
 }

@@ -14,7 +14,7 @@ app.use(createPinia());
 app.use(router);
 
 const userStore = useUserStore();
-userStore.fetchUser();
 userStore.restoreUser();
+userStore.fetchUser();
 
 app.mount('#app');
