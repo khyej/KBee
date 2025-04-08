@@ -19,8 +19,7 @@ import { RouterView } from 'vue-router';
 <style>
 @font-face {
   font-family: 'S-CoreDream-3Light';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
-    format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -28,6 +27,7 @@ import { RouterView } from 'vue-router';
 * {
   font-family: 'S-CoreDream-3Light';
 }
+
 .layout {
   display: flex;
   flex-direction: column;

@@ -10,6 +10,7 @@ const routes = [
     { path: '/calender', component: () => import('../views/CalendarView.vue') },
     { path: '/history', component: () => import('../views/HistoryView.vue') },
     { path: '/mypage', component: () => import('../views/MypageView.vue') },
+    { path: '/signup', component: () => import('../views/SignupView.vue') },
 ];
 
 const router = createRouter({
