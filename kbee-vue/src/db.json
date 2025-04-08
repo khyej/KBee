@@ -12,11 +12,12 @@
     {
       "id": "1",
       "user_id": "1",
-      "amount": 12000,
+      "amount": 12001,
       "category": "식비",
       "payment_method": "카드",
       "description": "편의점 간식",
-      "date": "2025-04-01"
+      "date": "2025-04-01",
+      "type": "expense"
     },
     {
       "id": "3",
