@@ -3,11 +3,11 @@ import { RouterLink, RouterView } from 'vue-router';
 import Sidebar from './Sidebar.vue';
 </script>
 <template>
-    <header>
-        <img src="@/assets/logo.png" />
-        <p>가계부</p>
-    </header>
-    <!-- <header
+  <header>
+    <img src="@/assets/logo.png" />
+    <p>가계부</p>
+  </header>
+  <!-- <header
         class="bg-white dark:bg-gray-800 text-black dark:text-white p-4 fixed top-0 w-full shadow-md border-1 border-[#FFBC00]"
     >
         <div class="max-w-screen-xl px-4 py-3 mx-auto">
@@ -82,24 +82,24 @@ import Sidebar from './Sidebar.vue';
 </template>
 <style scoped>
 header {
-    width: 100%;
-    height: 50px;
-    background-color: white;
-    /* border: 1px solid rgb(255, 204, 0); */
-    border-bottom: 1px solid rgb(255, 204, 0);
-    box-shadow: inset;
-    display: flex;
-    align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  /* border: 1px solid rgb(255, 204, 0); */
+  border-bottom: 1px solid rgb(255, 204, 0);
+  box-shadow: inset;
+  display: flex;
+  align-items: center;
 }
 
 img {
-    width: 50px;
-    height: 50px;
-    margin: 0 10px;
+  width: 50px;
+  height: 50px;
+  margin: 0 10px;
 }
 
 p {
-    font-family: 'S-CoreDream-3Light';
-    font-weight: 900;
+  font-family: 'S-CoreDream-3Light';
+  font-weight: 900;
 }
 </style>
