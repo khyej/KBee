@@ -101,6 +101,7 @@ const toggleEdit = async () => {
 .main {
   display: flex;
   justify-content: center;
+  padding-bottom: 100px;
   align-items: center;
   height: 100vh;
   background-color: #f4f7fb;
