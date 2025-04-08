@@ -8,11 +8,11 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         async fetchUser() {
-            const res = await axios.get('/api/user');
+            const res = await axios.get('/api/users');
             this.user = res.data;
         },
         async updateUser(updatedData) {
-            const res = await axios.put('/api/user', updatedData);
+            const res = await axios.put('/api/users', updatedData);
             this.user = res.data;
         },
         login(user) {

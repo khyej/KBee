@@ -9,20 +9,13 @@
     </div>
 
     <!-- 추가 버튼 -->
-    <button
-      @click="showAddModal = true"
-      class="bg-green-500 text-white px-4 py-2 rounded mb-4"
-    >
+    <button @click="showAddModal = true" class="bg-green-500 text-white px-4 py-2 rounded mb-4">
       항목 추가
     </button>
 
     <!-- 항목 리스트 -->
     <div class="mt-6">
-      <div
-        v-for="item in filteredList"
-        :key="item.id"
-        class="border p-2 mb-2 rounded relative"
-      >
+      <div v-for="item in filteredList" :key="item.id" class="border p-2 mb-2 rounded relative">
         <div class="flex justify-between">
           <div>
             <p>
@@ -39,58 +32,21 @@
     </div>
 
     <!-- 추가 모달 -->
-    <div
-      v-if="showAddModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-    >
+    <div v-if="showAddModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div class="bg-white p-6 rounded shadow w-full max-w-md">
         <h3 class="text-lg font-semibold mb-4">항목 추가</h3>
         <form @submit.prevent="handleSubmit" class="space-y-2">
-          <input
-            v-model="form.amount"
-            type="number"
-            placeholder="금액"
-            required
-            class="border px-2 py-1 w-full"
-          />
-          <input
-            v-model="form.category"
-            type="text"
-            placeholder="카테고리"
-            required
-            class="border px-2 py-1 w-full"
-          />
-          <input
-            v-if="mode === 'expense'"
-            v-model="form.payment_method"
-            type="text"
-            placeholder="결제수단"
-            class="border px-2 py-1 w-full"
-          />
-          <input
-            v-model="form.description"
-            type="text"
-            placeholder="설명"
-            class="border px-2 py-1 w-full"
-          />
-          <input
-            v-model="form.date"
-            type="date"
-            required
-            class="border px-2 py-1 w-full"
-          />
+          <input v-model="form.amount" type="number" placeholder="금액" required class="border px-2 py-1 w-full" />
+          <input v-model="form.category" type="text" placeholder="카테고리" required class="border px-2 py-1 w-full" />
+          <input v-if="mode === 'expense'" v-model="form.payment_method" type="text" placeholder="결제수단"
+            class="border px-2 py-1 w-full" />
+          <input v-model="form.description" type="text" placeholder="설명" class="border px-2 py-1 w-full" />
+          <input v-model="form.date" type="date" required class="border px-2 py-1 w-full" />
           <div class="flex justify-end gap-2 mt-4">
-            <button
-              type="button"
-              @click="showAddModal = false"
-              class="text-gray-500"
-            >
+            <button type="button" @click="showAddModal = false" class="text-gray-500">
               취소
             </button>
-            <button
-              type="submit"
-              class="bg-green-500 text-white px-4 py-1 rounded"
-            >
+            <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded">
               추가
             </button>
           </div>
@@ -99,54 +55,21 @@
     </div>
 
     <!-- 편집 모달 -->
-    <div
-      v-if="editingItem"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-    >
+    <div v-if="editingItem" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div class="bg-white p-6 rounded shadow w-full max-w-md">
         <h3 class="text-lg font-semibold mb-4">항목 수정</h3>
-        <input
-          v-model="editForm.amount"
-          type="number"
-          placeholder="금액"
-          class="border px-2 py-1 w-full mb-2"
-        />
-        <input
-          v-model="editForm.category"
-          type="text"
-          placeholder="카테고리"
-          class="border px-2 py-1 w-full mb-2"
-        />
-        <input
-          v-if="editingItem.type === 'expense'"
-          v-model="editForm.payment_method"
-          type="text"
-          placeholder="결제수단"
-          class="border px-2 py-1 w-full mb-2"
-        />
-        <input
-          v-model="editForm.description"
-          type="text"
-          placeholder="설명"
-          class="border px-2 py-1 w-full mb-2"
-        />
-        <input
-          v-model="editForm.date"
-          type="date"
-          class="border px-2 py-1 w-full mb-2"
-        />
+        <input v-model="editForm.amount" type="number" placeholder="금액" class="border px-2 py-1 w-full mb-2" />
+        <input v-model="editForm.category" type="text" placeholder="카테고리" class="border px-2 py-1 w-full mb-2" />
+        <input v-if="editingItem.type === 'expense'" v-model="editForm.payment_method" type="text" placeholder="결제수단"
+          class="border px-2 py-1 w-full mb-2" />
+        <input v-model="editForm.description" type="text" placeholder="설명" class="border px-2 py-1 w-full mb-2" />
+        <input v-model="editForm.date" type="date" class="border px-2 py-1 w-full mb-2" />
         <div class="flex justify-end gap-2">
           <button @click="cancelEdit" class="text-gray-500">취소</button>
-          <button
-            @click="deleteItem(editingItem)"
-            class="bg-red-500 text-white px-4 py-1 rounded"
-          >
+          <button @click="deleteItem(editingItem)" class="bg-red-500 text-white px-4 py-1 rounded">
             삭제
           </button>
-          <button
-            @click="applyEdit(editingItem)"
-            class="bg-yellow-500 text-white px-4 py-1 rounded"
-          >
+          <button @click="applyEdit(editingItem)" class="bg-yellow-500 text-white px-4 py-1 rounded">
             수정
           </button>
         </div>

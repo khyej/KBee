@@ -1,30 +1,3 @@
-<template>
-    <div class="main">
-        <div class="card">
-            <div class="logo-box">
-                <img src="@/assets/logo.png" />
-            </div>
-
-            <div class="input-group">
-                <div class="input-row" v-for="(label, key) in fields" :key="key">
-                    <label>{{ label }}</label>
-                    <input v-model="form[key]"
-                        :type="key === 'password' || key === 'confirmPassword' ? 'password' : 'text'"
-                        :placeholder="label + '을(를) 입력해주세요'" />
-                </div>
-            </div>
-
-            <div class="btn-wrapper">
-                <button @click="signup" class="login-button">회원가입</button>
-            </div>
-
-            <div class="signup">
-                <a @click.prevent="router.push('/login')">로그인으로 돌아가기</a>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -51,36 +24,44 @@ const fields = {
 }
 
 const signup = async () => {
-    if (form.value.password !== form.value.confirmPassword) {
-        return alert('비밀번호가 일치하지 않습니다')
+    try {
+        if (form.value.password !== form.value.confirmPassword) {
+            alert('비밀번호가 일치하지 않습니다')
+            return
+        }
+
+        const res = await axios.get('http://localhost:3001/users')
+        const users = res.data
+
+        const isDuplicate = users.some(
+            u => u.email === form.value.email || u.nickname === form.value.nickname
+        )
+        if (isDuplicate) {
+            alert('중복된 이메일 또는 닉네임입니다')
+            return
+        }
+
+        const nextId = String(Math.max(...users.map(u => Number(u.id))) + 1)
+
+        const newUser = {
+            id: nextId,
+            nickname: form.value.nickname,
+            username: form.value.username,
+            email: form.value.email,
+            password: form.value.password,
+            phone: form.value.phone
+        }
+
+        await axios.post('http://localhost:3001/users', newUser)
+        alert('회원가입 완료!')
+        router.push('/login')
+    } catch (error) {
+        console.error('회원가입 실패:', error.message)
+        alert('회원가입 실패: 서버 오류가 발생했습니다.')
     }
-
-    const res = await axios.get('http://localhost:3001/users')
-    const users = res.data
-
-    const isDuplicate = users.some(
-        u => u.email === form.value.email || u.nickname === form.value.nickname
-    )
-    if (isDuplicate) {
-        return alert('중복된 이메일 또는 닉네임입니다')
-    }
-
-    const nextId = String(Math.max(...users.map(u => Number(u.id))) + 1)
-
-    const newUser = {
-        id: nextId,
-        nickname: form.value.nickname,
-        username: form.value.username,
-        email: form.value.email,
-        password: form.value.password,
-        phone: form.value.phone
-    }
-
-    await axios.post('http://localhost:3001/users', newUser)
-    alert('회원가입 완료!')
-    router.push('/login')
 }
 </script>
+
 
 <style scoped>
 .main {
@@ -181,3 +162,28 @@ const signup = async () => {
     color: #666;
 }
 </style>
+<template>
+    <div class="main">
+        <div class="card">
+            <div class="logo-box">
+                <img src="@/assets/logo.png" />
+            </div>
+
+            <div class="input-group">
+                <div class="input-row" v-for="(label, key) in fields" :key="key">
+                    <label>{{ label }}</label>
+                    <input v-model="form[key]" :type="key.includes('password') ? 'password' : 'text'"
+                        :placeholder="label + '을(를) 입력해주세요'" />
+                </div>
+            </div>
+
+            <div class="btn-wrapper">
+                <button @click="signup" class="login-button">회원가입</button>
+            </div>
+
+            <div class="signup">
+                <a @click.prevent="router.push('/login')">로그인으로 돌아가기</a>
+            </div>
+        </div>
+    </div>
+</template>

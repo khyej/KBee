@@ -1,13 +1,31 @@
 {
-  "user": {
-    "id": "1",
-    "nickname": "gildong_2",
-    "username": "홍길동",
-    "email": "hong@gmail.com",
-    "password": "test",
-    "phone": "010-1234-5678",
-    "Set Budget": 100000
-  },
+  "users": [
+    {
+      "id": "1",
+      "nickname": "gildong_2",
+      "username": "홍길동",
+      "email": "hong@gmail.com",
+      "password": "test",
+      "phone": "010-1234-5678",
+      "Set Budget": 100000
+    },
+    {
+      "id": "2",
+      "nickname": "1111",
+      "username": "1111",
+      "email": "1111",
+      "password": "1111",
+      "phone": "1111"
+    },
+    {
+      "id": "3",
+      "nickname": "111",
+      "username": "111",
+      "email": "111",
+      "password": "111",
+      "phone": "111"
+    }
+  ],
   "expenses": [
     {
       "id": "1",
