@@ -1,10 +1,11 @@
 <template>
     <div>
-        <h2>📋 수입 / 지출 관리</h2>
-        <EditHistory />
+        <History />
+        <!-- <EditHistory /> -->
     </div>
 </template>
 
 <script setup>
+import History from '@/components/History.vue';
 import EditHistory from '@/components/EditHistory.vue';
 </script>
