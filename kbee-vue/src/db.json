@@ -129,20 +129,14 @@
       "date": "2025-03-25"
     },
     {
-      "id": "4",
-      "user_id": "1",
-      "amount": 150000,
-      "category": "용돈",
-      "description": "부모님 용돈",
-      "date": "2025-04-01"
-    },
-    {
       "id": "6",
-      "user_id": "1",
+      "type": "income",
       "amount": 50000,
       "category": "기타",
+      "payment_method": "카드",
       "description": "중고나라 판매 수익",
-      "date": "2025-04-02"
+      "date": "2025-04-02",
+      "user_id": "1"
     },
     {
       "id": "8",
@@ -199,6 +193,16 @@
       "category": "상여",
       "description": "성과급",
       "date": "2025-04-06"
+    },
+    {
+      "id": "21",
+      "type": "income",
+      "amount": 10000010,
+      "category": "가나다라",
+      "payment_method": "",
+      "description": "1111",
+      "date": "2025-04-08",
+      "user_id": "1"
     }
   ]
 }
