@@ -98,6 +98,7 @@ const logout = () => {
 </template>
 <style scoped>
 header {
+  position: fixed;
   width: 100%;
   height: 50px;
   background-color: white;
@@ -106,7 +107,8 @@ header {
   box-shadow: inset;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 좌우 정렬 */
+  justify-content: space-between;
+  /* 좌우 정렬 */
   padding: 0 16px;
 }
 
