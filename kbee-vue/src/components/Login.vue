@@ -63,7 +63,7 @@ const login = async () => {
     if (matchedUser) {
       userStore.login(matchedUser); // Pinia 등에서 로그인 처리
       alert('로그인 성공');
-      router.push('/');
+      router.push('/dashboard');
     } else {
       alert('아이디 또는 비밀번호가 틀렸습니다');
     }
