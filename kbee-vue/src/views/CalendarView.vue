@@ -4,6 +4,6 @@ import Calendar from '../components/Calendar.vue';
 
 <template>
   <main>
-    <Home />
+    <Calendar />
   </main>
 </template>
