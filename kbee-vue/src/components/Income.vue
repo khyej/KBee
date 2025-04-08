@@ -3,7 +3,7 @@
     <h3 class="text-lg font-semibold mb-2">💰 수입 내역</h3>
     <ul>
       <li
-        v-for="item in filteredIncomeList"
+        v-for="item in incomeList"
         :key="item.id"
         class="mb-2 p-2 border rounded"
       >
@@ -23,7 +23,7 @@ import axios from 'axios';
 const props = defineProps({
   selectedDate: {
     type: String,
-    required: true,
+    default: null, // Make the prop optional with a default value of null
   },
 });
 
@@ -65,12 +65,11 @@ const convertToYYYYMMDD = (dateStr) => {
 
 const fetchIncome = async (formattedDate) => {
   try {
-    const res = await axios.get('/api/incomes', {
-      params: {
-        user_id: 1,
-        date: formattedDate,
-      },
-    });
+    const params = { user_id: 1 };
+    if (formattedDate) {
+      params.date = formattedDate;
+    }
+    const res = await axios.get('/api/incomes', { params });
     incomeList.value = res.data;
     emit('income-loaded', res.data);
   } catch (error) {
@@ -78,17 +77,11 @@ const fetchIncome = async (formattedDate) => {
   }
 };
 
-const filteredIncomeList = computed(() => {
-  return incomeList.value;
-});
-
 watch(
   () => props.selectedDate,
   (newSelectedDate) => {
     const formattedDate = convertToYYYYMMDD(newSelectedDate);
-    if (formattedDate) {
-      fetchIncome(formattedDate);
-    }
+    fetchIncome(formattedDate);
   },
   { immediate: true }
 );
