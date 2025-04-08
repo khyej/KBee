@@ -63,6 +63,32 @@ const signup = async () => {
 }
 </script>
 
+<template>
+    <div class="main">
+        <div class="card">
+            <div class="logo-box">
+                <img src="@/assets/logo.png" />
+            </div>
+
+            <div class="input-group">
+                <div class="input-row" v-for="(label, key) in fields" :key="key">
+                    <label>{{ label }}</label>
+                    <input v-model="form[key]"
+                        :type="key === 'password' || key === 'confirmPassword' ? 'password' : 'text'"
+                        :placeholder="label + '을(를) 입력해주세요'" />
+                </div>
+            </div>
+
+            <div class="btn-wrapper">
+                <button @click="signup" class="login-button">회원가입</button>
+            </div>
+
+            <div class="signup">
+                <a @click.prevent="router.push('/login')">로그인으로 돌아가기</a>
+            </div>
+        </div>
+    </div>
+</template>
 
 <style scoped>
 .main {
@@ -163,28 +189,3 @@ const signup = async () => {
     color: #666;
 }
 </style>
-<template>
-    <div class="main">
-        <div class="card">
-            <div class="logo-box">
-                <img src="@/assets/logo.png" />
-            </div>
-
-            <div class="input-group">
-                <div class="input-row" v-for="(label, key) in fields" :key="key">
-                    <label>{{ label }}</label>
-                    <input v-model="form[key]" :type="key.includes('password') ? 'password' : 'text'"
-                        :placeholder="label + '을(를) 입력해주세요'" />
-                </div>
-            </div>
-
-            <div class="btn-wrapper">
-                <button @click="signup" class="login-button">회원가입</button>
-            </div>
-
-            <div class="signup">
-                <a @click.prevent="router.push('/login')">로그인으로 돌아가기</a>
-            </div>
-        </div>
-    </div>
-</template>

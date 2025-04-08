@@ -23,7 +23,7 @@ router.beforeEach(async (to, from, next) => {
 
   userStore.restoreUser();
 
-  if (to.path !== '/login' && to.path !== '/' && !userStore.isLoggedIn) {
+  if (!['/', '/login', '/signup'].includes(to.path) && !userStore.isLoggedIn) {
     next('/login');
   } else {
     next();
