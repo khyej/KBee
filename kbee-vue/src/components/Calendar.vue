@@ -1,52 +1,78 @@
 <template>
-  <div class="flex items-center justify-between mb-4">
-    <div>
-      <h2 v-if="selectedDate" class="text-xl font-semibold">
-        Selected Date: {{ formattedSelectedDate }}
-      </h2>
-      <h5 class="text-xl leading-8 font-semibold text-gray-900">
-        {{ currentMonth }} {{ currentYear }}
-      </h5>
-    </div>
-    <div>
-      <button @click="goToPreviousMonth" class="mr-2">&lt;</button>
-      <button @click="goToNextMonth">&gt;</button>
-    </div>
-  </div>
-  <div class="w-full max-w-md mx-auto">
-    <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
-      <div v-for="day in daysOfWeek" :key="day" class="p-2">{{ day }}</div>
-    </div>
-    <div class="grid grid-cols-7 divide-gray-200">
-      <button
-        v-for="date in calendarDays"
-        :key="date.id"
-        class="p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none"
-        :class="{
-          'text-gray-400': date.outside,
-          'bg-indigo-100': date.isToday,
-          'bg-yellow-200': isSelected(date),
-        }"
-        @click="selectDate(date)"
-      >
-        <span
-          class="text-xs font-semibold flex items-center justify-center w-7 h-7 rounded-full"
-          :class="{ 'bg-indigo-600 text-white': date.isToday }"
+  <div class="h-screen flex">
+    <div
+      class="flex flex-col items-center justify-center bg-blue-200 p-4"
+      :class="showSecondScreen ? 'w-5/7' : 'w-full'"
+      style="height: 100vh"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <input
+          v-model="message"
+          type="text"
+          placeholder="Type a message..."
+          class="p-2 border border-gray-300 rounded mb-4 w-3/4"
+        />
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded"
+          @click="showSecondScreen = !showSecondScreen"
         >
-          {{ date.day }}
-        </span>
-      </button>
+          {{ showSecondScreen ? 'Hide Second Screen' : 'Show Second Screen' }}
+        </button>
+        <h2 v-if="selectedDate" class="text-xl font-semibold">
+          Selected Date: {{ formattedSelectedDate }}
+        </h2>
+        <h5 class="text-xl leading-8 font-semibold text-gray-900">
+          {{ currentMonth }} {{ currentYear }}
+        </h5>
+        <div>
+          <button @click="goToPreviousMonth" class="mr-2">&lt;</button>
+          <button @click="goToNextMonth">&gt;</button>
+        </div>
+      </div>
+      <div class="w-full max-w-md mx-auto">
+        <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
+          <div v-for="day in daysOfWeek" :key="day" class="p-2">{{ day }}</div>
+        </div>
+        <div class="grid grid-cols-7 divide-gray-200">
+          <button
+            v-for="date in calendarDays"
+            :key="date.id"
+            class="p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none"
+            :class="{
+              'text-gray-400': date.outside,
+              'bg-indigo-100': date.isToday,
+              'bg-yellow-200': isSelected(date),
+            }"
+            @click="selectDate(date)"
+          >
+            <span
+              class="text-xs font-semibold flex items-center justify-center w-7 h-7 rounded-full"
+              :class="{ 'bg-indigo-600 text-white': date.isToday }"
+            >
+              {{ date.day }}
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showSecondScreen" class="w-2/7 h-screen">
+      <SecondScreen
+        :selectedDate="formattedSelectedDate"
+        @close="showSecondScreen = false"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import SecondScreen from './SecondScreen.vue';
 
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const currentDate = ref(new Date()); // Use ref for reactivity
 const selectedDate = ref(null);
-
+const showSecondScreen = ref(false);
 const year = computed(() => currentDate.value.getFullYear());
 const month = computed(() => currentDate.value.getMonth());
 const today = computed(() => new Date().getDate());
