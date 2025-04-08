@@ -1,5 +1,5 @@
 <script setup>
-import Home from '../components/Home.vue'
+import Calendar from '../components/Calendar.vue';
 </script>
 
 <template>
