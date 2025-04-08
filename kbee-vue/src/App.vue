@@ -1,22 +1,19 @@
 <script setup>
 import Header from './components/Header.vue';
 import Sidebar from './components/Sidebar.vue';
-import { RouterView } from 'vue-router';
 import Layout from './components/Layout.vue';
 </script>
 
 <template>
   <Layout>
-    <template #header>
+    <template v-slot:header>
       <Header />
     </template>
-    <template #sidebar>
+    <template v-slot:sidebar>
       <Sidebar />
     </template>
-    <div class="contentBox">
+    <template v-slot:main>
       <RouterView />
-    </div>
+    </template>
   </Layout>
 </template>
-
-<style></style>
