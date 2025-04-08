@@ -1,30 +1,14 @@
 <template>
   <div class="h-screen flex">
-    <!-- <div
-      class="flex flex-col items-center justify-center bg-blue-200 p-4"
-      :class="showSecondScreen ? 'w-5/7' : 'w-full'"
-      style="height: 100vh"
-    > -->
     <div
-      class="flex flex-col items-center justify-center bg-blue-200 p-4 w-5/7"
+      class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7"
       style="height: 100vh"
     >
       <div class="flex items-center justify-between mb-4 w-full">
+        <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
+          {{ currentYear }}년 {{ currentMonth }}
+        </h5>
         <div class="flex items-center">
-          <!-- <button
-            class="px-4 py-2 bg-blue-500 text-white rounded mr-4"
-            @click="showSecondScreen = !showSecondScreen"
-          >
-            {{ showSecondScreen ? 'Hide Details' : 'Show Details' }}
-          </button> -->
-          <h2 v-if="selectedDate" class="text-xl font-semibold">
-            Selected Date: {{ formattedSelectedDate }}
-          </h2>
-        </div>
-        <div class="flex items-center">
-          <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
-            {{ currentMonth }} {{ currentYear }}
-          </h5>
           <button
             @click="goToPreviousMonth"
             class="mr-2 px-2 py-1 bg-gray-300 rounded"
@@ -42,7 +26,7 @@
         </div>
       </div>
       <div
-        class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white"
+        class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
         <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
           <div v-for="day in daysOfWeek" :key="day" class="p-2">{{ day }}</div>
@@ -56,6 +40,7 @@
               'text-gray-400': date.outside,
               'bg-indigo-100': date.isToday,
               'bg-yellow-200': isSelected(date),
+              'outside-disabled': isOutsideDisabled(date),
             }"
             @click="selectDate(date)"
           >
@@ -71,12 +56,6 @@
     </div>
 
     <div v-if="showSecondScreen" class="w-2/7 h-screen">
-      <!-- <SecondScreen
-
-        :selectedDate="formattedSelectedDate"
-        @close="showSecondScreen = false"
-      /> -->
-
       <SecondScreen :selectedDate="formattedSelectedDate" />
     </div>
   </div>
@@ -88,30 +67,42 @@ import SecondScreen from './SecondScreen.vue';
 
 // Constants
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+// const monthNames = [
+//   'January',
+//   'February',
+//   'March',
+//   'April',
+//   'May',
+//   'June',
+//   'July',
+//   'August',
+//   'September',
+//   'October',
+//   'November',
+//   'December',
+// ];
 
+// const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+const monthNames = [
+  '1월',
+  '2월',
+  '3월',
+  '4월',
+  '5월',
+  '6월',
+  '7월',
+  '8월',
+  '9월',
+  '10월',
+  '11월',
+  '12월',
+];
 // Reactive state
 const currentDate = ref(new Date());
-const selectedDate = ref({
-  day: new Date().getDate(),
-  id: `current-${new Date().getDate()}`,
-  outside: false,
-  isToday: true,
-});
-// const showSecondScreen = ref(false);
+const selectedDate = ref(null);
+const selectedDay = ref(null);
+const selectedMonth = ref(null);
+const selectedYear = ref(null);
 const showSecondScreen = ref(true);
 
 // Computed properties for date information
@@ -178,15 +169,14 @@ const calendarDays = computed(() => [
 
 // Computed property for formatted selected date
 const formattedSelectedDate = computed(() => {
-  if (selectedDate.value) {
-    const selectedYear = year.value;
-    const selectedMonth = selectedDate.value.outside
-      ? selectedDate.value.id.startsWith('prev')
-        ? month.value - 1
-        : month.value + 1
-      : month.value;
-    const selectedDay = selectedDate.value.day;
-    return `${monthNames[selectedMonth]} ${selectedDay}, ${selectedYear}`;
+  if (
+    selectedDay.value !== null &&
+    selectedMonth.value !== null &&
+    selectedYear.value !== null
+  ) {
+    return `${monthNames[selectedMonth.value]} ${selectedDay.value}, ${
+      selectedYear.value
+    }`;
   }
   return '';
 });
@@ -209,26 +199,86 @@ const goToNextMonth = () => {
 };
 
 const selectDate = (date) => {
-  if (!date.outside) {
-    if (selectedDate.value?.id === date.id) {
-      // selectedDate.value = null;
-      showSecondScreen.value = true;
+  if (date.outside) {
+    if (date.id.startsWith('prev')) {
+      goToPreviousMonth();
+      selectedDay.value = date.day;
+      selectedMonth.value = month.value - 1 < 0 ? 11 : month.value - 1;
+      selectedYear.value = month.value - 1 < 0 ? year.value - 1 : year.value;
     } else {
-      selectedDate.value = date;
-      showSecondScreen.value = true;
+      goToNextMonth();
+      selectedDay.value = date.day;
+      selectedMonth.value = month.value + 1 > 11 ? 0 : month.value + 1;
+      selectedYear.value = month.value + 1 > 11 ? year.value + 1 : year.value;
     }
-    if (date.outside) {
+  } else {
+    if (
+      selectedDay.value === date.day &&
+      selectedMonth.value === month.value &&
+      selectedYear.value === year.value
+    ) {
+      selectedDay.value = null;
+      selectedMonth.value = null;
+      selectedYear.value = null;
+    } else {
+      selectedDay.value = date.day;
+      selectedMonth.value = month.value;
+      selectedYear.value = year.value;
     }
   }
 };
 
 const isSelected = (date) => {
-  return selectedDate.value?.id === date.id;
+  if (
+    selectedDay.value === null ||
+    selectedMonth.value === null ||
+    selectedYear.value === null
+  ) {
+    return false;
+  }
+  if (date.outside) {
+    if (date.id.startsWith('prev')) {
+      return (
+        selectedDay.value === date.day &&
+        selectedMonth.value === (month.value - 1 < 0 ? 11 : month.value - 1) &&
+        selectedYear.value ===
+          (month.value - 1 < 0 ? year.value - 1 : year.value)
+      );
+    } else {
+      return (
+        selectedDay.value === date.day &&
+        selectedMonth.value === (month.value + 1 > 11 ? 0 : month.value + 1) &&
+        selectedYear.value ===
+          (month.value + 1 > 11 ? year.value + 1 : year.value)
+      );
+    }
+  } else {
+    return (
+      selectedDay.value === date.day &&
+      selectedMonth.value === month.value &&
+      selectedYear.value === year.value
+    );
+  }
+};
+
+const isOutsideDisabled = (date) => {
+  return date.outside;
 };
 </script>
 
 <style scoped>
 .text-gray-400 {
   color: #9ca3af;
+}
+
+.calendar-grid-container {
+  border-bottom-left-radius: 0.5rem; /* Adjust the radius as needed */
+  border-bottom-right-radius: 0.5rem; /* Adjust the radius as needed */
+  overflow: hidden;
+}
+
+.outside-disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 </style>
