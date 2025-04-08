@@ -1,19 +1,51 @@
 <template>
-  <div
-    class="h-screen flex flex-col items-center justify-center bg-green-200 p-4"
-  >
-    <Income />
-    <p class="text-lg font-semibold mb-4">{{ selectedDate }}</p>
-    <button
-      class="px-4 py-2 bg-green-500 text-white rounded"
-      @click="$emit('close')"
-    >
-      Hide Me
-    </button>
+  <div>
+    <h2>Second Screen</h2>
+    <p>Selected Date: {{ selectedDate }}</p>
+    <Income @income-loaded="handleIncomeLoaded" :selectedDate="selectedDate" />
+    <Expense
+      @expense-loaded="handleExpenseLoaded"
+      :selectedDate="selectedDate"
+    />
+    <div v-if="parentIncomeList.length > 0">
+      <h2>Income Data in Parent</h2>
+      <ul>
+        <li v-for="item in parentIncomeList" :key="item.id">
+          {{ item.description }} - {{ item.amount }}
+        </li>
+      </ul>
+    </div>
+    <div v-if="parentExpenseList.length > 0">
+      <h2>Expense Data in Parent</h2>
+      <ul>
+        <li v-for="item in parentExpenseList" :key="item.id">
+          {{ item.description }} - {{ item.amount }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { ref, defineProps } from 'vue';
 import Income from './Income.vue';
-defineProps({ selectedDate: String });
+import Expense from './Expense.vue';
+
+const props = defineProps({
+  selectedDate: {
+    type: String,
+    default: null,
+  },
+});
+
+const parentIncomeList = ref([]);
+const parentExpenseList = ref([]);
+
+const handleIncomeLoaded = (incomeData) => {
+  parentIncomeList.value = incomeData;
+};
+
+const handleExpenseLoaded = (expenseData) => {
+  parentExpenseList.value = expenseData;
+};
 </script>
