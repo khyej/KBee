@@ -9,22 +9,14 @@
           <tr>
             <th>닉네임</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.nickname"
-                class="input-field"
-              />
+              <input v-if="editMode" v-model="form.nickname" class="input-field" />
               <span v-else>{{ userStore.user?.nickname }}</span>
             </td>
           </tr>
           <tr>
             <th>이름</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.username"
-                class="input-field"
-              />
+              <input v-if="editMode" v-model="form.username" class="input-field" />
               <span v-else>{{ userStore.user?.username }}</span>
             </td>
           </tr>
@@ -87,8 +79,7 @@ const toggleEdit = async () => {
 <style scoped>
 @font-face {
   font-family: 'S-CoreDream-3Light';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
-    format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

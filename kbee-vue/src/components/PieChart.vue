@@ -1,6 +1,36 @@
 <template>
-  <div class="relative">
-    <Doughnut :data="chartData" :options="options" />
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-center gap-4"
+  >
+    <!-- 도넛 차트 영역 -->
+    <div class="relative w-full md:w-1/2 h-full">
+      <Doughnut :data="chartData" :options="options" />
+    </div>
+
+    <!-- 범례 (Legend) -->
+    <div class="w-full md:w-1/2 flex flex-col justify-center pl-4">
+      <h3 class="font-semibold text-gray-700 mb-2">카테고리별 지출 내역</h3>
+      <ul class="space-y-2 text-sm">
+        <li
+          v-for="(label, index) in chartData.labels"
+          :key="index"
+          class="flex items-center justify-between"
+        >
+          <div class="flex items-center gap-2">
+            <span
+              class="w-4 h-4 inline-block rounded-full"
+              :style="{
+                backgroundColor: chartData.datasets[0].backgroundColor[index],
+              }"
+            ></span>
+            <span class="text-gray-800">{{ label }}</span>
+          </div>
+          <span class="text-gray-600 font-medium">
+            {{ chartData.datasets[0].data[index].toLocaleString() }}원
+          </span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -20,7 +50,15 @@ const options = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'bottom',
+      display: false, // 👉 기본 legend 숨김
+    },
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          const value = context.parsed;
+          return `${value.toLocaleString()}원`;
+        },
+      },
     },
   },
 };
@@ -78,3 +116,7 @@ const fetchAndRender = async () => {
 onMounted(fetchAndRender);
 watch(() => props.month, fetchAndRender);
 </script>
+
+<style scoped>
+/* 필요하면 스타일 더 추가 가능 */
+</style>

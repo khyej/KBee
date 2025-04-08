@@ -2,11 +2,7 @@
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">💸 지출 내역</h3>
     <ul>
-      <li
-        v-for="item in expenseList"
-        :key="item.id"
-        class="mb-2 p-2 border rounded"
-      >
+      <li v-for="item in expenseList" :key="item.id" class="mb-2 p-2 border rounded">
         <p>📆 {{ item.date }}</p>
         <p>💬 {{ item.description }}</p>
         <p>💸 {{ item.amount.toLocaleString() }}원</p>
@@ -23,7 +19,7 @@ import axios from 'axios';
 const expenseList = ref([]);
 
 const fetchExpense = async () => {
-  const res = await axios.get('http://localhost:3001/expenses?user_id=1');
+  const res = await axios.get('/api/expenses?user_id=1');
   expenseList.value = res.data;
 };
 

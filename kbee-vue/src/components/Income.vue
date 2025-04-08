@@ -19,7 +19,7 @@ import axios from 'axios'
 const incomeList = ref([])
 
 const fetchIncome = async () => {
-  const res = await axios.get('http://localhost:3001/incomes?user_id=1')
+  const res = await axios.get('/api/incomes?user_id=1')
   incomeList.value = res.data
 }
 
