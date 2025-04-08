@@ -1,18 +1,4 @@
-<script setup>
-import { useRoute } from 'vue-router';
-import config from '@/config';
-import { computed } from 'vue';
-const currentRoute = useRoute();
-const currentMenu = computed(() => {
-  return config.menus.find((menu) => menu.url === currentRoute.path);
-});
-const isActive = computed(() => {
-  return currentRoute.path === currentMenu.value.url;
-});
-const isDefault = computed(() => {
-  return currentMenu.value.title === 'default';
-});
-</script>
+<script setup></script>
 
 <template>
   <div class="layout">
@@ -21,7 +7,11 @@ const isDefault = computed(() => {
     </header>
     <div class="contentBox" v-if="!isDefault">
       <slot name="sidebar" />
-      <main class="mainBox"><slot /></main>
+      <slot />
+    </div>
+    <div class="contentBox" v-if="!isDefault">
+      <slot name="routerview" />
+      <!-- <main class="mainBox"><slot /></main> -->
     </div>
   </div>
 </template>
