@@ -13,7 +13,7 @@
         <div class="divider"></div>
         <div class="input-row">
           <label>PW</label>
-          <input v-model="form.pw" placeholder="비밀번호를 입력해주세요" @keyup.enter="login" />
+          <input v-model="form.pw" type="password" placeholder="비밀번호를 입력해주세요" @keyup.enter="login" />
         </div>
       </div>
 
@@ -29,34 +29,40 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 import { useUserStore } from '@/stores/user';
 
 const router = useRouter();
 const userStore = useUserStore();
 
-const dummyUser = {
-  id: 'admin',
-  pw: '1234',
-  username: '관리자',
-  email: 'admin@example.com',
-  phone: '010-0000-0000',
-};
-
 const form = ref({
-  id: '',
-  pw: '',
+  id: '', // 이메일
+  pw: '', // 비밀번호
 });
 
-const login = () => {
-  if (form.value.id === dummyUser.id && form.value.pw === dummyUser.pw) {
-    userStore.login(dummyUser);
-    alert('로그인 성공');
-    router.push('/');
-  } else {
-    alert('아이디 또는 비밀번호가 틀렸습니다');
+const login = async () => {
+  try {
+    const res = await axios.get('http://localhost:3001/users');
+    const users = res.data;
+
+    const matchedUser = users.find(
+      u => u.email === form.value.id && u.password === form.value.pw
+    );
+
+    if (matchedUser) {
+      userStore.login(matchedUser); // Pinia 등에서 로그인 처리
+      alert('로그인 성공');
+      router.push('/');
+    } else {
+      alert('아이디 또는 비밀번호가 틀렸습니다');
+    }
+  } catch (err) {
+    console.error('로그인 오류:', err.message);
+    alert('서버 연결에 실패했습니다');
   }
 };
 </script>
+
 
 <style scoped>
 .main {

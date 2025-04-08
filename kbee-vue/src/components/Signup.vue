@@ -49,7 +49,8 @@ const signup = async () => {
             username: form.value.username,
             email: form.value.email,
             password: form.value.password,
-            phone: form.value.phone
+            phone: form.value.phone,
+            budget: ''
         }
 
         await axios.post('http://localhost:3001/users', newUser)
