@@ -1,4 +1,7 @@
-<script setup></script>
+<script setup>
+// You can add any necessary logic here, like isDefault
+import { RouterView } from 'vue-router';
+</script>
 
 <template>
   <div class="layout">
@@ -7,21 +10,25 @@
     </header>
     <div class="contentBox" v-if="!isDefault">
       <slot name="sidebar" />
-      <slot />
     </div>
-    <div class="contentBox" v-if="!isDefault">
-      <slot name="routerview" />
-      <!-- <main class="mainBox"><slot /></main> -->
+
+    <div class="mainBox">
+      <!-- <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view> -->
+      <RouterView v-slot="{ Component }">
+        <component :is="Component" />
+      </RouterView>
+      <router-view />
     </div>
   </div>
 </template>
-<script setup></script>
+
 <style scoped>
 header {
   width: 100%;
   height: 50px;
   background-color: white;
-  /* border: 1px solid rgb(255, 204, 0); */
   border-bottom: 1px solid rgb(255, 204, 0);
   box-shadow: inset;
   display: flex;
@@ -38,6 +45,7 @@ p {
   font-family: 'S-CoreDream-3Light';
   font-weight: 900;
 }
+
 .layout {
   display: flex;
   flex-direction: column;
@@ -53,8 +61,5 @@ p {
   flex: 1;
   padding: 5px;
   box-sizing: border-box;
-}
-export default {
-  name: 'Layout';
 }
 </style>
