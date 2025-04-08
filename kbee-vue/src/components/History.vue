@@ -309,6 +309,7 @@ const handleClickOutside = (e) => {
 
 onMounted(async () => {
     document.addEventListener('click', handleClickOutside);
+    userStore.restoreUser();
     await userStore.fetchUser();
     await fetchData();
 });
@@ -342,6 +343,8 @@ const selectedFilters = ref({
 const categoryOptions = ref([]);
 
 const extractCategories = () => {
+    if (!userStore.user) return;
+
     const all = [...expenses.value, ...incomes.value];
     const categories = new Set();
     all.forEach((item) => {
@@ -353,17 +356,20 @@ const extractCategories = () => {
 };
 
 const filterAndCombineData = () => {
-    // const keywordLower = selectedFilters.value.keyword.toLowerCase();
+    if (!userStore.user) {
+        console.warn('사용자 정보가 아직 로드되지 않았습니다.');
+        return;
+    }
 
     const all = [...expenses.value, ...incomes.value];
     const monthIndex = months.indexOf(selected.value.month);
-
     combinedData.value = all
         .filter((item) => {
             const date = new Date(item.date);
-            const matchesDate =
-                date.getFullYear() === selected.value.year &&
-                date.getMonth() === monthIndex;
+            const matchesDate = item.date?.startsWith(
+                `${selected.value.year}-${selected.value.month}`
+            );
+
             const matchesUser = item.user_id === userStore.user?.id;
             const matchesType =
                 selectedFilters.value.type === 'all' ||
