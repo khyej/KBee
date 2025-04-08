@@ -136,7 +136,7 @@ const handleSubmit = async () => {
     date: form.date,
   };
   if (mode.value === 'expense') data.payment_method = form.payment_method;
-  const url = `http://localhost:3001/${mode.value}s`;
+  const url = `/api/${mode.value}s`;
   await axios.post(url, data);
   Object.assign(form, {
     amount: '',
@@ -150,7 +150,7 @@ const handleSubmit = async () => {
 };
 
 const deleteItem = async (item) => {
-  const url = `http://localhost:3001/${item.type}s/${item.id}`;
+  const url = `/api/${item.type}s/${item.id}`;
   await axios.delete(url);
   await fetchData();
   editingItem.value = null;
@@ -166,7 +166,7 @@ const cancelEdit = () => {
 };
 
 const applyEdit = async (item) => {
-  const url = `http://localhost:3001/${item.type}s/${item.id}`;
+  const url = `/api/${item.type}s/${item.id}`;
   const updated = {
     ...item,
     amount: Number(editForm.amount),

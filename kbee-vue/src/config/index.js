@@ -14,9 +14,6 @@ export default {
       title: '목록',
       url: '/history',
     },
-    {
-      title: '마이페이지',
-      url: '/mypage',
-    },
+
   ],
 };

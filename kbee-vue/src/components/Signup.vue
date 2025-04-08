@@ -30,7 +30,7 @@ const signup = async () => {
             return
         }
 
-        const res = await axios.get('http://localhost:3001/users')
+        const res = await axios.get('/api/users')
         const users = res.data
 
         const isDuplicate = users.some(
@@ -53,7 +53,7 @@ const signup = async () => {
             budget: ''
         }
 
-        await axios.post('http://localhost:3001/users', newUser)
+        await axios.post('/api/users', newUser)
         alert('회원가입 완료!')
         router.push('/login')
     } catch (error) {
