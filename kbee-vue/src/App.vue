@@ -22,10 +22,7 @@ const noLayoutPages = ['/', '/login'];
     <Header v-if="!noLayoutPages.includes(route.path)" />
     <div class="contentBox">
       <Sidebar v-if="!noLayoutPages.includes(route.path)" />
-      <main
-        class="mainBox"
-        :class="{ fullPage: noLayoutPages.includes(route.path) }"
-      >
+      <main class="mainBox" :class="{ fullPage: noLayoutPages.includes(route.path) }">
         <RouterView />
       </main>
     </div>
@@ -56,11 +53,20 @@ const noLayoutPages = ['/', '/login'];
 }
 
 .mainBox {
-  /* flex: 1; */
-  width: 100%;
-  height: calc(100vh - 50px);
+
+  /* 헤더 높이 */
+  margin-left: 160px;
+  /* 사이드바 너비 */
+  width: calc(100% - 160px);
+  height: calc(100vh - 35px);
+  overflow-y: auto;
+  padding: 20px;
   background-color: #f0f4f9;
-  /* padding: 5px; */
-  /* box-sizing: border-box; */
+}
+
+.fullPage {
+  margin: 0;
+  width: 100%;
+  height: 100vh;
 }
 </style>

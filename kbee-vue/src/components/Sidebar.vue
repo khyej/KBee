@@ -29,13 +29,18 @@ const userStore = useUserStore()
 
 <style scoped>
 aside {
-    border-right: 1px solid rgb(255, 204, 0);
-    height: calc(100vh - 50px);
+    position: fixed;
+    top: 50px;
+    left: 0;
     width: 160px;
+    height: calc(100vh - 50px);
+    border-right: 1px solid rgb(255, 204, 0);
     padding: 20px 10px;
+    background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 1000;
 }
 
 ul {
