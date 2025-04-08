@@ -6,16 +6,10 @@
       style="height: 100vh"
     >
       <div class="flex items-center justify-between mb-4">
-        <input
-          v-model="message"
-          type="text"
-          placeholder="Type a message..."
-          class="p-2 border border-gray-300 rounded mb-4 w-3/4"
-        />
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded"
-          @click="showSecondScreen = !showSecondScreen"
-        >
+        <h2 v-if="selectedDate" class="text-xl font-semibold">
+          Selected Date: {{ formattedSelectedDate }}
+        </h2>
+        <button v-else>
           {{ showSecondScreen ? 'Hide Second Screen' : 'Show Second Screen' }}
         </button>
         <h2 v-if="selectedDate" class="text-xl font-semibold">
@@ -56,7 +50,7 @@
       </div>
     </div>
 
-    <div v-if="showSecondScreen" class="w-2/7 h-screen">
+    <div v-if="showSecondScreen && selectedDate" class="w-2/7 h-screen">
       <SecondScreen
         :selectedDate="formattedSelectedDate"
         @close="showSecondScreen = false"
@@ -169,8 +163,10 @@ const selectDate = (date) => {
   if (!date.outside) {
     if (selectedDate.value?.id === date.id) {
       selectedDate.value = null;
+      showSecondScreen.value = false;
     } else {
       selectedDate.value = date;
+      showSecondScreen.value = true;
     }
   }
 };
