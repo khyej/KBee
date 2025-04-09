@@ -1,80 +1,79 @@
 <template>
     <div class="subBox">
-        <!-- 상단 컨트롤 영역 -->
-        <div class="subDiv">
+        <div class="subDiv-1">
             <!-- 날짜 드롭다운 -->
-            <div class="dropdown-container">
-                <div
-                    class="dropdown"
-                    @click="toggleDropdown('year')"
-                    :class="['dropdown', isOpen.year ? 'open' : '']"
-                >
-                    <div class="dropdown-toggle">{{ selected.year }}</div>
-                    <ul class="dropdown-menu">
-                        <li
-                            v-for="year in years"
-                            :key="year"
-                            @click.stop="selectOption('year', year)"
-                        >
-                            {{ year }}
-                        </li>
-                    </ul>
-                </div>
-                <div
-                    class="dropdown"
-                    @click="toggleDropdown('month')"
-                    :class="{ open: isOpen.month }"
-                >
-                    <div class="dropdown-toggle">{{ selected.month }}</div>
-                    <ul class="dropdown-menu">
-                        <li
-                            v-for="month in months"
-                            :key="month"
-                            @click.stop="selectOption('month', month)"
-                        >
-                            {{ month }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- 필터 영역 -->
-            <div class="filters">
-                <select v-model="selectedFilters.type">
-                    <option value="all">전체</option>
-                    <option value="income">수입</option>
-                    <option value="expense">지출</option>
-                </select>
-
-                <select v-model="selectedFilters.category">
-                    <option value="all">전체 카테고리</option>
-                    <option
-                        v-for="cat in categoryOptions"
-                        :key="cat"
-                        :value="cat"
+            <div class="subDiv-header">
+                <div class="dropdown-container">
+                    <div
+                        class="dropdown"
+                        @click="toggleDropdown('year')"
+                        :class="['dropdown', isOpen.year ? 'open' : '']"
                     >
-                        {{ cat }}
-                    </option>
-                </select>
+                        <div class="dropdown-toggle">{{ selected.year }}</div>
+                        <ul class="dropdown-menu">
+                            <li
+                                v-for="year in years"
+                                :key="year"
+                                @click.stop="selectOption('year', year)"
+                            >
+                                {{ year }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div
+                        class="dropdown"
+                        @click="toggleDropdown('month')"
+                        :class="{ open: isOpen.month }"
+                    >
+                        <div class="dropdown-toggle">{{ selected.month }}</div>
+                        <ul class="dropdown-menu">
+                            <li
+                                v-for="month in months"
+                                :key="month"
+                                @click.stop="selectOption('month', month)"
+                            >
+                                {{ month }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-                <input
-                    type="text"
-                    :value="selectedFilters.keyword"
-                    @compositionstart="isComposing = true"
-                    @compositionend="onCompositionEnd"
-                    @input="onInput"
-                    placeholder="내용 검색"
-                />
+                <!-- 필터 영역 -->
+                <div class="filters">
+                    <select v-model="selectedFilters.type">
+                        <option value="all">전체</option>
+                        <option value="income">수입</option>
+                        <option value="expense">지출</option>
+                    </select>
+
+                    <select v-model="selectedFilters.category">
+                        <option value="all">전체 카테고리</option>
+                        <option
+                            v-for="cat in categoryOptions"
+                            :key="cat"
+                            :value="cat"
+                        >
+                            {{ cat }}
+                        </option>
+                    </select>
+
+                    <input
+                        type="text"
+                        :value="selectedFilters.keyword"
+                        @compositionstart="isComposing = true"
+                        @compositionend="onCompositionEnd"
+                        @input="onInput"
+                        placeholder="내용 검색"
+                    />
+                </div>
+
+                <button @click="showAddModal = true" class="addButton">
+                    내역 추가
+                </button>
             </div>
+            <!-- 테이블 영역 -->
 
-            <button @click="showAddModal = true" class="addButton">
-                내역 추가
-            </button>
-        </div>
-
-        <!-- 테이블 영역 -->
-        <div class="subDiv">
-            <div class="results">
+            <div class="subDiv-body results">
                 <div class="table-wrap">
                     <table>
                         <colgroup>
@@ -125,44 +124,49 @@
                     </table>
                 </div>
             </div>
-
-            <!-- 상세 모달 -->
+        </div>
+        <div class="subDiv-2">
+            <!-- 상세 보기 -->
             <div class="modal2" v-if="showDetailModal">
                 <div class="modal2-overlay" @click="closeModal"></div>
                 <div class="modal2-content">
                     <template v-if="!isEditing">
-                        <div class="form-row">
-                            <div class="form-date">{{ selectedItem.date }}</div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">분류</div>
-                            <div class="form-data">
-                                {{
-                                    selectedItem.type === 'expense'
-                                        ? '지출'
-                                        : '수입'
-                                }}
+                        <div class="form-body">
+                            <div class="form-row">
+                                <div class="form-date">
+                                    {{ selectedItem.date }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">분류</div>
+                                <div class="form-data">
+                                    {{
+                                        selectedItem.type === 'expense'
+                                            ? '지출'
+                                            : '수입'
+                                    }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">카테고리</div>
+                                <div class="form-data">
+                                    {{ selectedItem.category }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">내용</div>
+                                <div class="form-data">
+                                    {{ selectedItem.description }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">금액</div>
+                                <div class="form-data">
+                                    {{ selectedItem.amount }}
+                                </div>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-title">카테고리</div>
-                            <div class="form-data">
-                                {{ selectedItem.category }}
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">내용</div>
-                            <div class="form-data">
-                                {{ selectedItem.description }}
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">금액</div>
-                            <div class="form-data">
-                                {{ selectedItem.amount }}
-                            </div>
-                        </div>
-                        <div class="form-row form-actions">
+                        <div class="form-actions">
                             <div class="left">
                                 <button @click="isEditing = true">수정</button>
                                 <button @click="deleteItem">삭제</button>
@@ -174,57 +178,65 @@
                     </template>
 
                     <template v-else>
-                        <div class="form-row">
-                            <div class="form-date">수정</div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">날짜</div>
-                            <input
-                                v-model="detailForm.date"
-                                type="date"
-                                class="form-data"
-                            />
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">분류</div>
-                            <select v-model="detailForm.type" class="form-data">
-                                <option value="income">수입</option>
-                                <option value="expense">지출</option>
-                            </select>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">카테고리</div>
-                            <select
-                                v-model="detailForm.category"
-                                class="form-data"
-                            >
-                                <option disabled value="">카테고리 선택</option>
-                                <option
-                                    v-for="cat in detailForm.type === 'income'
-                                        ? incomeCategories
-                                        : expenseCategories"
-                                    :key="cat.id"
-                                    :value="cat.name"
+                        <div class="form-body">
+                            <div class="form-row">
+                                <div class="form-date">수정</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">날짜</div>
+                                <input
+                                    v-model="detailForm.date"
+                                    type="date"
+                                    class="form-data"
+                                />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">분류</div>
+                                <select
+                                    v-model="detailForm.type"
+                                    class="form-data"
                                 >
-                                    {{ cat.name }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">내용</div>
-                            <input
-                                v-model="detailForm.description"
-                                type="text"
-                                class="form-data"
-                            />
-                        </div>
-                        <div class="form-row">
-                            <div class="form-title">금액</div>
-                            <input
-                                v-model.number="detailForm.amount"
-                                type="number"
-                                class="form-data"
-                            />
+                                    <option value="income">수입</option>
+                                    <option value="expense">지출</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">카테고리</div>
+                                <select
+                                    v-model="detailForm.category"
+                                    class="form-data"
+                                >
+                                    <option disabled value="">
+                                        카테고리 선택
+                                    </option>
+                                    <option
+                                        v-for="cat in detailForm.type ===
+                                        'income'
+                                            ? incomeCategories
+                                            : expenseCategories"
+                                        :key="cat.id"
+                                        :value="cat.name"
+                                    >
+                                        {{ cat.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">내용</div>
+                                <input
+                                    v-model="detailForm.description"
+                                    type="text"
+                                    class="form-data"
+                                />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-title">금액</div>
+                                <input
+                                    v-model.number="detailForm.amount"
+                                    type="number"
+                                    class="form-data"
+                                />
+                            </div>
                         </div>
                         <div class="form-actions">
                             <div class="left"></div>
@@ -237,53 +249,73 @@
                 </div>
             </div>
         </div>
-
         <!-- 항목 추가 모달 -->
         <div class="modal" v-if="showAddModal">
             <div class="modal-overlay" @click="showAddModal = false"></div>
             <div class="modal-content">
-                <h2>항목 추가</h2>
-                <div class="form-row">
-                    <label>유형</label>
-                    <select v-model="mode">
-                        <option value="income">수입</option>
-                        <option value="expense">지출</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label>금액</label>
-                    <input type="number" v-model="form.amount" />
-                </div>
-                <div class="form-row">
-                    <label>카테고리</label>
-                    <select v-model="form.category">
-                        <option disabled value="">카테고리 선택</option>
-                        <option
-                            v-for="cat in mode === 'income'
-                                ? incomeCategories
-                                : expenseCategories"
-                            :key="cat.id"
-                            :value="cat.name"
-                        >
-                            {{ cat.name }}
-                        </option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label>내용</label>
-                    <input type="text" v-model="form.description" />
-                </div>
-                <div class="form-row" v-if="mode === 'expense'">
-                    <label>결제 수단</label>
-                    <input type="text" v-model="form.payment_method" />
-                </div>
-                <div class="form-row">
-                    <label>날짜</label>
-                    <input type="date" v-model="form.date" />
+                <div class="form-body">
+                    <div class="form-date">항목 추가</div>
+                    <div class="form-row">
+                        <div class="form-title">유형</div>
+                        <select v-model="mode" class="form-data">
+                            <option value="income">수입</option>
+                            <option value="expense">지출</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-title">금액</div>
+                        <input
+                            type="number"
+                            v-model="form.amount"
+                            class="form-data"
+                        />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-title">카테고리</div>
+                        <select v-model="form.category" class="form-data">
+                            <option disabled value="">카테고리 선택</option>
+                            <option
+                                v-for="cat in mode === 'income'
+                                    ? incomeCategories
+                                    : expenseCategories"
+                                :key="cat.id"
+                                :value="cat.name"
+                            >
+                                {{ cat.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-title">내용</div>
+                        <input
+                            type="text"
+                            v-model="form.description"
+                            class="form-data"
+                        />
+                    </div>
+                    <div class="form-row" v-if="mode === 'expense'">
+                        <div class="form-title">결제 수단</div>
+                        <input
+                            type="text"
+                            v-model="form.payment_method"
+                            class="form-data"
+                        />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-title">날짜</div>
+                        <input
+                            type="date"
+                            v-model="form.date"
+                            class="form-data"
+                        />
+                    </div>
                 </div>
                 <div class="form-actions">
-                    <button @click="handleSubmit">저장</button>
-                    <button @click="showAddModal = false">취소</button>
+                    <div class="left"></div>
+                    <div class="right">
+                        <button @click="handleSubmit">저장</button>
+                        <button @click="showAddModal = false">취소</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -577,27 +609,51 @@ watch(
 <style scoped>
 /* subBox */
 .subBox {
+    width: 100%;
     height: calc(100vh - 90px);
-    padding: 30px;
-    background-color: white;
+    /* background-color: white; */
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     overflow: hidden;
 }
 
-.subDiv {
+.subDiv-1 {
+    width: 70%;
     display: flex;
-    width: 100%;
-    transition: all 0.4s ease;
+    flex-direction: column;
+}
+
+.subDiv-2 {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.subDiv-header {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    height: 80px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.subDiv-body {
+    padding: 20px;
+    background-color: white;
+    overflow: hidden;
 }
 /* --------------------------------------------------- dropdown */
 .dropdown-container {
     display: flex;
     /* gap: 1rem; */
-    border: 1px solid #ccc;
+    border-top: 1px solid rgb(255, 188, 0);
+    border-left: 1px solid rgb(255, 188, 0);
+    border-right: 1px solid rgb(255, 188, 0);
     width: fit-content;
     margin-bottom: 2rem;
     flex-wrap: wrap;
+    height: 100%;
 }
 
 .dropdown {
@@ -611,14 +667,14 @@ watch(
 }
 
 .dropdown + .dropdown {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid rgb(255, 188, 0);
 }
 
 .dropdown-toggle {
     padding: 8px 12px;
-    background-color: yellow;
+    /* background-color: yellow; */
+    border-bottom: 1px solid rgb(255, 188, 0);
     font-size: 16px;
-    font-weight: 500;
     position: relative;
     box-sizing: border-box;
 }
@@ -630,6 +686,7 @@ watch(
     top: 50%;
     transform: translateY(-50%);
     font-size: 12px;
+    color: rgb(84, 80, 69);
 }
 
 .dropdown-menu {
@@ -647,7 +704,7 @@ watch(
     display: none;
     max-height: 220px;
     overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 7px 9px rgba(84, 80, 69, 0.1);
 }
 
 .dropdown-menu::-webkit-scrollbar {
@@ -673,7 +730,6 @@ watch(
 .results {
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: 100%;
     transition: all 0.4s ease;
 }
 
@@ -684,14 +740,11 @@ table {
 }
 
 .table-wrap {
-    flex: 1;
-    /* 남은 공간 모두 사용 */
+    /* flex: 1; */
+    width: 100%;
     overflow-y: auto;
     overflow-x: auto;
-    height: calc(100vh - 234px);
-    margin-bottom: 50px;
-    margin-right: 70px;
-    /* border: 1px solid #ccc; */
+    height: calc(100vh - 230px);
 }
 
 .table-wrap::-webkit-scrollbar {
@@ -736,12 +789,10 @@ td:nth-child(2) {
     color: green;
 }
 
-/* filter */
+/* -------------------------------------------------------------- filter */
 .filters {
     display: flex;
     gap: 1rem;
-    align-items: center;
-    margin-bottom: 1.5rem;
     flex-wrap: wrap;
 }
 
@@ -795,12 +846,13 @@ td:nth-child(2) {
 
 /* ----------------------------------------------------------------- modal */
 .modal2 {
-    width: 500px;
+    width: 380px;
     background: white;
     height: calc(100vh - 234px);
     transition: all 0.4s ease;
     max-height: calc(100vh - 90px);
     /* 헤더 제외 */
+    margin-left: 50px;
 }
 
 .modal2-content {
@@ -809,8 +861,10 @@ td:nth-child(2) {
     height: 100%;
     padding: 1rem;
     margin: 0 3px;
-    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); */
     border: 1px solid black;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .modal2-content h2,
@@ -861,13 +915,16 @@ td:nth-child(2) {
     word-break: keep-all;
 }
 
+.form-body {
+    flex: 1; /* ✅ 이 영역이 위쪽 공간을 모두 차지하게 */
+    overflow-y: auto;
+}
+
 .form-actions {
-    /* position: absolute;
-    bottom: 16px; */
     display: flex;
     justify-content: space-between;
-    margin-top: 1.5rem;
     width: 100%;
+    margin-top: auto;
 }
 
 .form-actions button {
@@ -904,33 +961,13 @@ td:nth-child(2) {
     color: white;
 }
 
-/* 추가, 수정 모달 버튼 */
-/* .form-actions button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.form-actions button:first-child {
-    background-color: #4caf50;
-    color: white;
-}
-
-.form-actions button:nth-child(2) {
-    background-color: #ccc;
-    color: black;
-} */
-
 /* button */
 .addButton {
     width: 100px;
-    height: 30px;
+    height: 40px;
     cursor: pointer;
-    background-color: #4caf50;
-    /* 원의 배경 색상 */
+    background-color: rgb(255, 204, 0);
     color: white;
+    font-weight: bold;
 }
 </style>
