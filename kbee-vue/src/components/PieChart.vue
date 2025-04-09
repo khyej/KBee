@@ -27,6 +27,14 @@
           </div>
           <span class="text-gray-600 font-medium">
             {{ chartData.datasets[0].data[index].toLocaleString() }}원
+            <span class="text-xs text-gray-500 ml-1">
+              ({{
+                (
+                  (chartData.datasets[0].data[index] / total.value) *
+                  100
+                ).toFixed(1)
+              }}%)
+            </span>
           </span>
         </li>
       </ul>
@@ -35,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
 import { useUserStore } from '@/stores/user';
 import { Doughnut } from 'vue-chartjs';
@@ -48,6 +56,20 @@ const props = defineProps({
 });
 
 const userStore = useUserStore();
+
+const chartData = ref({
+  labels: [],
+  datasets: [],
+});
+
+const total = ref(0);
+
+const percentages = computed(() => {
+  const data = chartData.value.datasets[0]?.data || [];
+  return data.map((value) =>
+    total.value > 0 ? ((value / total.value) * 100).toFixed(1) : '0.0'
+  );
+});
 
 const options = {
   responsive: true,
@@ -66,11 +88,6 @@ const options = {
     },
   },
 };
-
-const chartData = ref({
-  labels: [],
-  datasets: [],
-});
 
 const getMonth = (dateStr) => dateStr.split('-')[1];
 
@@ -93,6 +110,7 @@ const fetchAndRender = async () => {
 
     const labels = Object.keys(categoryTotals);
     const data = Object.values(categoryTotals);
+    total.value = data.reduce((sum, val) => sum + val, 0);
 
     const backgroundColors = [
       '#FCA5A5',
@@ -122,6 +140,9 @@ const fetchAndRender = async () => {
 
 onMounted(fetchAndRender);
 watch(() => props.month, fetchAndRender);
+
+// 👉 export 해서 템플릿에서 사용할 수 있도록!
+defineExpose({ chartData, percentages, total });
 </script>
 
 <style scoped>

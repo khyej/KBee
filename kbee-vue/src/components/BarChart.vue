@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useUserStore } from '@/stores/user';
 import {
@@ -27,18 +27,9 @@ Chart.register(
   Legend
 );
 
-const props = defineProps({
-  month: String,
-});
-
 const userStore = useUserStore();
 const barCanvas = ref(null);
 let chartInstance = null;
-
-const formatLabel = (label) =>
-  label.includes('/') ? label.split('/') : [label];
-
-const getMonth = (dateStr) => dateStr.split('-')[1];
 
 const renderChart = async () => {
   try {
@@ -50,35 +41,38 @@ const renderChart = async () => {
     ]);
 
     const userId = userStore.user.id;
-    const expenses = expensesRes.data.filter(
-      (item) => item.user_id === userId && getMonth(item.date) === props.month
-    );
-    const incomes = incomesRes.data.filter(
-      (item) => item.user_id === userId && getMonth(item.date) === props.month
-    );
 
-    const expenseCategories = {};
-    const incomeCategories = {};
+    const monthLabels = [
+      '1월',
+      '2월',
+      '3월',
+      '4월',
+      '5월',
+      '6월',
+      '7월',
+      '8월',
+      '9월',
+      '10월',
+      '11월',
+      '12월',
+    ];
 
-    expenses.forEach((item) => {
-      expenseCategories[item.category] =
-        (expenseCategories[item.category] || 0) + item.amount;
+    const monthlyExpenses = Array(12).fill(0);
+    const monthlyIncomes = Array(12).fill(0);
+
+    expensesRes.data.forEach((item) => {
+      if (item.user_id === userId) {
+        const month = new Date(item.date).getMonth(); // 0~11
+        monthlyExpenses[month] += item.amount;
+      }
     });
 
-    incomes.forEach((item) => {
-      incomeCategories[item.category] =
-        (incomeCategories[item.category] || 0) + item.amount;
+    incomesRes.data.forEach((item) => {
+      if (item.user_id === userId) {
+        const month = new Date(item.date).getMonth(); // 0~11
+        monthlyIncomes[month] += item.amount;
+      }
     });
-
-    const allCategories = Array.from(
-      new Set([
-        ...Object.keys(expenseCategories),
-        ...Object.keys(incomeCategories),
-      ])
-    );
-
-    const expenseData = allCategories.map((cat) => expenseCategories[cat] || 0);
-    const incomeData = allCategories.map((cat) => incomeCategories[cat] || 0);
 
     if (chartInstance) {
       chartInstance.destroy();
@@ -87,18 +81,18 @@ const renderChart = async () => {
     chartInstance = new Chart(barCanvas.value, {
       type: 'bar',
       data: {
-        labels: allCategories,
+        labels: monthLabels,
         datasets: [
           {
-            label: formatLabel('수입'),
-            data: incomeData,
+            label: '수입',
+            data: monthlyIncomes,
             backgroundColor: '#4ADE80',
             categoryPercentage: 0.6,
             barPercentage: 0.8,
           },
           {
-            label: formatLabel('지출'),
-            data: expenseData,
+            label: '지출',
+            data: monthlyExpenses,
             backgroundColor: '#F87171',
             categoryPercentage: 0.6,
             barPercentage: 0.8,
@@ -112,34 +106,39 @@ const renderChart = async () => {
           legend: {
             position: 'bottom',
             labels: {
-              boxWidth: 12, // ✅ 색상 박스 크기 줄이기
-              padding: 16, // ✅ 아이템 간 간격 늘리기
+              boxWidth: 12,
+              padding: 16,
               font: {
-                size: 12, // ✅ 글자 크기 줄이기
+                size: 12,
               },
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) =>
+                `${
+                  context.dataset.label
+                }: ${context.parsed.y.toLocaleString()}원`,
             },
           },
         },
         scales: {
           x: {
-            offset: true, // ✅ 추가
-            ticks: {
-              maxRotation: 0,
-              minRotation: 0,
-              autoSkip: false,
-            },
+            stacked: false,
           },
           y: {
             beginAtZero: true,
+            ticks: {
+              callback: (value) => `${value.toLocaleString()}원`,
+            },
           },
         },
       },
     });
   } catch (err) {
-    console.error('📉 바 차트 로딩 실패:', err);
+    console.error('📉 월별 바 차트 로딩 실패:', err);
   }
 };
 
 onMounted(renderChart);
-watch(() => props.month, renderChart);
 </script>
