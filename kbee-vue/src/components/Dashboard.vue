@@ -30,22 +30,48 @@
         <div class="w-full flex flex-col md:flex-row gap-10 md:items-stretch">
           <!-- 좌측: 수입/지출 및 바차트 -->
           <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1">
+            <!-- 수입/지출/잔액 박스: 가로 정렬 -->
             <div
-              class="bg-white px-6 py-10 shadow text-center border-b-2 border-green-200"
+              class="flex flex-col md:flex-row gap-4 w-full h-full text-center"
             >
-              <p class="text-gray-500 text-sm">{{ selectedMonth }}월 수입</p>
-              <p class="text-2xl font-semibold text-green-600">
-                +<AnimatedNumber :to="aprilIncome" />원
-              </p>
+              <!-- 수입 박스 -->
+              <div
+                class="flex-1 bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
+              >
+                <p class="text-gray-500 text-sm mb-1">
+                  {{ selectedMonth }}월 수입
+                </p>
+                <p class="text-2xl font-semibold text-green-600">
+                  +<AnimatedNumber :to="aprilIncome" />원
+                </p>
+              </div>
+
+              <!-- 지출 박스 -->
+              <div
+                class="flex-1 bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
+              >
+                <p class="text-gray-500 text-sm mb-1">
+                  {{ selectedMonth }}월 지출
+                </p>
+                <p class="text-2xl font-semibold text-red-600">
+                  -<AnimatedNumber :to="aprilExpense" />원
+                </p>
+              </div>
+
+              <!-- 잔액 박스 -->
+              <div
+                class="flex-1 bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
+              >
+                <p class="text-gray-500 text-sm mb-1">
+                  {{ selectedMonth }}월 잔액
+                </p>
+                <p class="text-2xl font-semibold text-blue-600">
+                  <AnimatedNumber :to="balance" />원
+                </p>
+              </div>
             </div>
-            <div
-              class="bg-white px-6 py-10 shadow text-center border-b-2 border-red-200"
-            >
-              <p class="text-gray-500 text-sm">{{ selectedMonth }}월 지출</p>
-              <p class="text-2xl font-semibold text-red-600">
-                -<AnimatedNumber :to="aprilExpense" />원
-              </p>
-            </div>
+
+            <!-- 바 차트 -->
             <div
               class="bg-white rounded-xl shadow p-4 h-full flex-1 flex flex-col justify-between"
             >
@@ -164,6 +190,9 @@ const fetchData = async () => {
 
 const getMonth = (dateStr) => dateStr.split('-')[1];
 
+const userBudget = ref(0);
+const balance = ref(0);
+
 const updateFilteredData = () => {
   const userId = userStore.user?.id;
   if (!userId) return;
@@ -185,6 +214,13 @@ const updateFilteredData = () => {
     (sum, item) => sum + item.amount,
     0
   );
+
+  // ✅ 사용자 budget 가져오기
+  const userData = userStore.user;
+  userBudget.value = Number(userData?.budget || 0);
+
+  // ✅ 잔액 계산
+  balance.value = userBudget.value - aprilExpense.value;
 
   const categorySums = filteredExpenses.reduce((acc, cur) => {
     acc[cur.category] = (acc[cur.category] || 0) + cur.amount;
