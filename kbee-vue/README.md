@@ -22,6 +22,9 @@ npm install
 npm run dev
 ```
 
+hiZZ
+odafajo
+
 ### Compile and Minify for Production
 
 ```sh

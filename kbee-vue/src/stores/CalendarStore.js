@@ -1,10 +1,8 @@
 // stores/CalendarStore.js
-import { ref, computed, watch } from 'vue'; // Import watch
+import { ref, computed, watch } from 'vue';
 import { defineStore } from 'pinia';
-// Import the transaction store to trigger fetches when a date is selected
 import { useTransactionStore } from './TransactionStore';
 
-// Constants can live here or in a shared utils file
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const monthNames = [
   '1월',
@@ -22,30 +20,35 @@ const monthNames = [
 ];
 
 export const useCalendarStore = defineStore('calendar', () => {
-  // Inject the transaction store
   const transactionStore = useTransactionStore();
 
-  // --- State ---
-  const today = new Date(); // Get today's date once
-  const currentDate = ref(new Date(today.getFullYear(), today.getMonth(), 1)); // For calendar view month/year, start with today's month
-  // --- Initialize selected date state with today's date ---
+  const today = new Date();
+  const currentDate = ref(new Date(today.getFullYear(), today.getMonth(), 1));
   const selectedDay = ref(today.getDate());
   const selectedMonth = ref(today.getMonth()); // 0-indexed month
   const selectedYear = ref(today.getFullYear());
-  // --- End Initialization ---
 
-  // --- Computed Properties ---
   const year = computed(() => currentDate.value.getFullYear());
   const month = computed(() => currentDate.value.getMonth()); // 0-indexed
-  const todayDate = computed(() => new Date().getDate()); // Day of the month for 'isToday' check
+  const todayDate = computed(() => new Date().getDate());
   const currentMonthName = computed(() => monthNames[month.value]);
   const currentYear = computed(() => year.value);
+  const currentMonthIndex = month; // Keep 0-indexed month
 
-  // Helper functions (can remain internal)
+  // --- NEW: Computed property for YYYY-MM format ---
+  const currentYearMonth = computed(() => {
+    const y = currentYear.value;
+    // Add 1 to the 0-indexed month and pad with '0'
+    const m = String(month.value + 1).padStart(2, '0');
+    return `${y}-${m}`; // e.g., "2024-03"
+  });
+  // --- End New Property ---
+
+  // Helper functions
   const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
   const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
 
-  // Computed properties for calendar days
+  // Computed properties for calendar days (no changes needed here)
   const daysInCurrentMonth = computed(() =>
     getDaysInMonth(year.value, month.value)
   );
@@ -57,7 +60,6 @@ export const useCalendarStore = defineStore('calendar', () => {
   const prevMonthDays = computed(() =>
     Array.from({ length: firstDay.value }, (_, i) => {
       const day = daysInPrevMonth.value - firstDay.value + i + 1;
-      // Calculate the actual month/year for prev month days
       let prevMonth = month.value - 1;
       let prevYear = year.value;
       if (prevMonth < 0) {
@@ -65,12 +67,12 @@ export const useCalendarStore = defineStore('calendar', () => {
         prevYear--;
       }
       return {
-        id: `prev-${day}`, // Use day in ID for potential key usage
+        id: `prev-${day}`,
         day: day,
-        monthIndex: prevMonth, // Store actual month index
-        year: prevYear, // Store actual year
+        monthIndex: prevMonth,
+        year: prevYear,
         outside: true,
-        isToday: false, // Previous month days are never today
+        isToday: false,
       };
     })
   );
@@ -82,13 +84,13 @@ export const useCalendarStore = defineStore('calendar', () => {
       return {
         id: `current-${day}`,
         day,
-        monthIndex: month.value, // Store actual month index
-        year: year.value, // Store actual year
+        monthIndex: month.value,
+        year: year.value,
         outside: false,
         isToday:
           year.value === todayFull.getFullYear() &&
           month.value === todayFull.getMonth() &&
-          day === todayFull.getDate(), // Compare with todayFull.getDate()
+          day === todayFull.getDate(),
       };
     })
   );
@@ -100,7 +102,6 @@ export const useCalendarStore = defineStore('calendar', () => {
   const nextMonthDays = computed(() =>
     Array.from({ length: 42 - totalDays.value }, (_, i) => {
       const day = i + 1;
-      // Calculate the actual month/year for next month days
       let nextMonth = month.value + 1;
       let nextYear = year.value;
       if (nextMonth > 11) {
@@ -108,12 +109,12 @@ export const useCalendarStore = defineStore('calendar', () => {
         nextYear++;
       }
       return {
-        id: `next-${day}`, // Use day in ID
+        id: `next-${day}`,
         day: day,
-        monthIndex: nextMonth, // Store actual month index
-        year: nextYear, // Store actual year
+        monthIndex: nextMonth,
+        year: nextYear,
         outside: true,
-        isToday: false, // Next month days are never today
+        isToday: false,
       };
     })
   );
@@ -124,20 +125,17 @@ export const useCalendarStore = defineStore('calendar', () => {
     ...nextMonthDays.value,
   ]);
 
-  // Formatted date string for display/API trigger
-  // This will now reflect the initial state (today's date)
   const formattedSelectedDate = computed(() => {
     if (
       selectedDay.value !== null &&
       selectedMonth.value !== null &&
       selectedYear.value !== null
     ) {
-      // Format consistent with what TransactionStore expects
       return `${monthNames[selectedMonth.value]} ${selectedDay.value}, ${
         selectedYear.value
       }`;
     }
-    return ''; // Return empty string if no date is selected
+    return '';
   });
 
   // --- Actions ---
@@ -150,11 +148,9 @@ export const useCalendarStore = defineStore('calendar', () => {
   }
 
   function selectDate(date) {
-    // Use the monthIndex and year stored directly on the date object
     const targetMonth = date.monthIndex;
     const targetYear = date.year;
 
-    // Check if the same date is clicked again to deselect
     if (
       selectedDay.value === date.day &&
       selectedMonth.value === targetMonth &&
@@ -166,41 +162,44 @@ export const useCalendarStore = defineStore('calendar', () => {
     selectedMonth.value = targetMonth;
     selectedYear.value = targetYear;
 
-    // If the clicked date was outside the current view, update the view
     if (date.outside) {
       currentDate.value = new Date(targetYear, targetMonth, 1);
     }
-
-    // Fetching is now handled by the watcher below
   }
 
   // --- Watcher to Fetch Transactions ---
-  // Watch the formattedSelectedDate. When it changes (or initializes), fetch data.
+  // This watcher currently fetches data for the *selected day*.
+  // If you want to fetch data for the *entire year* when the year changes,
+  // you would need a different watcher or trigger mechanism.
   watch(
     formattedSelectedDate,
     (newFormattedDate) => {
       if (newFormattedDate) {
-        // Check if the date string is not empty
+        // TransactionStore's fetchIncome/Expense expect "Month Day, Year"
+        // and internally convert it to YYYY-MM-DD for the API call.
+        // The API call itself seems to fetch for that specific day.
         transactionStore.fetchIncome(newFormattedDate);
         transactionStore.fetchExpense(newFormattedDate);
       } else {
-        // Optionally clear lists if the date becomes null/empty
-        transactionStore.incomeList = [];
-        transactionStore.expenseList = [];
+        // Clear lists if no date is selected
+        transactionStore.incomeList.value = []; // Use .value with refs
+        transactionStore.expenseList.value = []; // Use .value with refs
       }
     },
-    { immediate: true } // Run the watcher immediately on store initialization
+    { immediate: true }
   );
 
   return {
     // State
     selectedDay,
-    selectedMonth,
+    selectedMonth, // 0-indexed
     selectedYear,
 
     // Computed (for Calendar component)
-    currentMonthName,
-    currentYear,
+    currentMonthName, // e.g., "3월"
+    currentYear, // e.g., 2024
+    currentMonthIndex, // 0-indexed month
+    currentYearMonth, // --- ADDED: e.g., "2024-03" ---
     daysOfWeek,
     calendarDays,
     formattedSelectedDate, // Expose for passing to SecondScreen
