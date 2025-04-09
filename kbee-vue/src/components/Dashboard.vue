@@ -4,11 +4,22 @@
       <div class="px-4">
         <!-- 제목과 월 선택 -->
         <div class="bg-white rounded-xl shadow p-4 mb-6 w-full">
+          <!-- 💡 template 부분 수정 -->
           <div class="flex justify-between items-center">
             <h3 class="font-bold text-xl text-gray-800">
-              2025년 {{ selectedMonth }}월 가계부
+              {{ selectedYear }}년 {{ selectedMonth }}월 가계부
             </h3>
             <div class="flex items-center gap-2">
+              <label class="text-gray-700 font-semibold">연도 선택:</label>
+              <select
+                v-model="selectedYear"
+                class="border px-3 py-1 rounded-md shadow-sm text-gray-700 text-sm"
+              >
+                <option v-for="year in years" :key="year" :value="year">
+                  {{ year }}년
+                </option>
+              </select>
+
               <label class="text-gray-700 font-semibold">월 선택:</label>
               <select
                 v-model="selectedMonth"
@@ -42,7 +53,7 @@
                   {{ selectedMonth }}월 수입
                 </p>
                 <p class="text-2xl font-semibold text-green-600">
-                  +<AnimatedNumber :to="aprilIncome" />원
+                  +<AnimatedNumber :to="monthIncome" />원
                 </p>
               </div>
 
@@ -54,7 +65,7 @@
                   {{ selectedMonth }}월 지출
                 </p>
                 <p class="text-2xl font-semibold text-red-600">
-                  -<AnimatedNumber :to="aprilExpense" />원
+                  -<AnimatedNumber :to="monthExpense" />원
                 </p>
               </div>
 
@@ -76,11 +87,11 @@
               class="bg-white rounded-xl shadow p-4 h-full flex-1 flex flex-col justify-between"
             >
               <h2 class="text-center font-semibold mb-2">
-                {{ selectedMonth }}월 지출 및 수입
+                {{ selectedYear }}년 지출 및 수입
               </h2>
               <div class="flex-1 flex items-center justify-center">
                 <div
-                  v-if="aprilIncome === 0 && aprilExpense === 0"
+                  v-if="monthIncome === 0 && monthExpense === 0"
                   class="text-gray-400 text-center"
                 >
                   데이터가 없습니다.
@@ -101,16 +112,7 @@
                 카테고리별 지출
               </h2>
               <div class="flex-1 flex items-center justify-center">
-                <div
-                  v-if="aprilExpense === 0"
-                  class="text-gray-400 text-center"
-                >
-                  데이터가 없습니다.
-                </div>
-                <div
-                  v-else
-                  class="min-w-[300px] max-w-full mx-auto w-full h-full"
-                >
+                <div class="min-w-[300px] max-w-full mx-auto w-full h-full">
                   <PieChart :month="selectedMonth" />
                 </div>
               </div>
@@ -162,7 +164,10 @@ import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 
+const selectedYear = ref('2025'); // ✅ 연도 선택 추가
 const selectedMonth = ref('04');
+
+const years = ['2023', '2024', '2025', '2026', '2027']; // ✅ 연도 옵션 리스트
 const months = Array.from({ length: 12 }, (_, i) => {
   const num = String(i + 1).padStart(2, '0');
   return { label: `${i + 1}월`, value: num };
@@ -170,9 +175,15 @@ const months = Array.from({ length: 12 }, (_, i) => {
 
 const incomes = ref([]);
 const expenses = ref([]);
-const aprilIncome = ref(0);
-const aprilExpense = ref(0);
+const monthIncome = ref(0);
+const monthExpense = ref(0);
 const topExpenses = ref([]);
+
+const getYear = (dateStr) => dateStr.split('-')[0];
+const getMonth = (dateStr) => dateStr.split('-')[1];
+
+const userBudget = ref(0);
+const balance = ref(0);
 
 const fetchData = async () => {
   try {
@@ -188,39 +199,35 @@ const fetchData = async () => {
   }
 };
 
-const getMonth = (dateStr) => dateStr.split('-')[1];
-
-const userBudget = ref(0);
-const balance = ref(0);
-
 const updateFilteredData = () => {
   const userId = userStore.user?.id;
   if (!userId) return;
 
   const filteredIncomes = incomes.value.filter(
     (item) =>
-      item.user_id === userId && getMonth(item.date) === selectedMonth.value
+      item.user_id === userId &&
+      getYear(item.date) === selectedYear.value &&
+      getMonth(item.date) === selectedMonth.value
   );
   const filteredExpenses = expenses.value.filter(
     (item) =>
-      item.user_id === userId && getMonth(item.date) === selectedMonth.value
+      item.user_id === userId &&
+      getYear(item.date) === selectedYear.value &&
+      getMonth(item.date) === selectedMonth.value
   );
 
-  aprilIncome.value = filteredIncomes.reduce(
+  monthIncome.value = filteredIncomes.reduce(
     (sum, item) => sum + item.amount,
     0
   );
-  aprilExpense.value = filteredExpenses.reduce(
+  monthExpense.value = filteredExpenses.reduce(
     (sum, item) => sum + item.amount,
     0
   );
 
-  // ✅ 사용자 budget 가져오기
   const userData = userStore.user;
   userBudget.value = Number(userData?.budget || 0);
-
-  // ✅ 잔액 계산
-  balance.value = userBudget.value - aprilExpense.value;
+  balance.value = userBudget.value - monthExpense.value;
 
   const categorySums = filteredExpenses.reduce((acc, cur) => {
     acc[cur.category] = (acc[cur.category] || 0) + cur.amount;
@@ -239,29 +246,5 @@ onMounted(async () => {
   await fetchData();
 });
 
-watch(selectedMonth, updateFilteredData);
+watch([selectedYear, selectedMonth], updateFilteredData);
 </script>
-
-<style scoped>
-.wrap {
-  background-color: #f3f4f6;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.subBox {
-  background-color: #f3f4f6;
-  border-radius: 16px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  max-width: 1800px;
-  height: calc(100% - 40px);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-</style>

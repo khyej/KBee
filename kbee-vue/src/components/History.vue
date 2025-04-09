@@ -175,9 +175,9 @@
                 </div>
             </div>
         </div>
-        <div class="subDiv-2">
+        <div class="subDiv-2" v-if="showDetailModal">
             <!-- 상세 보기 -->
-            <div class="modal2" v-if="showDetailModal">
+            <div class="modal2">
                 <div class="modal2-overlay" @click="closeModal"></div>
                 <div class="modal2-content">
                     <template v-if="!isEditing">
@@ -221,7 +221,7 @@
                                 <button @click="isEditing = true">수정</button>
                                 <button @click="deleteItem">삭제</button>
                             </div>
-                            <div class="rigth">
+                            <div class="right">
                                 <button @click="closeModal">닫기</button>
                             </div>
                         </div>
@@ -304,21 +304,23 @@
             <div class="modal-overlay" @click="showAddModal = false"></div>
             <div class="modal-content">
                 <div class="form-body">
-                    <div class="form-date">항목 추가</div>
+                    <div class="form-row">
+                        <div class="form-date">항목 추가</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-title">날짜</div>
+                        <input
+                            type="date"
+                            v-model="form.date"
+                            class="form-data"
+                        />
+                    </div>
                     <div class="form-row">
                         <div class="form-title">유형</div>
                         <select v-model="mode" class="form-data">
                             <option value="income">수입</option>
                             <option value="expense">지출</option>
                         </select>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-title">금액</div>
-                        <input
-                            type="number"
-                            v-model="form.amount"
-                            class="form-data"
-                        />
                     </div>
                     <div class="form-row">
                         <div class="form-title">카테고리</div>
@@ -352,10 +354,10 @@
                         />
                     </div>
                     <div class="form-row">
-                        <div class="form-title">날짜</div>
+                        <div class="form-title">금액</div>
                         <input
-                            type="date"
-                            v-model="form.date"
+                            type="number"
+                            v-model="form.amount"
                             class="form-data"
                         />
                     </div>
@@ -413,6 +415,12 @@ const selected = ref({
 });
 
 const isOpen = ref({ month: false, year: false });
+const isFilterDropdownOpen = ref({ type: false, category: false });
+const filterDropdownLabels = {
+    all: '전체',
+    income: '수입',
+    expense: '지출',
+};
 
 const toggleDropdown = (type) => {
     isOpen.value[type] = !isOpen.value[type];
@@ -438,6 +446,7 @@ const handleClickOutside = (e) => {
 
 onMounted(async () => {
     document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', handleClickOutsideFilters);
     userStore.restoreUser();
     await userStore.fetchUser();
     await fetchData();
@@ -446,6 +455,7 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside);
+    document.removeEventListener('click', handleClickOutsideFilters);
 });
 
 const expenses = ref([]);
@@ -481,18 +491,23 @@ const selectedFilters = ref({
     category: 'all',
     keyword: '',
 });
-const categoryOptions = ref([]);
+
+const categoryOptions = computed(() => {
+    if (selectedFilters.value.type === 'income') {
+        return incomeCategories.value.map((c) => c.name);
+    } else if (selectedFilters.value.type === 'expense') {
+        return expenseCategories.value.map((c) => c.name);
+    } else {
+        const set = new Set([
+            ...incomeCategories.value.map((c) => c.name),
+            ...expenseCategories.value.map((c) => c.name),
+        ]);
+        return Array.from(set).sort();
+    }
+});
 
 const extractCategories = () => {
-    if (!userStore.user) return;
-    const all = [...expenses.value, ...incomes.value];
-    const categories = new Set();
-    all.forEach((item) => {
-        if (item.user_id === userStore.user?.id) {
-            categories.add(item.category);
-        }
-    });
-    categoryOptions.value = Array.from(categories).sort();
+    // 기존 카테고리 전체 추출은 categoryOptions에서 대체됨
 };
 
 const filterAndCombineData = () => {
@@ -536,7 +551,6 @@ const onCompositionEnd = (e) => {
     filterAndCombineData();
 };
 
-// 추가 모달 관련
 const showAddModal = ref(false);
 const mode = ref('income');
 const form = reactive({
@@ -581,14 +595,12 @@ const handleSubmit = async () => {
             date: '',
         });
         showAddModal.value = false;
-        extractCategories();
         filterAndCombineData();
     } catch (e) {
         console.error('저장 실패', e);
     }
 };
 
-// 상세 모달
 const showDetailModal = ref(false);
 const isEditing = ref(false);
 const selectedItem = ref(null);
@@ -644,20 +656,6 @@ const deleteItem = async () => {
     }
 };
 
-// 필터 드롭다운 열림 상태 관리 (기존 드롭다운 isOpen과 별도 운영)
-const isFilterDropdownOpen = ref({
-    type: false,
-    category: false,
-});
-
-// 드롭다운 라벨
-const filterDropdownLabels = {
-    all: '전체',
-    income: '수입',
-    expense: '지출',
-};
-
-// 필터 드롭다운 토글
 const toggleFilterDropdown = (key) => {
     isFilterDropdownOpen.value[key] = !isFilterDropdownOpen.value[key];
     Object.keys(isFilterDropdownOpen.value).forEach((k) => {
@@ -665,14 +663,12 @@ const toggleFilterDropdown = (key) => {
     });
 };
 
-// 필터 옵션 선택
 const selectFilterOption = (key, value) => {
     selectedFilters.value[key] = value;
     isFilterDropdownOpen.value[key] = false;
     filterAndCombineData();
 };
 
-// 필터 드롭다운 외부 클릭 시 닫기 (기존 handleClickOutside와 분리 가능, 또는 통합)
 const handleClickOutsideFilters = (e) => {
     if (!e.target.closest('.dropdown')) {
         isFilterDropdownOpen.value.type = false;
@@ -680,16 +676,6 @@ const handleClickOutsideFilters = (e) => {
     }
 };
 
-// 이벤트 등록 추가 (기존 handleClickOutside와 함께 등록 가능)
-onMounted(() => {
-    document.addEventListener('click', handleClickOutsideFilters);
-});
-
-onBeforeUnmount(() => {
-    document.removeEventListener('click', handleClickOutsideFilters);
-});
-
-// watch
 watch(
     [() => selected.value.month, () => selected.value.year],
     filterAndCombineData
@@ -706,22 +692,29 @@ watch(
 .subBox {
     width: 100%;
     height: calc(100vh - 90px);
-    /* background-color: white; */
     display: flex;
     flex-direction: row;
     overflow: hidden;
 }
 
 .subDiv-1 {
-    width: 70%;
+    flex-grow: 1;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    transition: width 0.3s ease;
 }
 
 .subDiv-2 {
-    width: 30%;
-    display: flex;
+    height: 100%;
+    align-items: center;
     flex-direction: column;
+    margin-left: 20px;
+}
+
+.subBox.has-subDiv-2 .subDiv-1 {
+    width: 70%;
+    flex-grow: 0;
 }
 
 .subDiv-header {
@@ -738,6 +731,7 @@ watch(
     background-color: white;
     overflow: hidden;
 }
+
 /* --------------------------------------------------- dropdown */
 .dropdown-container {
     display: flex;
@@ -818,6 +812,7 @@ watch(
 .dropdown-menu li:first-child {
     border-top: 1px solid rgb(255, 188, 0);
 }
+
 .dropdown-menu::-webkit-scrollbar {
     display: none;
     /* Chrome, Safari, Opera */
@@ -933,22 +928,11 @@ td:nth-child(2) {
     overflow-y: auto;
 }
 
-.modal-content h2,
-.modal-content h3 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
 /* ----------------------------------------------------------------- modal */
 .modal2 {
     width: 380px;
     background: white;
-    height: calc(100vh - 234px);
-    transition: all 0.4s ease;
-    max-height: calc(100vh - 90px);
-    /* 헤더 제외 */
-    margin-left: 50px;
+    height: 100%;
 }
 
 .modal2-content {
@@ -956,7 +940,6 @@ td:nth-child(2) {
     background: white;
     height: 100%;
     padding: 1rem;
-    margin: 0 3px;
     border: 1px solid black;
 
     display: flex;
@@ -999,7 +982,7 @@ td:nth-child(2) {
     width: 35%;
     text-align: center;
     padding: 5px;
-    border-left: 5px solid rgb(240, 240, 75);
+    border-left: 5px solid rgb(255, 204, 0);
     margin-left: 10px;
 }
 
@@ -1012,7 +995,8 @@ td:nth-child(2) {
 }
 
 .form-body {
-    flex: 1; /* ✅ 이 영역이 위쪽 공간을 모두 차지하게 */
+    flex: 1;
+    /* ✅ 이 영역이 위쪽 공간을 모두 차지하게 */
     overflow-y: auto;
 }
 
@@ -1042,21 +1026,25 @@ td:nth-child(2) {
     gap: 1rem;
 }
 
-.form-actions button:first-child {
-    background-color: #4caf50;
+.form-actions .left button:first-child {
+    background-color: rgb(255, 204, 0);
     color: white;
 }
 
-.form-actions button:nth-child(2) {
-    background-color: #ccc;
-    color: black;
-}
-
-.form-actions button:nth-child(3) {
-    background-color: #f44336;
+.form-actions .left button:last-child {
+    background-color: rgb(96, 88, 76);
     color: white;
 }
 
+.form-actions .right button:first-child {
+    background-color: rgb(255, 188, 0);
+    color: white;
+}
+
+.form-actions .right button:last-child {
+    background-color: rgb(96, 88, 76);
+    color: white;
+}
 /* button */
 .addButton {
     width: 100px;
