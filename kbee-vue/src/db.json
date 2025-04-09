@@ -38,13 +38,13 @@
   "expenses": [
     {
       "id": "1",
-      "user_id": "1",
+      "type": "expense",
       "amount": 12001,
-      "category": "식비",
+      "category": "의료/건강",
       "payment_method": "카드",
       "description": "편의점 간식",
       "date": "2025-04-01",
-      "type": "expense"
+      "user_id": "1"
     },
     {
       "id": "3",
@@ -84,12 +84,13 @@
     },
     {
       "id": "11",
-      "user_id": "1",
+      "type": "expense",
       "amount": 3800,
-      "category": "교통",
+      "category": "쇼핑",
       "payment_method": "카드",
       "description": "지하철 요금",
-      "date": "2025-04-01"
+      "date": "2025-04-01",
+      "user_id": "1"
     },
     {
       "id": "13",
@@ -202,6 +203,70 @@
       "category": "상여",
       "description": "성과급",
       "date": "2025-04-06"
+    }
+  ],
+  "incomeCategory": [
+    {
+      "id": 1,
+      "name": "급여"
+    },
+    {
+      "id": 2,
+      "name": "상여"
+    },
+    {
+      "id": 3,
+      "name": "이자"
+    },
+    {
+      "id": 4,
+      "name": "투자수익"
+    },
+    {
+      "id": 5,
+      "name": "프리랜서"
+    },
+    {
+      "id": 6,
+      "name": "기타"
+    },
+    {
+      "id": 7,
+      "name": "상금"
+    }
+  ],
+  "expenseCategory": [
+    {
+      "id": 1,
+      "name": "식비"
+    },
+    {
+      "id": 2,
+      "name": "카페/디저트"
+    },
+    {
+      "id": 3,
+      "name": "교통"
+    },
+    {
+      "id": 4,
+      "name": "문화생활"
+    },
+    {
+      "id": 5,
+      "name": "쇼핑"
+    },
+    {
+      "id": 6,
+      "name": "주거/공과금"
+    },
+    {
+      "id": 7,
+      "name": "통신비"
+    },
+    {
+      "id": 8,
+      "name": "의료/건강"
     }
   ]
 }
