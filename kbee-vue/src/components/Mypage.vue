@@ -9,22 +9,14 @@
           <tr>
             <th>닉네임</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.nickname"
-                class="input-field"
-              />
+              <input v-if="editMode" v-model="form.nickname" class="input-field" />
               <span v-else>{{ userStore.user?.nickname }}</span>
             </td>
           </tr>
           <tr>
             <th>이름</th>
             <td>
-              <input
-                v-if="editMode"
-                v-model="form.username"
-                class="input-field"
-              />
+              <input v-if="editMode" v-model="form.username" class="input-field" />
               <span v-else>{{ userStore.user?.username }}</span>
             </td>
           </tr>
@@ -40,6 +32,13 @@
             <td>
               <input v-if="editMode" v-model="form.phone" class="input-field" />
               <span v-else>{{ userStore.user?.phone }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th>예산</th>
+            <td>
+              <input v-if="editMode" v-model="form.budget" class="input-field" />
+              <span v-else>{{ userStore.user?.budget }}</span>
             </td>
           </tr>
         </tbody>
@@ -62,8 +61,13 @@ const form = ref({});
 const editMode = ref(false);
 
 onMounted(async () => {
-  await userStore.fetchUser();
-  form.value = { ...userStore.user }; // 초기값 복사
+  try {
+    await userStore.fetchUser();
+    form.value = { ...userStore.user }; // 초기값 복사
+  } catch (err) {
+    console.error('유저 정보 불러오기 실패:', err);
+    // 필요하면 에러 메시지 표시 로직 추가
+  }
 });
 
 // userStore.user가 바뀌면 form도 같이 바뀌게
@@ -78,7 +82,13 @@ watch(
 
 const toggleEdit = async () => {
   if (editMode.value) {
-    await userStore.updateUser(form.value);
+    try {
+      await userStore.updateUser(form.value);
+    } catch (err) {
+      console.error('유저 정보 업데이트 실패:', err);
+      // 필요시 사용자에게 알림
+      return; // 실패했으면 수정 모드 유지
+    }
   }
   editMode.value = !editMode.value;
 };
@@ -87,8 +97,7 @@ const toggleEdit = async () => {
 <style scoped>
 @font-face {
   font-family: 'S-CoreDream-3Light';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
-    format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

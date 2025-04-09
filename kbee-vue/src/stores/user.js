@@ -21,7 +21,10 @@ export const useUserStore = defineStore('user', {
       }
     },
     async updateUser(updatedData) {
-      const res = await axios.put('/api/users', updatedData);
+      if (!updatedData.id) {
+        throw new Error('updatedData에 id가 없습니다.');
+      }
+      const res = await axios.put(`/api/users/${updatedData.id}`, updatedData);
       this.user = res.data;
     },
     login(user) {
