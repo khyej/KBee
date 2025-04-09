@@ -102,6 +102,7 @@
         :month="selectedMonth"
         :income="aprilIncome"
         :expense="aprilExpense"
+        :selectedDate="calendarStore.formattedSelectedDate"
       />
       <SecondScreen :selectedDate="calendarStore.formattedSelectedDate" />
     </div>

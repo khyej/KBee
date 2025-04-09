@@ -2,7 +2,11 @@
   <div class="summary-wrapper">
     <div class="summary-card">
       <h3 class="text-lg font-semibold text-gray-800">
+        <!-- {{ calendarStore.selectedMonth }} -->
+        <!-- {{ calendarStore.currentMonthName.slice(0, -1) }} -->
+        <!-- {{ calendarStore.currentYear }} -->
         {{ monthName }} 수입/지출 요약
+        <!-- {{ transactionStore.expenseList }} 수입/지출 요약 -->
       </h3>
       <div class="text-green-600 font-bold">
         수입: +{{ totalIncome.toLocaleString() }}원
@@ -25,14 +29,15 @@ const calendarStore = useCalendarStore();
 const monthName = computed(() => calendarStore.currentMonthName);
 
 const totalIncome = computed(() =>
-  transactionStore.incomeList.reduce((sum, item) => sum + (item.amount || 0), 0)
+  transactionStore.incomeList
+    .filter((item) => item.date.startsWith(calendarStore.currentYearMonth))
+    .reduce((sum, item) => sum + (item.amount || 0), 0)
 );
 
 const totalExpense = computed(() =>
-  transactionStore.expenseList.reduce(
-    (sum, item) => sum + (item.amount || 0),
-    0
-  )
+  transactionStore.expenseList
+    .filter((item) => item.date.startsWith(calendarStore.currentYearMonth))
+    .reduce((sum, item) => sum + (item.amount || 0), 0)
 );
 </script>
 
