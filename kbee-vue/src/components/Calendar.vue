@@ -4,8 +4,9 @@
       class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7"
       style="height: 100vh"
     >
-      <!-- Existing Month/Year Header -->
+      <!-- Header, User ID -->
       <div class="flex items-center justify-between mb-4 w-full">
+        <!-- Make sure your actual month/year header content is here -->
         <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
           {{ calendarStore.currentYear }}년 {{ calendarStore.currentMonthName }}
         </h5>
@@ -26,13 +27,11 @@
           </button>
         </div>
       </div>
-
-      <!-- Display User ID -->
       <p class="text-sm mb-1 text-gray-600 w-full px-2">
         User ID: {{ userStore.user?.id || 'Loading...' }}
       </p>
 
-      <!-- Displayed Dates -->
+      <!-- Displayed Dates - Corrected Expression -->
       <h1
         class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2"
       >
@@ -42,12 +41,13 @@
             .map((date) => {
               const month = String(date.monthIndex + 1).padStart(2, '0');
               const day = String(date.day).padStart(2, '0');
-              return `${date.year}-${month}-${day}`;
+              return `${date.year}-${month}-${day}`; // Replaced comment with actual expression
             })
             .join(', ')
         }}
       </h1>
 
+      <!-- Rest of the template -->
       <div
         class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
@@ -62,7 +62,7 @@
           <button
             v-for="date in calendarStore.calendarDays"
             :key="date.id"
-            class="p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none"
+            class="relative p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none"
             :class="{
               'text-gray-400': date.outside,
               'bg-indigo-100': date.isToday,
@@ -70,12 +70,43 @@
             }"
             @click="calendarStore.selectDate(date)"
           >
+            <!-- Date Number Span -->
             <span
-              class="text-xs font-semibold flex items-center justify-center w-7 h-7 rounded-full"
+              class="text-xs font-semibold flex items-center justify-center w-7 h-7 rounded-full z-10 relative"
               :class="{ 'bg-indigo-600 text-white': date.isToday }"
             >
               {{ date.day }}
             </span>
+
+            <!-- Conditional Div and Sums for Day 1 -->
+            <template v-if="date.day === 1 && !date.outside">
+              <!-- Cyan Background Div -->
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-50"
+              >
+                <div class="bg-cyan-500 h-16 w-16 rounded"></div>
+              </div>
+              <!-- Display Sums -->
+              <div class="text-xs mt-1 z-10 relative text-center">
+                <p class="text-green-700 font-medium">
+                  In:
+                  {{
+                    transactionStore.dailyIncomeSums[
+                      formatDateForStore(date)
+                    ] ?? '...'
+                  }}
+                </p>
+                <p class="text-red-700 font-medium">
+                  Out:
+                  {{
+                    transactionStore.dailyExpenseSums[
+                      formatDateForStore(date)
+                    ] ?? '...'
+                  }}
+                </p>
+              </div>
+            </template>
+            <!-- End Conditional Div -->
           </button>
         </div>
       </div>
@@ -89,14 +120,24 @@
 </template>
 
 <script setup>
+// Script setup remains the same
 import { ref } from 'vue';
 import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore';
-import { useUserStore } from '../stores/user'; // Import the user store
+import { useUserStore } from '../stores/user';
+import { useTransactionStore } from '../stores/TransactionStore';
 
 const calendarStore = useCalendarStore();
-const userStore = useUserStore(); // Get the user store instance
+const userStore = useUserStore();
+const transactionStore = useTransactionStore();
 const showSecondScreen = ref(true);
+
+const formatDateForStore = (date) => {
+  if (!date) return '';
+  const month = String(date.monthIndex + 1).padStart(2, '0');
+  const day = String(date.day).padStart(2, '0');
+  return `${date.year}-${month}-${day}`;
+};
 
 const isSelected = (date) => {
   return (
@@ -108,6 +149,7 @@ const isSelected = (date) => {
 </script>
 
 <style scoped>
+/* Styles remain the same */
 .text-gray-400 {
   color: #9ca3af;
 }
