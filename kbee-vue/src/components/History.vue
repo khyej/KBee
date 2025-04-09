@@ -39,24 +39,74 @@
                 </div>
 
                 <!-- 필터 영역 -->
-                <div class="filters">
-                    <select v-model="selectedFilters.type">
-                        <option value="all">전체</option>
-                        <option value="income">수입</option>
-                        <option value="expense">지출</option>
-                    </select>
+                <div class="dropdown-container">
+                    <!-- 타입 드롭다운 -->
+                    <!-- 타입 필터 -->
+                    <div
+                        class="dropdown"
+                        @click="toggleFilterDropdown('type')"
+                        :class="{ open: isFilterDropdownOpen.type }"
+                    >
+                        <div class="dropdown-toggle">
+                            {{
+                                filterDropdownLabels[selectedFilters.type] ||
+                                '전체'
+                            }}
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li @click.stop="selectFilterOption('type', 'all')">
+                                전체
+                            </li>
+                            <li
+                                @click.stop="
+                                    selectFilterOption('type', 'income')
+                                "
+                            >
+                                수입
+                            </li>
+                            <li
+                                @click.stop="
+                                    selectFilterOption('type', 'expense')
+                                "
+                            >
+                                지출
+                            </li>
+                        </ul>
+                    </div>
 
-                    <select v-model="selectedFilters.category">
-                        <option value="all">전체 카테고리</option>
-                        <option
-                            v-for="cat in categoryOptions"
-                            :key="cat"
-                            :value="cat"
-                        >
-                            {{ cat }}
-                        </option>
-                    </select>
-
+                    <!-- 카테고리 필터 -->
+                    <div
+                        class="dropdown"
+                        @click="toggleFilterDropdown('category')"
+                        :class="{ open: isFilterDropdownOpen.category }"
+                    >
+                        <div class="dropdown-toggle">
+                            {{
+                                selectedFilters.category === 'all'
+                                    ? '전체 카테고리'
+                                    : selectedFilters.category
+                            }}
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li
+                                @click.stop="
+                                    selectFilterOption('category', 'all')
+                                "
+                            >
+                                전체 카테고리
+                            </li>
+                            <li
+                                v-for="cat in categoryOptions"
+                                :key="cat"
+                                @click.stop="
+                                    selectFilterOption('category', cat)
+                                "
+                            >
+                                {{ cat }}
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 키워드 검색 입력 -->
                     <input
                         type="text"
                         :value="selectedFilters.keyword"
@@ -594,6 +644,51 @@ const deleteItem = async () => {
     }
 };
 
+// 필터 드롭다운 열림 상태 관리 (기존 드롭다운 isOpen과 별도 운영)
+const isFilterDropdownOpen = ref({
+    type: false,
+    category: false,
+});
+
+// 드롭다운 라벨
+const filterDropdownLabels = {
+    all: '전체',
+    income: '수입',
+    expense: '지출',
+};
+
+// 필터 드롭다운 토글
+const toggleFilterDropdown = (key) => {
+    isFilterDropdownOpen.value[key] = !isFilterDropdownOpen.value[key];
+    Object.keys(isFilterDropdownOpen.value).forEach((k) => {
+        if (k !== key) isFilterDropdownOpen.value[k] = false;
+    });
+};
+
+// 필터 옵션 선택
+const selectFilterOption = (key, value) => {
+    selectedFilters.value[key] = value;
+    isFilterDropdownOpen.value[key] = false;
+    filterAndCombineData();
+};
+
+// 필터 드롭다운 외부 클릭 시 닫기 (기존 handleClickOutside와 분리 가능, 또는 통합)
+const handleClickOutsideFilters = (e) => {
+    if (!e.target.closest('.dropdown')) {
+        isFilterDropdownOpen.value.type = false;
+        isFilterDropdownOpen.value.category = false;
+    }
+};
+
+// 이벤트 등록 추가 (기존 handleClickOutside와 함께 등록 가능)
+onMounted(() => {
+    document.addEventListener('click', handleClickOutsideFilters);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutsideFilters);
+});
+
 // watch
 watch(
     [() => selected.value.month, () => selected.value.year],
@@ -647,13 +742,25 @@ watch(
 .dropdown-container {
     display: flex;
     /* gap: 1rem; */
-    border-top: 1px solid rgb(255, 188, 0);
+    /* border-top: 1px solid rgb(255, 188, 0);
     border-left: 1px solid rgb(255, 188, 0);
-    border-right: 1px solid rgb(255, 188, 0);
+    border-right: 1px solid rgb(255, 188, 0); */
+    border: 1px solid rgb(255, 188, 0);
     width: fit-content;
     margin-bottom: 2rem;
     flex-wrap: wrap;
     height: 100%;
+}
+
+.dropdown-container input {
+    border-left: 1px solid rgb(255, 188, 0);
+    width: 200px;
+    padding: 0 10px;
+}
+
+.dropdown-container input:focus {
+    outline: none;
+    border: 4px solid rgb(255, 188, 0);
 }
 
 .dropdown {
@@ -664,6 +771,7 @@ watch(
     text-align: center;
     margin: 0;
     box-sizing: border-box;
+    height: 38px;
 }
 
 .dropdown + .dropdown {
@@ -673,10 +781,10 @@ watch(
 .dropdown-toggle {
     padding: 8px 12px;
     /* background-color: yellow; */
-    border-bottom: 1px solid rgb(255, 188, 0);
+    /* border-bottom: 1px solid rgb(255, 188, 0); */
     font-size: 16px;
     position: relative;
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 
 .dropdown-toggle::after {
@@ -707,6 +815,9 @@ watch(
     box-shadow: 0 7px 9px rgba(84, 80, 69, 0.1);
 }
 
+.dropdown-menu li:first-child {
+    border-top: 1px solid rgb(255, 188, 0);
+}
 .dropdown-menu::-webkit-scrollbar {
     display: none;
     /* Chrome, Safari, Opera */
@@ -787,21 +898,6 @@ td:nth-child(2) {
 
 .income {
     color: green;
-}
-
-/* -------------------------------------------------------------- filter */
-.filters {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.filters select,
-.filters input {
-    padding: 6px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 /* ------------------------------------------------------------- addModal */
