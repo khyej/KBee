@@ -35,6 +35,9 @@ const userStore = useUserStore();
 const barCanvas = ref(null);
 let chartInstance = null;
 
+const formatLabel = (label) =>
+  label.includes('/') ? label.split('/') : [label];
+
 const getMonth = (dateStr) => dateStr.split('-')[1];
 
 const renderChart = async () => {
@@ -87,14 +90,18 @@ const renderChart = async () => {
         labels: allCategories,
         datasets: [
           {
-            label: '수입',
+            label: formatLabel('수입'),
             data: incomeData,
             backgroundColor: '#4ADE80',
+            categoryPercentage: 0.6,
+            barPercentage: 0.8,
           },
           {
-            label: '지출',
+            label: formatLabel('지출'),
             data: expenseData,
             backgroundColor: '#F87171',
+            categoryPercentage: 0.6,
+            barPercentage: 0.8,
           },
         ],
       },
@@ -104,6 +111,19 @@ const renderChart = async () => {
         plugins: {
           legend: {
             position: 'bottom',
+          },
+        },
+        scales: {
+          x: {
+            offset: true, // ✅ 추가
+            ticks: {
+              maxRotation: 0,
+              minRotation: 0,
+              autoSkip: false,
+            },
+          },
+          y: {
+            beginAtZero: true,
           },
         },
       },
