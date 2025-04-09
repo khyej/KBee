@@ -113,7 +113,6 @@ import { ref } from 'vue';
 import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore'; // Import the new store
 import MonthInEx from './MonthInEx.vue';
-import { useCalendarStore } from '../stores/CalendarStore';
 import { useUserStore } from '../stores/user';
 import { useTransactionStore } from '../stores/TransactionStore';
 
