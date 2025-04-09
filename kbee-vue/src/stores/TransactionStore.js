@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { useUserStore } from './user';
 
 // --- Date Utility Code (Keep or move to utils) ---
 const monthNames = [
@@ -48,6 +49,8 @@ const convertToYYYYMMDD = (dateStr) => {
 // --- End of Date Utility Code ---
 
 export const useTransactionStore = defineStore('transactions', () => {
+  const userStore = useUserStore();
+
   // --- State ---
   const incomeList = ref([]);
   const expenseList = ref([]);
@@ -70,7 +73,11 @@ export const useTransactionStore = defineStore('transactions', () => {
     incomeError.value = null;
 
     try {
-      const params = { user_id: 1 }; // Consider making dynamic
+      const params = {
+        user_id: userStore.user?.id,
+      };
+      if (!params.user_id) return;
+
       if (dateToFetch) {
         params.date = dateToFetch;
       }
@@ -97,7 +104,11 @@ export const useTransactionStore = defineStore('transactions', () => {
     expenseError.value = null;
 
     try {
-      const params = { user_id: 1 }; // Consider making dynamic
+      const params = {
+        user_id: userStore.user?.id,
+      };
+      if (!params.user_id) return;
+
       if (dateToFetch) {
         params.date = dateToFetch;
       }
