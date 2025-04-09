@@ -1,9 +1,14 @@
 <template>
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">💰 수입 내역</h3>
-    <ul>
+    <!-- Use the specific loading/error states from the transaction store -->
+    <div v-if="transactionStore.isIncomeLoading">Loading...</div>
+    <div v-else-if="transactionStore.incomeError" class="text-red-500">
+      {{ transactionStore.incomeError }}
+    </div>
+    <ul v-else-if="transactionStore.incomeList.length > 0">
       <li
-        v-for="item in incomeList"
+        v-for="item in transactionStore.incomeList"
         :key="item.id"
         class="mb-2 p-2 border rounded"
       >
@@ -13,76 +18,32 @@
         <p>🏷️ {{ item.category }}</p>
       </li>
     </ul>
+    <p v-else>선택된 날짜에 수입 내역이 없습니다.</p>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, watch, defineProps, computed } from 'vue';
-import axios from 'axios';
+import { watch, defineProps } from 'vue';
+// Import the combined store
+import { useTransactionStore } from '../stores/TransactionStore'; // Adjust path
 
 const props = defineProps({
   selectedDate: {
     type: String,
-    default: null, // Make the prop optional with a default value of null
+    default: null,
   },
 });
 
-const incomeList = ref([]);
-const emit = defineEmits(['income-loaded']);
+// Use the transaction store
+const transactionStore = useTransactionStore();
 
-const monthNames = [
-  '1월',
-  '2월',
-  '3월',
-  '4월',
-  '5월',
-  '6월',
-  '7월',
-  '8월',
-  '9월',
-  '10월',
-  '11월',
-  '12월',
-];
-
-const convertToYYYYMMDD = (dateStr) => {
-  if (!dateStr) return null;
-
-  const [monthStr, dayStr, yearStr] = dateStr.split(/[\s,]+/);
-  const monthIndex = monthNames.indexOf(monthStr);
-  const day = parseInt(dayStr, 10);
-  const year = parseInt(yearStr, 10);
-
-  if (monthIndex === -1 || isNaN(day) || isNaN(year)) {
-    console.error('Invalid date format:', dateStr);
-    return null;
-  }
-
-  const month = (monthIndex + 1).toString().padStart(2, '0');
-  const formattedDay = day.toString().padStart(2, '0');
-  return `${year}-${month}-${formattedDay}`;
-};
-
-const fetchIncome = async (formattedDate) => {
-  try {
-    const params = { user_id: 1 };
-    if (formattedDate) {
-      params.date = formattedDate;
-    }
-    const res = await axios.get('/api/incomes', { params });
-    incomeList.value = res.data;
-    emit('income-loaded', res.data);
-  } catch (error) {
-    console.error('Error fetching income:', error);
-  }
-};
-
+// Watch the prop and trigger the specific store action
 watch(
   () => props.selectedDate,
   (newSelectedDate) => {
-    const formattedDate = convertToYYYYMMDD(newSelectedDate);
-    fetchIncome(formattedDate);
+    // Call the fetchIncome action from the transaction store
+    transactionStore.fetchIncome(newSelectedDate);
   },
-  { immediate: true }
+  { immediate: true } // Fetch data immediately when the component mounts
 );
 </script>
