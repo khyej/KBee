@@ -4,16 +4,35 @@
         <div class="subDiv">
             <!-- 날짜 드롭다운 -->
             <div class="dropdown-container">
-                <div class="dropdown" @click="toggleDropdown('year')" :class="['dropdown', isOpen.year ? 'open' : '']">
+                <div
+                    class="dropdown"
+                    @click="toggleDropdown('year')"
+                    :class="['dropdown', isOpen.year ? 'open' : '']"
+                >
                     <div class="dropdown-toggle">{{ selected.year }}</div>
                     <ul class="dropdown-menu">
-                        <li v-for="year in years" :key="year" @click.stop="selectOption('year', year)">{{ year }}</li>
+                        <li
+                            v-for="year in years"
+                            :key="year"
+                            @click.stop="selectOption('year', year)"
+                        >
+                            {{ year }}
+                        </li>
                     </ul>
                 </div>
-                <div class="dropdown" @click="toggleDropdown('month')" :class="{ open: isOpen.month }">
+                <div
+                    class="dropdown"
+                    @click="toggleDropdown('month')"
+                    :class="{ open: isOpen.month }"
+                >
                     <div class="dropdown-toggle">{{ selected.month }}</div>
                     <ul class="dropdown-menu">
-                        <li v-for="month in months" :key="month" @click.stop="selectOption('month', month)">{{ month }}
+                        <li
+                            v-for="month in months"
+                            :key="month"
+                            @click.stop="selectOption('month', month)"
+                        >
+                            {{ month }}
                         </li>
                     </ul>
                 </div>
@@ -29,14 +48,28 @@
 
                 <select v-model="selectedFilters.category">
                     <option value="all">전체 카테고리</option>
-                    <option v-for="cat in categoryOptions" :key="cat" :value="cat">{{ cat }}</option>
+                    <option
+                        v-for="cat in categoryOptions"
+                        :key="cat"
+                        :value="cat"
+                    >
+                        {{ cat }}
+                    </option>
                 </select>
 
-                <input type="text" :value="selectedFilters.keyword" @compositionstart="isComposing = true"
-                    @compositionend="onCompositionEnd" @input="onInput" placeholder="내용 검색" />
+                <input
+                    type="text"
+                    :value="selectedFilters.keyword"
+                    @compositionstart="isComposing = true"
+                    @compositionend="onCompositionEnd"
+                    @input="onInput"
+                    placeholder="내용 검색"
+                />
             </div>
 
-            <button @click="showAddModal = true" class="addButton">내역 추가</button>
+            <button @click="showAddModal = true" class="addButton">
+                내역 추가
+            </button>
         </div>
 
         <!-- 테이블 영역 -->
@@ -62,12 +95,24 @@
                         </thead>
                         <tbody>
                             <template v-if="combinedData.length">
-                                <tr v-for="item in combinedData" :key="item.id" @click="openDetailModal(item)"
-                                    style="cursor: pointer">
-                                    <td>{{ item.type === 'income' ? '수입' : '지출' }}</td>
+                                <tr
+                                    v-for="item in combinedData"
+                                    :key="item.id"
+                                    @click="openDetailModal(item)"
+                                    style="cursor: pointer"
+                                >
+                                    <td>
+                                        {{
+                                            item.type === 'income'
+                                                ? '수입'
+                                                : '지출'
+                                        }}
+                                    </td>
                                     <td>{{ item.date }}</td>
                                     <td>{{ item.description }}</td>
-                                    <td :class="item.type">{{ item.amount.toLocaleString() }}원</td>
+                                    <td :class="item.type">
+                                        {{ item.amount.toLocaleString() }}원
+                                    </td>
                                     <td>{{ item.category }}</td>
                                 </tr>
                             </template>
@@ -91,24 +136,40 @@
                         </div>
                         <div class="form-row">
                             <div class="form-title">분류</div>
-                            <div class="form-data">{{ selectedItem.type === 'expense' ? '지출' : '수입' }}</div>
+                            <div class="form-data">
+                                {{
+                                    selectedItem.type === 'expense'
+                                        ? '지출'
+                                        : '수입'
+                                }}
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-title">카테고리</div>
-                            <div class="form-data">{{ selectedItem.category }}</div>
+                            <div class="form-data">
+                                {{ selectedItem.category }}
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-title">내용</div>
-                            <div class="form-data">{{ selectedItem.description }}</div>
+                            <div class="form-data">
+                                {{ selectedItem.description }}
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-title">금액</div>
-                            <div class="form-data">{{ selectedItem.amount }}</div>
+                            <div class="form-data">
+                                {{ selectedItem.amount }}
+                            </div>
                         </div>
-                        <div class="form-actions">
-                            <button @click="isEditing = true">수정</button>
-                            <button @click="deleteItem">삭제</button>
-                            <button @click="closeModal">닫기</button>
+                        <div class="form-row form-actions">
+                            <div class="left">
+                                <button @click="isEditing = true">수정</button>
+                                <button @click="deleteItem">삭제</button>
+                            </div>
+                            <div class="rigth">
+                                <button @click="closeModal">닫기</button>
+                            </div>
                         </div>
                     </template>
 
@@ -118,7 +179,11 @@
                         </div>
                         <div class="form-row">
                             <div class="form-title">날짜</div>
-                            <input v-model="detailForm.date" type="date" class="form-data" />
+                            <input
+                                v-model="detailForm.date"
+                                type="date"
+                                class="form-data"
+                            />
                         </div>
                         <div class="form-row">
                             <div class="form-title">분류</div>
@@ -129,26 +194,44 @@
                         </div>
                         <div class="form-row">
                             <div class="form-title">카테고리</div>
-                            <select v-model="detailForm.category" class="form-data">
+                            <select
+                                v-model="detailForm.category"
+                                class="form-data"
+                            >
                                 <option disabled value="">카테고리 선택</option>
                                 <option
-                                    v-for="cat in detailForm.type === 'income' ? incomeCategories : expenseCategories"
-                                    :key="cat.id" :value="cat.name">
+                                    v-for="cat in detailForm.type === 'income'
+                                        ? incomeCategories
+                                        : expenseCategories"
+                                    :key="cat.id"
+                                    :value="cat.name"
+                                >
                                     {{ cat.name }}
                                 </option>
                             </select>
                         </div>
                         <div class="form-row">
                             <div class="form-title">내용</div>
-                            <input v-model="detailForm.description" type="text" class="form-data" />
+                            <input
+                                v-model="detailForm.description"
+                                type="text"
+                                class="form-data"
+                            />
                         </div>
                         <div class="form-row">
                             <div class="form-title">금액</div>
-                            <input v-model.number="detailForm.amount" type="number" class="form-data" />
+                            <input
+                                v-model.number="detailForm.amount"
+                                type="number"
+                                class="form-data"
+                            />
                         </div>
                         <div class="form-actions">
-                            <button @click="saveEdit">저장</button>
-                            <button @click="isEditing = false">취소</button>
+                            <div class="left"></div>
+                            <div class="right">
+                                <button @click="saveEdit">저장</button>
+                                <button @click="isEditing = false">취소</button>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -175,8 +258,13 @@
                     <label>카테고리</label>
                     <select v-model="form.category">
                         <option disabled value="">카테고리 선택</option>
-                        <option v-for="cat in mode === 'income' ? incomeCategories : expenseCategories" :key="cat.id"
-                            :value="cat.name">
+                        <option
+                            v-for="cat in mode === 'income'
+                                ? incomeCategories
+                                : expenseCategories"
+                            :key="cat.id"
+                            :value="cat.name"
+                        >
                             {{ cat.name }}
                         </option>
                     </select>
@@ -202,7 +290,6 @@
     </div>
 </template>
 
-
 <script setup>
 import {
     ref,
@@ -217,10 +304,26 @@ import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 
-const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+const months = [
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
+];
 const currentDate = new Date();
 
-const years = Array.from({ length: 5 }, (_, i) => currentDate.getFullYear() - 4 + i);
+const years = Array.from(
+    { length: 5 },
+    (_, i) => currentDate.getFullYear() - 4 + i
+);
 
 const selected = ref({
     month: months[currentDate.getMonth()],
@@ -315,17 +418,27 @@ const filterAndCombineData = () => {
     const all = [...expenses.value, ...incomes.value];
     combinedData.value = all
         .filter((item) => {
-            const matchesDate = item.date?.startsWith(`${selected.value.year}-${selected.value.month}`);
+            const matchesDate = item.date?.startsWith(
+                `${selected.value.year}-${selected.value.month}`
+            );
             const matchesUser = item.user_id === userStore.user?.id;
             const matchesType =
-                selectedFilters.value.type === 'all' || item.type === selectedFilters.value.type;
+                selectedFilters.value.type === 'all' ||
+                item.type === selectedFilters.value.type;
             const matchesCategory =
-                selectedFilters.value.category === 'all' || item.category === selectedFilters.value.category;
+                selectedFilters.value.category === 'all' ||
+                item.category === selectedFilters.value.category;
             const matchesKeyword = item.description
                 .toLowerCase()
                 .includes(selectedFilters.value.keyword.toLowerCase());
 
-            return matchesDate && matchesUser && matchesType && matchesCategory && matchesKeyword;
+            return (
+                matchesDate &&
+                matchesUser &&
+                matchesType &&
+                matchesCategory &&
+                matchesKeyword
+            );
         })
         .sort((a, b) => new Date(a.date) - new Date(b.date));
 };
@@ -423,7 +536,8 @@ const saveEdit = async () => {
     try {
         const url = `/api/${detailForm.type}s/${detailForm.id}`;
         await axios.put(url, { ...detailForm });
-        const targetList = detailForm.type === 'income' ? incomes.value : expenses.value;
+        const targetList =
+            detailForm.type === 'income' ? incomes.value : expenses.value;
         const index = targetList.findIndex((i) => i.id === detailForm.id);
         if (index !== -1) targetList[index] = { ...detailForm };
         closeModal();
@@ -437,7 +551,8 @@ const deleteItem = async () => {
     try {
         const url = `/api/${detailForm.type}s/${detailForm.id}`;
         await axios.delete(url);
-        const targetList = detailForm.type === 'income' ? incomes.value : expenses.value;
+        const targetList =
+            detailForm.type === 'income' ? incomes.value : expenses.value;
         const index = targetList.findIndex((i) => i.id === detailForm.id);
         if (index !== -1) targetList.splice(index, 1);
         closeModal();
@@ -448,11 +563,16 @@ const deleteItem = async () => {
 };
 
 // watch
-watch([() => selected.value.month, () => selected.value.year], filterAndCombineData);
+watch(
+    [() => selected.value.month, () => selected.value.year],
+    filterAndCombineData
+);
 watch(() => selectedFilters.value.keyword, filterAndCombineData);
-watch(() => [selectedFilters.value.type, selectedFilters.value.category], filterAndCombineData);
+watch(
+    () => [selectedFilters.value.type, selectedFilters.value.category],
+    filterAndCombineData
+);
 </script>
-
 
 <style scoped>
 /* subBox */
@@ -470,8 +590,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
     width: 100%;
     transition: all 0.4s ease;
 }
-
-/* dropdown */
+/* --------------------------------------------------- dropdown */
 .dropdown-container {
     display: flex;
     /* gap: 1rem; */
@@ -491,7 +610,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
     box-sizing: border-box;
 }
 
-.dropdown+.dropdown {
+.dropdown + .dropdown {
     border-left: 1px solid #ccc;
 }
 
@@ -549,7 +668,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
     background-color: #f0f0f0;
 }
 
-/* table */
+/* ---------------------------------------------------------- table */
 
 .results {
     flex-grow: 1;
@@ -634,7 +753,7 @@ td:nth-child(2) {
     border-radius: 4px;
 }
 
-/* addModal */
+/* ------------------------------------------------------------- addModal */
 .modal {
     position: fixed;
     top: 0;
@@ -674,9 +793,9 @@ td:nth-child(2) {
     font-weight: bold;
 }
 
-/* --------------------------------------------------------- */
+/* ----------------------------------------------------------------- modal */
 .modal2 {
-    width: 400px;
+    width: 500px;
     background: white;
     height: calc(100vh - 234px);
     transition: all 0.4s ease;
@@ -701,7 +820,7 @@ td:nth-child(2) {
     font-weight: bold;
 }
 
-/* ----------------------------------------------------------- */
+/* ---------------------------------------------------------------- form */
 .form-row {
     display: flex;
     flex-direction: row;
@@ -743,12 +862,12 @@ td:nth-child(2) {
 }
 
 .form-actions {
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
+    /* position: absolute;
+    bottom: 16px; */
     display: flex;
-    gap: 1rem;
+    justify-content: space-between;
     margin-top: 1.5rem;
+    width: 100%;
 }
 
 .form-actions button {
@@ -758,6 +877,16 @@ td:nth-child(2) {
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+}
+
+.form-actions .left {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-actions .right {
+    display: flex;
+    gap: 1rem;
 }
 
 .form-actions button:first-child {
