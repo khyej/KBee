@@ -285,8 +285,6 @@ const fetchCategories = async () => {
         const resExpense = await axios.get('/api/expenseCategory');
         incomeCategories.value = resIncome.data;
         expenseCategories.value = resExpense.data;
-        console.log('✔ incomeCategories', incomeCategories.value);
-        console.log('✔ expenseCategories', expenseCategories.value);
     } catch (e) {
         console.error('카테고리 로딩 실패', e);
     }
