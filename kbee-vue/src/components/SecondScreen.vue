@@ -1,9 +1,10 @@
 <template>
   <div class="wrapper">
     <div class="main">
-      <!-- <h2>Second Screen</h2>
-    <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1> -->
+      <h2>Second Screen</h2>
+      <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1>
       <p>{{ formattedSelectedDate }}</p>
+      <p>{{ selectedDate }}</p>
       <hr />
       <Income style="display: none" @income-loaded="handleIncomeLoaded" :selectedDate="selectedDate" />
       <Expense style="display: none" @expense-loaded="handleExpenseLoaded" :selectedDate="selectedDate" />
