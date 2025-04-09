@@ -1,29 +1,18 @@
 <template>
   <div class="wrapper">
     <div class="main">
-      <!-- <h2>Second Screen</h2>
-    <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1> -->
+      <h2>Second Screen</h2>
+      <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1>
       <p>{{ formattedSelectedDate }}</p>
+      <p>{{ selectedDate }}</p>
       <hr />
-      <Income
-        style="display: none"
-        @income-loaded="handleIncomeLoaded"
-        :selectedDate="selectedDate"
-      />
-      <Expense
-        style="display: none"
-        @expense-loaded="handleExpenseLoaded"
-        :selectedDate="selectedDate"
-      />
+      <Income style="display: none" @income-loaded="handleIncomeLoaded" :selectedDate="selectedDate" />
+      <Expense style="display: none" @expense-loaded="handleExpenseLoaded" :selectedDate="selectedDate" />
       <div v-if="filteredParentIncomeList.length > 0">
         <h2 class="subtitle">수입</h2>
         <ul>
-          <li
-            v-for="item in filteredParentIncomeList"
-            :key="item.id"
-            class="income-item"
-          >
-            {{ item.description }}
+          <li v-for="item in filteredParentIncomeList" :key="item.id" class="income-item">
+            <font-awesome-icon :icon="getIcon(item.category)" class="text-black-600 w-4 h-4" /> {{ item.description }}
             <span class="amount plus">+ {{ item.amount }}원</span>
           </li>
         </ul>
@@ -31,21 +20,15 @@
       <div v-if="filteredParentExpenseList.length > 0">
         <h2 class="subtitle">지출</h2>
         <ul>
-          <li
-            v-for="item in filteredParentExpenseList"
-            :key="item.id"
-            class="expense-item"
-          >
-            {{ item.description }}
+          <li v-for="item in filteredParentExpenseList" :key="item.id" class="expense-item">
+            <font-awesome-icon :icon="getIcon(item.category)" class="text-black-600 w-4 h-4" /> {{ item.description }}
             <span class="amount minus">- {{ item.amount }}원</span>
           </li>
         </ul>
       </div>
-      <div
-        v-if="
-          !filteredParentIncomeList.length && !filteredParentExpenseList.length
-        "
-      >
+      <div v-if="
+        !filteredParentIncomeList.length && !filteredParentExpenseList.length
+      ">
         <p>해당 날짜에는 내역이 없습니다.</p>
       </div>
     </div>
@@ -57,6 +40,7 @@ import { ref, defineProps, computed } from 'vue';
 import Income from './Income.vue';
 import Expense from './Expense.vue';
 import { useUserStore } from '../stores/user';
+import Hiya from './Hiya.vue';
 
 const userStore = useUserStore();
 
@@ -107,6 +91,34 @@ const formattedSelectedDate = computed(() => {
   const [, month, day, year] = match;
   return `${year}년 ${month}월 ${day}일`;
 });
+const getIcon = (category) => {
+  switch (category) {
+    case '식비':
+      return ['fas', 'utensils'];
+    case '쇼핑':
+      return ['fas', 'shopping-cart'];
+    case '통신비':
+      return ['fas', 'wifi'];
+    case '교통':
+      return ['fas', 'subway'];
+    case '프리랜서':
+    case '투자 수익':
+    case '급여':
+      return ['fas', 'piggy-bank'];
+    case '문화생활':
+      return ['fas', 'gift'];
+    case '카페/디저트':
+      return ['fas', 'coffee'];
+    case '의료/건강':
+      return ['fas', 'clinic-medical'];
+    case '공과금':
+      return ['fas', 'credit-card'];
+    case '이자':
+      return ['fas', 'money-check-alt'];
+    default:
+      return ['fas', 'money-check-alt'];
+  }
+};
 </script>
 
 <style scoped>
@@ -115,7 +127,8 @@ const formattedSelectedDate = computed(() => {
   justify-content: center;
   align-items: flex-start;
   padding: 20px 40px 40px;
-  background-color: #f4f4f4; /* 전체 배경 */
+  background-color: #f4f4f4;
+  /* 전체 배경 */
   min-height: 100vh;
 }
 
@@ -135,7 +148,8 @@ const formattedSelectedDate = computed(() => {
 .income-item,
 .expense-item {
   position: relative;
-  padding-left: 20px; /* 왼쪽 여백 확보 */
+  padding-left: 20px;
+  /* 왼쪽 여백 확보 */
   margin-bottom: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid #e0e0e0;
@@ -167,13 +181,17 @@ const formattedSelectedDate = computed(() => {
 
 hr {
   border: none;
-  border-top: 1px solid #ddd; /* 선 색상 설정 */
-  margin: 16px 0; /* 위아래 간격 (선택사항) */
+  border-top: 1px solid #ddd;
+  /* 선 색상 설정 */
+  margin: 16px 0;
+  /* 위아래 간격 (선택사항) */
 }
 
 .subtitle {
-  margin-bottom: 12px; /* 제목 아래 간격 */
-  margin-top: 24px; /* 위쪽 간격 추가 (필요시) */
+  margin-bottom: 12px;
+  /* 제목 아래 간격 */
+  margin-top: 24px;
+  /* 위쪽 간격 추가 (필요시) */
   font-size: 1.25rem;
   font-weight: bold;
 }
@@ -184,10 +202,12 @@ hr {
 }
 
 .plus {
-  color: #2e7d32; /* 진한 초록 */
+  color: #2e7d32;
+  /* 진한 초록 */
 }
 
 .minus {
-  color: #c62828; /* 진한 빨강 */
+  color: #c62828;
+  /* 진한 빨강 */
 }
 </style>

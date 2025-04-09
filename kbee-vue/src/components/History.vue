@@ -83,7 +83,7 @@
                         <div class="dropdown-toggle">
                             {{
                                 selectedFilters.category === 'all'
-                                    ? '전체 카테고리'
+                                    ? '카테고리'
                                     : selectedFilters.category
                             }}
                         </div>
@@ -93,7 +93,7 @@
                                     selectFilterOption('category', 'all')
                                 "
                             >
-                                전체 카테고리
+                                카테고리
                             </li>
                             <li
                                 v-for="cat in categoryOptions"
@@ -162,7 +162,13 @@
                                     <td :class="item.type">
                                         {{ item.amount.toLocaleString() }}원
                                     </td>
-                                    <td>{{ item.category }}</td>
+
+                                    <td>
+                                        <font-awesome-icon
+                                            :icon="getIcon(item.category)"
+                                        />
+                                        {{ item.category }}
+                                    </td>
                                 </tr>
                             </template>
                             <template v-else>
@@ -675,6 +681,34 @@ const handleClickOutsideFilters = (e) => {
         isFilterDropdownOpen.value.category = false;
     }
 };
+const getIcon = (category) => {
+    switch (category) {
+        case '식비':
+            return ['fas', 'utensils'];
+        case '쇼핑':
+            return ['fas', 'shopping-cart'];
+        case '통신비':
+            return ['fas', 'wifi'];
+        case '교통':
+            return ['fas', 'subway'];
+        case '프리랜서':
+        case '투자 수익':
+        case '급여':
+            return ['fas', 'piggy-bank'];
+        case '문화생활':
+            return ['fas', 'gift'];
+        case '카페/디저트':
+            return ['fas', 'coffee'];
+        case '의료/건강':
+            return ['fas', 'clinic-medical'];
+        case '공과금':
+            return ['fas', 'credit-card'];
+        case '이자':
+            return ['fas', 'money-check-alt'];
+        default:
+            return ['fas', 'money-check-alt'];
+    }
+};
 
 watch(
     [() => selected.value.month, () => selected.value.year],
@@ -700,6 +734,7 @@ watch(
 .subDiv-1 {
     flex-grow: 1;
     height: 100%;
+    min-width: 800px;
     display: flex;
     flex-direction: column;
     transition: width 0.3s ease;
@@ -735,15 +770,11 @@ watch(
 /* --------------------------------------------------- dropdown */
 .dropdown-container {
     display: flex;
-    /* gap: 1rem; */
-    /* border-top: 1px solid rgb(255, 188, 0);
-    border-left: 1px solid rgb(255, 188, 0);
-    border-right: 1px solid rgb(255, 188, 0); */
     border: 1px solid rgb(255, 188, 0);
     width: fit-content;
     margin-bottom: 2rem;
     flex-wrap: wrap;
-    height: 100%;
+    height: 40px;
 }
 
 .dropdown-container input {
@@ -759,13 +790,12 @@ watch(
 
 .dropdown {
     position: relative;
-    width: 140px;
+    width: 100px;
     cursor: pointer;
     z-index: 5;
     text-align: center;
     margin: 0;
     box-sizing: border-box;
-    height: 38px;
 }
 
 .dropdown + .dropdown {
@@ -774,11 +804,8 @@ watch(
 
 .dropdown-toggle {
     padding: 8px 12px;
-    /* background-color: yellow; */
-    /* border-bottom: 1px solid rgb(255, 188, 0); */
     font-size: 16px;
     position: relative;
-    /* box-sizing: border-box; */
 }
 
 .dropdown-toggle::after {
@@ -799,7 +826,7 @@ watch(
     box-sizing: border-box;
     background: white;
     border-top: none;
-    z-index: 10;
+    z-index: 20;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -961,15 +988,6 @@ td:nth-child(2) {
     font-size: 14px;
 }
 
-.form-row input,
-.form-row select {
-    width: 65%;
-    padding: 5px;
-    border-bottom: 1px solid black;
-    margin-right: 10px;
-    word-break: keep-all;
-}
-
 .form-date {
     width: 100%;
     text-align: center;
@@ -1045,6 +1063,7 @@ td:nth-child(2) {
     background-color: rgb(96, 88, 76);
     color: white;
 }
+
 /* button */
 .addButton {
     width: 100px;
@@ -1053,5 +1072,21 @@ td:nth-child(2) {
     background-color: rgb(255, 204, 0);
     color: white;
     font-weight: bold;
+}
+
+@media (max-width: 1100px) {
+    .dropdown-container {
+        margin: 0;
+    }
+
+    .dropdown-toggle {
+        height: 100%;
+    }
+    .subDiv-header {
+        flex-direction: column;
+        align-items: flex-start; /* 좌측 정렬로 변경 */
+        height: auto; /* 높이 자동으로 */
+        gap: 10px; /* 요소 사이 간격 주기 */
+    }
 }
 </style>
