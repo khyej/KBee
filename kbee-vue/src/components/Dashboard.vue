@@ -1,10 +1,9 @@
 <template>
   <div class="wrap">
     <div class="subBox">
-      <div class="px-4">
+      <div>
         <!-- 제목과 월 선택 -->
         <div class="bg-white rounded-xl shadow p-4 mb-6 w-full">
-          <!-- 💡 template 부분 수정 -->
           <div class="flex justify-between items-center">
             <h3 class="font-bold text-xl text-gray-800">
               {{ selectedYear }}년 {{ selectedMonth }}월 가계부
@@ -47,7 +46,7 @@
             >
               <!-- 수입 박스 -->
               <div
-                class="flex-1 bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
+                class="flex-1 rounded-xl bg-white px-4 py-6 shadow border-b-2 border-green-200 flex flex-col items-center justify-center"
               >
                 <p class="text-gray-500 text-sm mb-1">
                   {{ selectedMonth }}월 수입
@@ -59,7 +58,7 @@
 
               <!-- 지출 박스 -->
               <div
-                class="flex-1 bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
+                class="flex-1 rounded-xl bg-white px-4 py-6 shadow border-b-2 border-red-200 flex flex-col items-center justify-center"
               >
                 <p class="text-gray-500 text-sm mb-1">
                   {{ selectedMonth }}월 지출
@@ -71,10 +70,10 @@
 
               <!-- 잔액 박스 -->
               <div
-                class="flex-1 bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
+                class="flex-1 rounded-xl bg-white px-4 py-6 shadow border-b-2 border-blue-200 flex flex-col items-center justify-center"
               >
                 <p class="text-gray-500 text-sm mb-1">
-                  {{ selectedMonth }}월 잔액
+                  {{ selectedMonth }}월 예산
                 </p>
                 <p class="text-2xl font-semibold text-blue-600">
                   <AnimatedNumber :to="balance" />원
@@ -112,7 +111,16 @@
                 카테고리별 지출
               </h2>
               <div class="flex-1 flex items-center justify-center">
-                <div class="min-w-[300px] max-w-full mx-auto w-full h-full">
+                <div
+                  v-if="monthExpense === 0"
+                  class="text-gray-400 text-center"
+                >
+                  데이터가 없습니다.
+                </div>
+                <div
+                  v-else
+                  class="min-w-[300px] max-w-full mx-auto w-full h-full"
+                >
                   <PieChart :month="selectedMonth" />
                 </div>
               </div>
@@ -248,3 +256,28 @@ onMounted(async () => {
 
 watch([selectedYear, selectedMonth], updateFilteredData);
 </script>
+
+<style scoped>
+.wrap {
+  background-color: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.subBox {
+  background-color: #f3f4f6;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 1800px;
+  height: calc(100% - 40px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 10px;
+}
+</style>
