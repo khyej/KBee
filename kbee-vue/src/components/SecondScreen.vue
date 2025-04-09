@@ -1,5 +1,4 @@
 <template>
-  <Hiya />
   <div>
     <h2>Second Screen</h2>
     <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1>
