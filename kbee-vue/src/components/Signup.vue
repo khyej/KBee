@@ -50,7 +50,7 @@ const signup = async () => {
             email: form.value.email,
             password: form.value.password,
             phone: form.value.phone,
-            budget: ''
+            budget: '0'
         }
 
         await axios.post('/api/users', newUser)

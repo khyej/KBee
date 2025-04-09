@@ -4,35 +4,11 @@
       "id": "1",
       "nickname": "admin",
       "username": "admin",
-      "email": "admin@admin.com",
+      "email": "admin",
       "password": "admin",
       "phone": "010-1234-5678",
-      "Set Budget": 100000
-    },
-    {
-      "id": "2",
-      "nickname": "1111",
-      "username": "1111",
-      "email": "1111",
-      "password": "1111",
-      "phone": "1111"
-    },
-    {
-      "id": "3",
-      "nickname": "111",
-      "username": "111",
-      "email": "111",
-      "password": "111",
-      "phone": "111"
-    },
-    {
-      "id": "4",
-      "nickname": "user",
-      "username": "user",
-      "email": "user@user.com",
-      "password": "user",
-      "phone": "00000000",
-      "budget": ""
+      "Set Budget": 100000,
+      "budget": "1000000"
     }
   ],
   "expenses": [
@@ -40,7 +16,7 @@
       "id": "1",
       "type": "expense",
       "amount": 12001,
-      "category": "의료/건강",
+      "category": "식비",
       "payment_method": "카드",
       "description": "편의점 간식",
       "date": "2025-04-01",
@@ -207,65 +183,65 @@
   ],
   "incomeCategory": [
     {
-      "id": 1,
+      "id": "1",
       "name": "급여"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "상여"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "이자"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "투자수익"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "프리랜서"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "기타"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "상금"
     }
   ],
   "expenseCategory": [
     {
-      "id": 1,
+      "id": "1",
       "name": "식비"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "카페/디저트"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "교통"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "문화생활"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "쇼핑"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "주거/공과금"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "통신비"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "의료/건강"
     }
   ]
