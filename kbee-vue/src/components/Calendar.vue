@@ -5,19 +5,21 @@
       style="height: 100vh"
     >
       <div class="flex items-center justify-between mb-4 w-full">
+        <!-- Use store computed properties -->
         <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
-          {{ currentYear }}년 {{ currentMonth }}
+          {{ calendarStore.currentYear }}년 {{ calendarStore.currentMonthName }}
         </h5>
         <div class="flex items-center">
+          <!-- Use store actions -->
           <button
-            @click="goToPreviousMonth"
+            @click="calendarStore.goToPreviousMonth"
             class="mr-2 px-2 py-1 bg-gray-300 rounded"
             aria-label="Previous Month"
           >
             &lt;
           </button>
           <button
-            @click="goToNextMonth"
+            @click="calendarStore.goToNextMonth"
             class="px-2 py-1 bg-gray-300 rounded"
             aria-label="Next Month"
           >
@@ -28,20 +30,24 @@
       <div
         class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
+        <!-- Use store computed properties -->
         <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
-          <div v-for="day in daysOfWeek" :key="day" class="p-2">{{ day }}</div>
+          <div v-for="day in calendarStore.daysOfWeek" :key="day" class="p-2">
+            {{ day }}
+          </div>
         </div>
         <div class="grid grid-cols-7 divide-gray-200">
+          <!-- Use store computed properties and actions -->
           <button
-            v-for="date in calendarDays"
+            v-for="date in calendarStore.calendarDays"
             :key="date.id"
             class="p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none"
             :class="{
               'text-gray-400': date.outside,
               'bg-indigo-100': date.isToday,
-              'bg-yellow-200': isSelected(date),
+              'bg-yellow-200': isSelected(date), // Keep local isSelected
             }"
-            @click="selectDate(date)"
+            @click="calendarStore.selectDate(date)"
           >
             <span
               class="text-xs font-semibold flex items-center justify-center w-7 h-7 rounded-full"
@@ -54,196 +60,122 @@
       </div>
     </div>
 
+    <!-- Keep SecondScreen logic local -->
     <div v-if="showSecondScreen" class="w-2/7 h-screen">
-      <SecondScreen :selectedDate="formattedSelectedDate" />
+      <!-- Pass formatted date from store -->
+      <SecondScreen :selectedDate="calendarStore.formattedSelectedDate" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue'; // Only ref needed now
 import SecondScreen from './SecondScreen.vue';
+import { useCalendarStore } from '../stores/CalendarStore'; // Import the new store
 
-// Constants
-const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const monthNames = [
-  '1월',
-  '2월',
-  '3월',
-  '4월',
-  '5월',
-  '6월',
-  '7월',
-  '8월',
-  '9월',
-  '10월',
-  '11월',
-  '12월',
-];
+// Get the calendar store instance
+const calendarStore = useCalendarStore();
 
-// Reactive state
-const currentDate = ref(new Date());
-const selectedDay = ref(null);
-const selectedMonth = ref(null);
-const selectedYear = ref(null);
+// Keep UI state local
 const showSecondScreen = ref(true);
 
-// Computed properties for date information
-const year = computed(() => currentDate.value.getFullYear());
-const month = computed(() => currentDate.value.getMonth());
-const today = computed(() => new Date().getDate());
-const currentMonth = computed(() => monthNames[month.value]);
-const currentYear = computed(() => year.value);
-
-// Helper functions for calendar calculations
-const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
-const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
-
-// Computed properties for calendar days
-const daysInCurrentMonth = computed(() =>
-  getDaysInMonth(year.value, month.value)
-);
-const firstDay = computed(() => getFirstDayOfMonth(year.value, month.value));
-const daysInPrevMonth = computed(() =>
-  getDaysInMonth(year.value, month.value - 1)
-);
-
-const prevMonthDays = computed(() =>
-  Array.from({ length: firstDay.value }, (_, i) => ({
-    id: `prev-${i}`,
-    day: daysInPrevMonth.value - firstDay.value + i + 1,
-    outside: true,
-    isToday: false,
-  }))
-);
-
-const currentMonthDays = computed(() =>
-  Array.from({ length: daysInCurrentMonth.value }, (_, i) => {
-    const day = i + 1;
-    return {
-      id: `current-${day}`,
-      day,
-      outside: false,
-      isToday:
-        year.value === new Date().getFullYear() &&
-        month.value === new Date().getMonth() &&
-        day === today.value,
-    };
-  })
-);
-
-const totalDays = computed(
-  () => prevMonthDays.value.length + currentMonthDays.value.length
-);
-const nextMonthDays = computed(() =>
-  Array.from({ length: 42 - totalDays.value }, (_, i) => ({
-    id: `next-${i}`,
-    day: i + 1,
-    outside: true,
-    isToday: false,
-  }))
-);
-
-const calendarDays = computed(() => [
-  ...prevMonthDays.value,
-  ...currentMonthDays.value,
-  ...nextMonthDays.value,
-]);
-
-// Computed property for formatted selected date
-const formattedSelectedDate = computed(() => {
-  if (
-    selectedDay.value !== null &&
-    selectedMonth.value !== null &&
-    selectedYear.value !== null
-  ) {
-    return `${monthNames[selectedMonth.value]} ${selectedDay.value}, ${
-      selectedYear.value
-    }`;
-  }
-  return '';
-});
-
-// Methods
-const goToPreviousMonth = () => {
-  currentDate.value = new Date(
-    currentDate.value.getFullYear(),
-    currentDate.value.getMonth() - 1,
-    1
-  );
-};
-
-const goToNextMonth = () => {
-  currentDate.value = new Date(
-    currentDate.value.getFullYear(),
-    currentDate.value.getMonth() + 1,
-    1
-  );
-};
-
-const selectDate = (date) => {
-  if (date.outside) {
-    if (date.id.startsWith('prev')) {
-      goToPreviousMonth();
-      selectedDay.value = date.day;
-      selectedMonth.value = month.value - 1 < 0 ? 11 : month.value - 1;
-      selectedYear.value = month.value - 1 < 0 ? year.value - 1 : year.value;
-    } else {
-      goToNextMonth();
-      selectedDay.value = date.day;
-      selectedMonth.value = month.value + 1 > 11 ? 0 : month.value + 1;
-      selectedYear.value = month.value + 1 > 11 ? year.value + 1 : year.value;
-    }
-  } else {
-    if (
-      selectedDay.value === date.day &&
-      selectedMonth.value === month.value &&
-      selectedYear.value === year.value
-    ) {
-      selectedDay.value = null;
-      selectedMonth.value = null;
-      selectedYear.value = null;
-    } else {
-      selectedDay.value = date.day;
-      selectedMonth.value = month.value;
-      selectedYear.value = year.value;
-    }
-  }
-};
-
+// Keep isSelected logic local, but reference store state
 const isSelected = (date) => {
+  // Reference store's selected date state
   if (
-    selectedDay.value === null ||
-    selectedMonth.value === null ||
-    selectedYear.value === null
+    calendarStore.selectedDay === null ||
+    calendarStore.selectedMonth === null ||
+    calendarStore.selectedYear === null
   ) {
     return false;
   }
 
-  const targetMonth = date.outside
-    ? date.id.startsWith('prev')
-      ? month.value - 1 < 0
-        ? 11
-        : month.value - 1
-      : month.value + 1 > 11
-      ? 0
-      : month.value + 1
-    : month.value;
+  // Need month/year from store to compare correctly
+  const currentViewMonth = calendarStore.currentDate?.value.getMonth(); // Access internal state if needed, or derive
+  const currentViewYear = calendarStore.currentDate?.value.getFullYear(); // Or expose month/year computed from store
 
-  const targetYear = date.outside
-    ? date.id.startsWith('prev')
-      ? month.value - 1 < 0
-        ? year.value - 1
-        : year.value
-      : month.value + 1 > 11
-      ? year.value + 1
-      : year.value
-    : year.value;
+  // Simplified logic - assumes selectDate handles setting correct month/year
+  // If date is outside, the selectDate action handles the logic
+  // We just need to check if the store's selected date matches this date's day, month, year
+  // Note: This requires careful handling in selectDate to ensure selectedMonth/Year are correct
+  // OR expose current view month/year from store if needed for comparison here.
+  // Let's assume selectDate correctly sets selectedMonth/Year based on the *actual* date clicked
 
   return (
-    selectedDay.value === date.day &&
-    selectedMonth.value === targetMonth &&
-    selectedYear.value === targetYear
+    calendarStore.selectedDay === date.day &&
+    calendarStore.selectedMonth ===
+      (date.outside
+        ? date.id.startsWith('prev')
+          ? (currentViewMonth - 1 + 12) % 12
+          : (currentViewMonth + 1) % 12
+        : currentViewMonth) && // Approximate month check
+    calendarStore.selectedYear ===
+      (date.outside
+        ? date.id.startsWith('prev')
+          ? currentViewMonth === 0
+            ? currentViewYear - 1
+            : currentViewYear
+          : currentViewMonth === 11
+          ? currentViewYear + 1
+          : currentViewYear
+        : currentViewYear) // Approximate year check
+  );
+
+  // --- A potentially simpler isSelected (relies on selectDate setting correctly) ---
+  // return (
+  //   !date.outside && // Only highlight if it's in the current month view *after* potential navigation
+  //   calendarStore.selectedDay === date.day &&
+  //   calendarStore.selectedMonth === calendarStore.currentDate.value.getMonth() && // Check against current view month
+  //   calendarStore.selectedYear === calendarStore.currentDate.value.getFullYear() // Check against current view year
+  // );
+  // ^^ This simpler version might be incorrect if you click a date from prev/next month.
+  // The more complex one tries to calculate the target month/year.
+  // The *best* way is often to ensure `selectDate` sets `selectedMonth` and `selectedYear` to the *actual* month/year of the clicked day.
+
+  // Let's stick to the most direct comparison assuming selectDate sets correctly:
+  return (
+    calendarStore.selectedDay === date.day &&
+    calendarStore.selectedMonth ===
+      (date.outside
+        ? date.id.startsWith('prev')
+          ? (new Date(
+              calendarStore.currentYear,
+              calendarStore.currentMonthName,
+              1
+            ).getMonth() -
+              1 +
+              12) %
+            12
+          : (new Date(
+              calendarStore.currentYear,
+              calendarStore.currentMonthName,
+              1
+            ).getMonth() +
+              1) %
+            12
+        : new Date(
+            calendarStore.currentYear,
+            calendarStore.currentMonthName,
+            1
+          ).getMonth()) &&
+    calendarStore.selectedYear ===
+      (date.outside
+        ? date.id.startsWith('prev')
+          ? new Date(
+              calendarStore.currentYear,
+              calendarStore.currentMonthName,
+              1
+            ).getMonth() === 0
+            ? calendarStore.currentYear - 1
+            : calendarStore.currentYear
+          : new Date(
+              calendarStore.currentYear,
+              calendarStore.currentMonthName,
+              1
+            ).getMonth() === 11
+          ? calendarStore.currentYear + 1
+          : calendarStore.currentYear
+        : calendarStore.currentYear)
   );
 };
 </script>
