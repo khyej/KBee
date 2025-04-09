@@ -57,6 +57,7 @@ import { ref, defineProps, computed } from 'vue';
 import Income from './Income.vue';
 import Expense from './Expense.vue';
 import { useUserStore } from '../stores/user';
+import Hiya from './Hiya.vue';
 
 const userStore = useUserStore();
 
