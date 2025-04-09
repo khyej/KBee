@@ -1,14 +1,14 @@
 <template>
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">💰 수입 내역</h3>
-    <!-- Optional: Show loading/error states -->
-    <div v-if="incomeStore.isLoading">Loading...</div>
-    <div v-else-if="incomeStore.error" class="text-red-500">
-      {{ incomeStore.error }}
+    <!-- Use the specific loading/error states from the transaction store -->
+    <div v-if="transactionStore.isIncomeLoading">Loading...</div>
+    <div v-else-if="transactionStore.incomeError" class="text-red-500">
+      {{ transactionStore.incomeError }}
     </div>
-    <ul v-else-if="incomeStore.incomeList.length > 0">
+    <ul v-else-if="transactionStore.incomeList.length > 0">
       <li
-        v-for="item in incomeStore.incomeList"
+        v-for="item in transactionStore.incomeList"
         :key="item.id"
         class="mb-2 p-2 border rounded"
       >
@@ -24,7 +24,8 @@
 
 <script setup>
 import { watch, defineProps } from 'vue';
-import { useIncomeStore } from '../stores/IncomeStore'; // Adjust the path as necessary
+// Import the combined store
+import { useTransactionStore } from '../stores/TransactionStore'; // Adjust path
 
 const props = defineProps({
   selectedDate: {
@@ -33,20 +34,16 @@ const props = defineProps({
   },
 });
 
-const incomeStore = useIncomeStore();
+// Use the transaction store
+const transactionStore = useTransactionStore();
 
-// Watch the prop and trigger the store action
+// Watch the prop and trigger the specific store action
 watch(
   () => props.selectedDate,
   (newSelectedDate) => {
-    // Pass the original selectedDate string to the action
-    incomeStore.fetchIncome(newSelectedDate);
+    // Call the fetchIncome action from the transaction store
+    transactionStore.fetchIncome(newSelectedDate);
   },
   { immediate: true } // Fetch data immediately when the component mounts
 );
-
-// No need for local incomeList, fetchIncome, convertToYYYYMMDD, or emit
-// If you needed to notify a parent *specifically* when income loads
-// (and the parent can't just watch the store), you might still emit,
-// but often direct store access or watching the store state is preferred.
 </script>
