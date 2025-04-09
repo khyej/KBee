@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-// --- Date Utility Code (moved directly into this file) ---
+// --- Date Utility Code (Keep or move to utils) ---
 const monthNames = [
   '1월',
   '2월',
@@ -21,7 +21,6 @@ const monthNames = [
 
 const convertToYYYYMMDD = (dateStr) => {
   if (!dateStr) return null;
-  // Handle potential empty string from split if dateStr is weird
   const parts = dateStr.split(/[\s,]+/).filter((part) => part);
   if (parts.length < 3) {
     console.error('Invalid date format for splitting:', dateStr);
@@ -59,17 +58,21 @@ export const useTransactionStore = defineStore('transactions', () => {
 
   // --- Actions ---
 
-  // Action to fetch income data
   async function fetchIncome(selectedDateString) {
+    const dateToFetch = convertToYYYYMMDD(selectedDateString);
+    if (!dateToFetch) {
+      // Only fetch if a date is selected/passed
+      incomeList.value = []; // Clear if no date
+      return;
+    }
+
     isIncomeLoading.value = true;
     incomeError.value = null;
-    // Use the utility function defined above in this file
-    const formattedDate = convertToYYYYMMDD(selectedDateString);
 
     try {
       const params = { user_id: 1 }; // Consider making dynamic
-      if (formattedDate) {
-        params.date = formattedDate;
+      if (dateToFetch) {
+        params.date = dateToFetch;
       }
       const res = await axios.get('/api/incomes', { params });
       incomeList.value = res.data;
@@ -82,17 +85,21 @@ export const useTransactionStore = defineStore('transactions', () => {
     }
   }
 
-  // Action to fetch expense data
   async function fetchExpense(selectedDateString) {
+    const dateToFetch = convertToYYYYMMDD(selectedDateString);
+    if (!dateToFetch) {
+      // Only fetch if a date is selected/passed
+      expenseList.value = []; // Clear if no date
+      return;
+    }
+
     isExpenseLoading.value = true;
     expenseError.value = null;
-    // Use the utility function defined above in this file
-    const formattedDate = convertToYYYYMMDD(selectedDateString);
 
     try {
       const params = { user_id: 1 }; // Consider making dynamic
-      if (formattedDate) {
-        params.date = formattedDate;
+      if (dateToFetch) {
+        params.date = dateToFetch;
       }
       const res = await axios.get('/api/expenses', { params });
       expenseList.value = res.data;
@@ -105,13 +112,13 @@ export const useTransactionStore = defineStore('transactions', () => {
     }
   }
 
-  // Optional: Action to fetch both
-  async function fetchAllTransactions(selectedDateString) {
-    await Promise.all([
-      fetchIncome(selectedDateString),
-      fetchExpense(selectedDateString),
-    ]);
-  }
+  // Optional: Action to fetch both (if needed) - Can be removed if CalendarStore handles triggering both
+  // async function fetchAllTransactions(selectedDateString) {
+  //    await Promise.all([
+  //       fetchIncome(selectedDateString),
+  //       fetchExpense(selectedDateString)
+  //    ]);
+  // }
 
   return {
     // State
@@ -125,6 +132,6 @@ export const useTransactionStore = defineStore('transactions', () => {
     // Actions
     fetchIncome,
     fetchExpense,
-    fetchAllTransactions,
+    // fetchAllTransactions, // Expose if needed elsewhere
   };
 });

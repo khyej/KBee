@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { watch, defineProps } from 'vue';
+import { watch, defineProps, getCurrentInstance } from 'vue';
 // Import the combined store
 import { useTransactionStore } from '../stores/TransactionStore'; // Adjust path
 
@@ -37,13 +37,16 @@ const props = defineProps({
 // Use the transaction store
 const transactionStore = useTransactionStore();
 
+const { emit } = getCurrentInstance();
 // Watch the prop and trigger the specific store action
 watch(
   () => props.selectedDate,
-  (newSelectedDate) => {
-    // Call the fetchIncome action from the transaction store
-    transactionStore.fetchIncome(newSelectedDate);
+  async (newSelectedDate) => {
+    if (newSelectedDate) {
+      await transactionStore.fetchIncome(newSelectedDate);
+      emit('income-loaded', transactionStore.incomeList);
+    }
   },
-  { immediate: true } // Fetch data immediately when the component mounts
+  { immediate: true }
 );
 </script>

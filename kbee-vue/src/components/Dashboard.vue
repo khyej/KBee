@@ -35,7 +35,7 @@
             >
               <p class="text-gray-500 text-sm">{{ selectedMonth }}월 수입</p>
               <p class="text-2xl font-semibold text-green-600">
-                +{{ aprilIncome.toLocaleString() }}원
+                +<AnimatedNumber :to="aprilIncome" />원
               </p>
             </div>
             <div
@@ -43,31 +43,63 @@
             >
               <p class="text-gray-500 text-sm">{{ selectedMonth }}월 지출</p>
               <p class="text-2xl font-semibold text-red-600">
-                -{{ aprilExpense.toLocaleString() }}원
+                -<AnimatedNumber :to="aprilExpense" />원
               </p>
             </div>
-            <div class="bg-white rounded-xl shadow p-4 h-full flex-1">
+            <div
+              class="bg-white rounded-xl shadow p-4 h-full flex-1 flex flex-col justify-between"
+            >
               <h2 class="text-center font-semibold mb-2">
                 {{ selectedMonth }}월 지출 및 수입
               </h2>
-              <BarChart :month="selectedMonth" />
+              <div class="flex-1 flex items-center justify-center">
+                <div
+                  v-if="aprilIncome === 0 && aprilExpense === 0"
+                  class="text-gray-400 text-center"
+                >
+                  데이터가 없습니다.
+                </div>
+                <div v-else class="w-full h-full">
+                  <BarChart :month="selectedMonth" />
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- 우측: 파이차트와 지출 TOP5 -->
           <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1">
-            <div class="bg-white rounded-xl shadow p-4 flex-1">
+            <div
+              class="bg-white rounded-xl shadow p-4 flex-1 flex flex-col justify-between"
+            >
               <h2 class="text-center font-semibold text-base md:text-lg mb-4">
                 카테고리별 지출
               </h2>
-              <div class="min-w-[300px] max-w-full mx-auto h-full">
-                <PieChart :month="selectedMonth" />
+              <div class="flex-1 flex items-center justify-center">
+                <div
+                  v-if="aprilExpense === 0"
+                  class="text-gray-400 text-center"
+                >
+                  데이터가 없습니다.
+                </div>
+                <div
+                  v-else
+                  class="min-w-[300px] max-w-full mx-auto w-full h-full"
+                >
+                  <PieChart :month="selectedMonth" />
+                </div>
               </div>
             </div>
+
             <!-- 지출 TOP 5 -->
             <div class="bg-white rounded-xl shadow p-4">
               <h2 class="text-lg font-semibold mb-3 text-left">지출 TOP 5</h2>
-              <div class="grid grid-rows-3 grid-flow-col gap-4">
+              <div
+                v-if="topExpenses.length === 0"
+                class="text-center text-gray-400 py-8"
+              >
+                데이터가 없습니다.
+              </div>
+              <div v-else class="grid grid-rows-3 grid-flow-col gap-4">
                 <div
                   v-for="(item, index) in topExpenses"
                   :key="index"
@@ -95,6 +127,7 @@
 </template>
 
 <script setup>
+import AnimatedNumber from '@/components/AnimatedNumber.vue';
 import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import PieChart from '@/components/PieChart.vue';

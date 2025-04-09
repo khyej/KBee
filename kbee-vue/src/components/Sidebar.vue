@@ -1,11 +1,11 @@
 <script setup>
-import { RouterLink, useRoute, useRouter } from 'vue-router'
-import config from '@/config'
-import { useUserStore } from '@/stores/user'
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import config from '@/config';
+import { useUserStore } from '@/stores/user';
 
-const currentRoute = useRoute()
-const router = useRouter()
-const userStore = useUserStore()
+const currentRoute = useRoute();
+const router = useRouter();
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -13,7 +13,13 @@ const userStore = useUserStore()
         <div>
             <ul>
                 <li v-for="menu in config.menus" :key="menu.url">
-                    <div :class="currentRoute.path === menu.url ? 'activeBar' : 'defaultBar'"></div>
+                    <div
+                        :class="
+                            currentRoute.path === menu.url
+                                ? 'activeBar'
+                                : 'defaultBar'
+                        "
+                    ></div>
                     <router-link :to="menu.url">{{ menu.title }}</router-link>
                 </li>
             </ul>
@@ -21,7 +27,11 @@ const userStore = useUserStore()
 
         <!-- 내 정보 영역 (사이드바 하단 고정) -->
         <div class="my-info" v-if="userStore.isLoggedIn">
-            <img src="@/assets/profile.png" class="my-info-img" @click="router.push('/mypage')" />
+            <img
+                src="@/assets/profile.png"
+                class="my-info-img"
+                @click="router.push('/mypage')"
+            />
             <p class="nickname">{{ userStore.user.nickname }}</p>
         </div>
     </aside>
@@ -40,7 +50,7 @@ aside {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    z-index: 1000;
+    z-index: 50;
 }
 
 ul {
@@ -77,7 +87,6 @@ li {
     padding: 20px 0;
     text-align: center;
 }
-
 
 .my-info-img {
     width: 60px;
