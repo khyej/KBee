@@ -63,6 +63,11 @@
     <!-- Keep SecondScreen logic local -->
     <div v-if="showSecondScreen" class="w-2/7 h-screen">
       <!-- Pass formatted date from store -->
+      <MonthInEx
+        :month="selectedMonth"
+        :income="aprilIncome"
+        :expense="aprilExpense"
+      />
       <SecondScreen :selectedDate="calendarStore.formattedSelectedDate" />
     </div>
   </div>
@@ -72,6 +77,7 @@
 import { ref } from 'vue'; // Only ref needed now
 import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore'; // Import the new store
+import MonthInEx from './MonthInEx.vue';
 
 // Get the calendar store instance
 const calendarStore = useCalendarStore();

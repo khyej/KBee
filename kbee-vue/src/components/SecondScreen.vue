@@ -24,7 +24,7 @@
             class="income-item"
           >
             {{ item.description }}
-            <span class="amount plus">+ {{ item.amount }}</span>
+            <span class="amount plus">+ {{ item.amount }}원</span>
           </li>
         </ul>
       </div>
@@ -37,7 +37,7 @@
             class="expense-item"
           >
             {{ item.description }}
-            <span class="amount minus">- {{ item.amount }}</span>
+            <span class="amount minus">- {{ item.amount }}원</span>
           </li>
         </ul>
       </div>
