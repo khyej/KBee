@@ -37,12 +37,12 @@
         </div>
 
         <!-- 전체 레이아웃 -->
-        <div class="w-full flex flex-col md:flex-row gap-10 md:items-stretch">
+        <div class="w-full flex flex-col xl:flex-row gap-10 xl:items-stretch">
           <!-- 좌측: 수입/지출 및 바차트 -->
-          <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1">
+          <div class="flex flex-col gap-4 w-full xl:w-1/2 flex-1">
             <!-- 수입/지출/잔액 박스: 가로 정렬 -->
             <div
-              class="flex flex-col md:flex-row gap-4 w-full h-full text-center"
+              class="flex flex-col xl:flex-row gap-4 w-full h-full text-center"
             >
               <!-- 수입 박스 -->
               <div
@@ -103,11 +103,11 @@
           </div>
 
           <!-- 우측: 파이차트와 지출 TOP5 -->
-          <div class="flex flex-col gap-4 w-full md:w-1/2 flex-1">
+          <div class="flex flex-col gap-4 w-full xl:w-1/2 flex-1">
             <div
               class="bg-white rounded-xl shadow p-4 flex-1 flex flex-col justify-between"
             >
-              <h2 class="text-center font-semibold text-base md:text-lg mb-4">
+              <h2 class="text-center font-semibold text-base xl:text-lg mb-4">
                 카테고리별 지출
               </h2>
               <div class="flex-1 flex items-center justify-center">
@@ -150,6 +150,7 @@
                     </span>
                   </div>
                   <div class="mt-2 text-base font-bold text-gray-800 truncate">
+                    <font-awesome-icon :icon="getIcon(item.category)" />
                     {{ item.category }}
                   </div>
                 </div>
@@ -246,6 +247,34 @@ const updateFilteredData = () => {
     .map(([category, amount]) => ({ category, amount }))
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 6);
+};
+const getIcon = (category) => {
+  switch (category) {
+    case '식비':
+      return ['fas', 'utensils'];
+    case '쇼핑':
+      return ['fas', 'shopping-cart'];
+    case '통신비':
+      return ['fas', 'wifi'];
+    case '교통':
+      return ['fas', 'subway'];
+    case '프리랜서':
+    case '투자 수익':
+    case '급여':
+      return ['fas', 'piggy-bank'];
+    case '문화생활':
+      return ['fas', 'gift'];
+    case '카페/디저트':
+      return ['fas', 'coffee'];
+    case '의료/건강':
+      return ['fas', 'clinic-medical'];
+    case '공과금':
+      return ['fas', 'credit-card'];
+    case '이자':
+      return ['fas', 'money-check-alt'];
+    default:
+      return ['fas', 'money-check-alt'];
+  }
 };
 
 onMounted(async () => {

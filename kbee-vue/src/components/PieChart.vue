@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col md:flex-row md:items-center md:justify-center gap-4"
-  >
+  <div class="flex flex-col md:flex-row md:items-center md:justify-center gap-4">
     <!-- 도넛 차트 영역 -->
     <div class="relative w-full md:w-1/2 h-full">
       <Doughnut :data="chartData" :options="options" />
@@ -11,18 +9,12 @@
     <div class="w-full md:w-1/2 flex flex-col justify-center pl-4">
       <h3 class="font-semibold text-gray-700 mb-2">카테고리별 지출 내역</h3>
       <ul class="space-y-2 text-sm">
-        <li
-          v-for="(label, index) in chartData.labels"
-          :key="index"
-          class="flex items-center justify-between"
-        >
+        <li v-for="(label, index) in chartData.labels" :key="index" class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span
-              class="w-4 h-4 inline-block rounded-full"
-              :style="{
-                backgroundColor: chartData.datasets[0].backgroundColor[index],
-              }"
-            ></span>
+            <span class="w-4 h-4 inline-block rounded-full" :style="{
+              backgroundColor: chartData.datasets[0].backgroundColor[index],
+            }"></span>
+            <font-awesome-icon :icon="getCategoryIcon(label)" class="text-gray-600 w-4 h-4" />
             <span class="text-gray-800">{{ label }}</span>
             <span class="text-xs text-gray-500">
               ({{ percentages[index] }}%)
@@ -137,6 +129,34 @@ const fetchAndRender = async () => {
     };
   } catch (error) {
     console.error('❌ PieChart 데이터 로딩 에러:', error);
+  }
+};
+const getCategoryIcon = (category) => {
+  switch (category) {
+    case '식비':
+      return ['fas', 'utensils'];
+    case '쇼핑':
+      return ['fas', 'shopping-cart'];
+    case '통신비':
+      return ['fas', 'wifi'];
+    case '교통':
+      return ['fas', 'bus'];
+    case '프리랜서':
+    case '급여':
+    case '투자 수익':
+      return ['fas', 'piggy-bank'];
+    case '문화생활':
+      return ['fas', 'gift'];
+    case '카페/디저트':
+      return ['fas', 'coffee'];
+    case '의료/건강':
+      return ['fas', 'clinic-medical'];
+    case '공과금':
+      return ['fas', 'file-invoice-dollar'];
+    case '이자':
+      return ['fas', 'money-check-alt'];
+    default:
+      return ['fas', 'circle'];
   }
 };
 
