@@ -24,18 +24,15 @@
               }"
             ></span>
             <span class="text-gray-800">{{ label }}</span>
-          </div>
-          <span class="text-gray-600 font-medium">
-            {{ chartData.datasets[0].data[index].toLocaleString() }}원
-            <span class="text-xs text-gray-500 ml-1">
-              ({{
-                (
-                  (chartData.datasets[0].data[index] / total.value) *
-                  100
-                ).toFixed(1)
-              }}%)
+            <span class="text-xs text-gray-500">
+              ({{ percentages[index] }}%)
             </span>
-          </span>
+          </div>
+          <div class="flex flex-col items-end text-right">
+            <span class="text-gray-600 font-medium">
+              {{ chartData.datasets[0].data[index].toLocaleString() }}원
+            </span>
+          </div>
         </li>
       </ul>
     </div>
@@ -108,8 +105,13 @@ const fetchAndRender = async () => {
         (categoryTotals[item.category] || 0) + item.amount;
     });
 
-    const labels = Object.keys(categoryTotals);
-    const data = Object.values(categoryTotals);
+    // ✅ 내림차순 정렬된 배열로 변환
+    const sortedCategories = Object.entries(categoryTotals).sort(
+      (a, b) => b[1] - a[1]
+    ); // amount 기준 내림차순 정렬
+
+    const labels = sortedCategories.map(([category]) => category);
+    const data = sortedCategories.map(([_, amount]) => amount);
     total.value = data.reduce((sum, val) => sum + val, 0);
 
     const backgroundColors = [
