@@ -111,6 +111,13 @@ const renderChart = async () => {
         plugins: {
           legend: {
             position: 'bottom',
+            labels: {
+              boxWidth: 12, // ✅ 색상 박스 크기 줄이기
+              padding: 16, // ✅ 아이템 간 간격 늘리기
+              font: {
+                size: 12, // ✅ 글자 크기 줄이기
+              },
+            },
           },
         },
         scales: {
