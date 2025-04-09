@@ -36,6 +36,8 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import axios from 'axios';
+import { useUserStore } from '@/stores/user';
 import { Doughnut } from 'vue-chartjs';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -45,12 +47,14 @@ const props = defineProps({
   month: String,
 });
 
+const userStore = useUserStore();
+
 const options = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      display: false, // 👉 기본 legend 숨김
+      display: false,
     },
     tooltip: {
       callbacks: {
@@ -68,18 +72,21 @@ const chartData = ref({
   datasets: [],
 });
 
+const getMonth = (dateStr) => dateStr.split('-')[1];
+
 const fetchAndRender = async () => {
   try {
-    const res = await fetch('/api/expenses');
-    const expenses = await res.json();
+    if (!userStore.user?.id) return;
 
-    const getMonth = (dateStr) => dateStr.split('-')[1];
-    const filteredExpenses = expenses.filter(
-      (item) => getMonth(item.date) === props.month
+    const res = await axios.get('/api/expenses');
+    const userId = userStore.user.id;
+
+    const filtered = res.data.filter(
+      (item) => item.user_id === userId && getMonth(item.date) === props.month
     );
 
     const categoryTotals = {};
-    filteredExpenses.forEach((item) => {
+    filtered.forEach((item) => {
       categoryTotals[item.category] =
         (categoryTotals[item.category] || 0) + item.amount;
     });
@@ -118,5 +125,5 @@ watch(() => props.month, fetchAndRender);
 </script>
 
 <style scoped>
-/* 필요하면 스타일 더 추가 가능 */
+/* 필요 시 스타일 추가 가능 */
 </style>
