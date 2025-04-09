@@ -76,6 +76,20 @@
             >
               {{ date.day }}
             </span>
+            <div class="flex flex-col text-xs">
+              <span
+                v-if="getDailyTotals(date).income > 0"
+                class="text-green-600"
+              >
+                +{{ getDailyTotals(date).income.toLocaleString() }}
+              </span>
+              <span
+                v-if="getDailyTotals(date).expense > 0"
+                class="text-red-600"
+              >
+                -{{ getDailyTotals(date).expense.toLocaleString() }}
+              </span>
+            </div>
           </button>
         </div>
       </div>
@@ -92,11 +106,28 @@
 import { ref } from 'vue';
 import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore';
-import { useUserStore } from '../stores/user'; // Import the user store
+import { useUserStore } from '../stores/user';
+import { useTransactionStore } from '../stores/TransactionStore';
 
 const calendarStore = useCalendarStore();
-const userStore = useUserStore(); // Get the user store instance
+const userStore = useUserStore();
+const transactionStore = useTransactionStore();
 const showSecondScreen = ref(true);
+
+const formatDate = (date) => {
+  const month = String(date.monthIndex + 1).padStart(2, '0');
+  const day = String(date.day).padStart(2, '0');
+  return `${date.year}-${month}-${day}`;
+};
+
+const getDailyTotals = (date) => {
+  const formattedDate = formatDate(date);
+  const summary = transactionStore.dailyTransactionSummary[formattedDate] || {
+    income: 0,
+    expense: 0,
+  };
+  return summary;
+};
 
 const isSelected = (date) => {
   return (

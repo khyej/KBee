@@ -1,4 +1,5 @@
 <template>
+  <Hiya />
   <div>
     <h2>Second Screen</h2>
     <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1>
@@ -39,6 +40,7 @@ import { ref, defineProps, computed } from 'vue';
 import Income from './Income.vue';
 import Expense from './Expense.vue';
 import { useUserStore } from '../stores/user';
+import Hiya from './Hiya.vue';
 
 const userStore = useUserStore();
 
