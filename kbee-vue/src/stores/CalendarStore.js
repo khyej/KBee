@@ -160,24 +160,18 @@ export const useCalendarStore = defineStore('calendar', () => {
       selectedMonth.value === targetMonth &&
       selectedYear.value === targetYear
     ) {
-      selectedDay.value = null;
-      selectedMonth.value = null;
-      selectedYear.value = null;
-      // Clear transactions when date is deselected
-      transactionStore.incomeList = []; // Consider adding clear actions in TransactionStore
-      transactionStore.expenseList = [];
-    } else {
-      selectedDay.value = date.day;
-      selectedMonth.value = targetMonth;
-      selectedYear.value = targetYear;
-
-      // If the clicked date was outside the current view, update the view
-      if (date.outside) {
-        currentDate.value = new Date(targetYear, targetMonth, 1);
-      }
-
-      // Fetching is now handled by the watcher below
+      return;
     }
+    selectedDay.value = date.day;
+    selectedMonth.value = targetMonth;
+    selectedYear.value = targetYear;
+
+    // If the clicked date was outside the current view, update the view
+    if (date.outside) {
+      currentDate.value = new Date(targetYear, targetMonth, 1);
+    }
+
+    // Fetching is now handled by the watcher below
   }
 
   // --- Watcher to Fetch Transactions ---
