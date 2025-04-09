@@ -14,7 +14,7 @@ onMounted(() => {
 });
 
 // 헤더, 사이드바를 제외할 경로 리스트
-const noLayoutPages = ['/', '/login'];
+const noLayoutPages = ['/', '/login', '/signup'];
 </script>
 
 <template>
@@ -22,10 +22,7 @@ const noLayoutPages = ['/', '/login'];
         <Header v-if="!noLayoutPages.includes(route.path)" />
         <div class="contentBox">
             <Sidebar v-if="!noLayoutPages.includes(route.path)" />
-            <main
-                class="mainBox"
-                :class="{ fullPage: noLayoutPages.includes(route.path) }"
-            >
+            <main class="mainBox" :class="{ fullPage: noLayoutPages.includes(route.path) }">
                 <RouterView />
             </main>
         </div>
@@ -35,8 +32,7 @@ const noLayoutPages = ['/', '/login'];
 <style>
 @font-face {
     font-family: 'S-CoreDream-3Light';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
-        format('woff');
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }

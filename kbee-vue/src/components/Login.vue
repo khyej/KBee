@@ -8,21 +8,12 @@
       <div class="input-group">
         <div class="input-row">
           <label>ID</label>
-          <input
-            v-model="form.id"
-            placeholder="아이디를 입력해주세요"
-            @keyup.enter="login"
-          />
+          <input v-model="form.id" placeholder="아이디를 입력해주세요" @keyup.enter="login" />
         </div>
         <div class="divider"></div>
         <div class="input-row">
           <label>PW</label>
-          <input
-            v-model="form.pw"
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            @keyup.enter="login"
-          />
+          <input v-model="form.pw" type="password" placeholder="비밀번호를 입력해주세요" @keyup.enter="login" />
         </div>
       </div>
 
@@ -31,7 +22,7 @@
       </div>
 
       <div class="signup">
-        <a @click.prevent="router.push('/signup')">회원가입</a>
+        <button @click.prevent="router.push('/signup')">회원가입</button>
       </div>
     </div>
   </div>

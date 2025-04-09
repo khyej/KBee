@@ -40,7 +40,6 @@
               'text-gray-400': date.outside,
               'bg-indigo-100': date.isToday,
               'bg-yellow-200': isSelected(date),
-              'outside-disabled': isOutsideDisabled(date),
             }"
             @click="selectDate(date)"
           >
@@ -67,22 +66,6 @@ import SecondScreen from './SecondScreen.vue';
 
 // Constants
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-// const monthNames = [
-//   'January',
-//   'February',
-//   'March',
-//   'April',
-//   'May',
-//   'June',
-//   'July',
-//   'August',
-//   'September',
-//   'October',
-//   'November',
-//   'December',
-// ];
-
-// const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 const monthNames = [
   '1월',
   '2월',
@@ -97,9 +80,9 @@ const monthNames = [
   '11월',
   '12월',
 ];
+
 // Reactive state
 const currentDate = ref(new Date());
-const selectedDate = ref(null);
 const selectedDay = ref(null);
 const selectedMonth = ref(null);
 const selectedYear = ref(null);
@@ -236,33 +219,32 @@ const isSelected = (date) => {
   ) {
     return false;
   }
-  if (date.outside) {
-    if (date.id.startsWith('prev')) {
-      return (
-        selectedDay.value === date.day &&
-        selectedMonth.value === (month.value - 1 < 0 ? 11 : month.value - 1) &&
-        selectedYear.value ===
-          (month.value - 1 < 0 ? year.value - 1 : year.value)
-      );
-    } else {
-      return (
-        selectedDay.value === date.day &&
-        selectedMonth.value === (month.value + 1 > 11 ? 0 : month.value + 1) &&
-        selectedYear.value ===
-          (month.value + 1 > 11 ? year.value + 1 : year.value)
-      );
-    }
-  } else {
-    return (
-      selectedDay.value === date.day &&
-      selectedMonth.value === month.value &&
-      selectedYear.value === year.value
-    );
-  }
-};
 
-const isOutsideDisabled = (date) => {
-  return date.outside;
+  const targetMonth = date.outside
+    ? date.id.startsWith('prev')
+      ? month.value - 1 < 0
+        ? 11
+        : month.value - 1
+      : month.value + 1 > 11
+      ? 0
+      : month.value + 1
+    : month.value;
+
+  const targetYear = date.outside
+    ? date.id.startsWith('prev')
+      ? month.value - 1 < 0
+        ? year.value - 1
+        : year.value
+      : month.value + 1 > 11
+      ? year.value + 1
+      : year.value
+    : year.value;
+
+  return (
+    selectedDay.value === date.day &&
+    selectedMonth.value === targetMonth &&
+    selectedYear.value === targetYear
+  );
 };
 </script>
 
@@ -277,10 +259,5 @@ const isOutsideDisabled = (date) => {
   border-bottom-right-radius: 0.5rem;
   /* Adjust the radius as needed */
   overflow: hidden;
-}
-
-.outside-disabled {
-  pointer-events: none;
-  opacity: 0.5;
 }
 </style>

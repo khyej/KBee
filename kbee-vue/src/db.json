@@ -2,10 +2,10 @@
   "users": [
     {
       "id": "1",
-      "nickname": "gildong_2",
-      "username": "홍길동",
-      "email": "hong@gmail.com",
-      "password": "test",
+      "nickname": "admin",
+      "username": "admin",
+      "email": "admin@admin.com",
+      "password": "admin",
       "phone": "010-1234-5678",
       "Set Budget": 100000
     },
@@ -24,6 +24,15 @@
       "email": "111",
       "password": "111",
       "phone": "111"
+    },
+    {
+      "id": "4",
+      "nickname": "user",
+      "username": "user",
+      "email": "user@user.com",
+      "password": "user",
+      "phone": "00000000",
+      "budget": ""
     }
   ],
   "expenses": [
