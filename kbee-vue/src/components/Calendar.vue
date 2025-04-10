@@ -26,27 +26,6 @@
         </div>
       </div>
 
-      <!-- Display User ID -->
-      <!-- <p class="text-sm mb-1 text-gray-600 w-full px-2">
-        User ID: {{ userStore.user?.id || 'Loading...' }}
-      </p> -->
-
-      <!-- Displayed Dates -->
-      <!-- <h1
-        class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2"
-      >
-        Displayed Dates:
-        {{
-          calendarStore.calendarDays
-            .map((date) => {
-              const month = String(date.monthIndex + 1).padStart(2, '0');
-              const day = String(date.day).padStart(2, '0');
-              return `${date.year}-${month}-${day}`;
-            })
-            .join(', ')
-        }}
-      </h1> -->
-
       <div
         class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
@@ -80,13 +59,13 @@
             <div class="flex flex-col text-xs">
               <span
                 v-if="getDailyTotals(date).income > 0"
-                class="text-green-600"
+                class="text-green-600 bg-green-200 rounded-full px-1 p-0.5 hover:scale-110 transition-transform duration-300 shadow-sm drop-shadow-black"
               >
                 +{{ getDailyTotals(date).income.toLocaleString() }}
               </span>
               <span
                 v-if="getDailyTotals(date).expense > 0"
-                class="text-red-600"
+                class="text-red-600 bg-red-200 rounded-full px-1 p-0.5 hover:scale-110 transition-transform duration-300 shadow-md drop-shadow-black"
               >
                 -{{ getDailyTotals(date).expense.toLocaleString() }}
               </span>
