@@ -10,11 +10,21 @@ export const useUserStore = defineStore('user', {
     // 모든 사용자 데이터를 가져오고, 로그인한 사용자만 필터링
     async fetchUser() {
       try {
-        const res = await axios.get('/api/users'); // 모든 사용자 데이터를 가져옴
-        const loggedInUserId = JSON.parse(localStorage.getItem('user'))?.id; // 로컬 스토리지에서 로그인한 사용자 ID 가져오기
+        const res = await axios.get('/api/users');
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        const loggedInUserId = storedUser?.id;
         if (loggedInUserId) {
-          this.user = res.data.find((user) => user.id === loggedInUserId); // 로그인한 사용자만 필터링
-          this.isLoggedIn = true;
+          const fetchedUser = res.data.find(
+            (user) => user.id === loggedInUserId
+          );
+          if (fetchedUser) {
+            // localStorage에서 보완해 병합
+            this.user = {
+              ...fetchedUser,
+              profileImage: storedUser?.profileImage,
+            };
+            this.isLoggedIn = true;
+          }
         }
       } catch (error) {
         console.error('Error fetching users:', error);

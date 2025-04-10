@@ -1,5 +1,7 @@
 <template>
   <div class="flex overflow-hidden max-h-[85vh]">
+    <h1>{{ userStore.isLoggedIn }}</h1>
+    <h1>{{ userStore }}</h1>
     <div
       class="flex flex-col items-center justify-center bg-white p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]"
     >
@@ -115,7 +117,7 @@ import { ref } from 'vue';
 import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore'; // Import the new store
 import MonthInEx from './MonthInEx.vue';
-import { useUserStore } from '../stores/user';
+import { useUserStore } from '@/stores/user';
 import { useTransactionStore } from '../stores/TransactionStore';
 
 const calendarStore = useCalendarStore();
