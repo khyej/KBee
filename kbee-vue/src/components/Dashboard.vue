@@ -242,34 +242,36 @@ const fetchData = async () => {
   }
 };
 
+//userid가 유효하지 않다면 반환
 const updateFilteredData = () => {
   const userId = userStore.user?.id;
   if (!userId) return;
-
+  //userid에 해당하는 연월을 받아와서 수입을 받기
   const filteredIncomes = incomes.value.filter(
     (item) =>
       item.user_id === userId &&
       getYear(item.date) === selectedYear.value &&
       getMonth(item.date) === selectedMonth.value
   );
+  //userid에 해당하는 연월을 받아와서 지출을 받기
   const filteredExpenses = expenses.value.filter(
     (item) =>
       item.user_id === userId &&
       getYear(item.date) === selectedYear.value &&
       getMonth(item.date) === selectedMonth.value
   );
-
+  //필터링된 월별 수입 데이터를 가져와서 합산하기
   monthIncome.value = filteredIncomes.reduce(
     (sum, item) => sum + item.amount,
     0
   );
-
+  //필터링된 월별 지출 데이터를 가져와서 합산하기
   monthExpense.value = filteredExpenses.reduce(
     (sum, item) => sum + item.amount,
     0
   );
 
-  //유저 테이블에 있는 데이터를 userDate변수에 담기
+  //유저 테이블에 있는 데이터를 userData변수에 담기
   const userData = userStore.user;
   //유저 아이디에 해당하는 잔액을 업데이트
   userBudget.value = Number(userData?.budget || 0);
