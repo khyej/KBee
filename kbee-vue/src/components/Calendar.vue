@@ -1,13 +1,7 @@
 <template>
-<<<<<<< HEAD
-  <div class="h-screen flex overflow-hidden">
-    <div class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7" style="height: 100vh">
-=======
   <div class="flex overflow-hidden max-h-[85vh]">
     <div
-      class="flex flex-col items-center justify-center bg-white p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]"
-    >
->>>>>>> 54aa96eef8dee840f2fc100cde76dc335c6fa22d
+      class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]">
       <!-- Existing Month/Year Header -->
       <div class="flex items-center justify-between mb-4 w-full">
         <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
@@ -30,13 +24,9 @@
       </p> -->
 
       <!-- Displayed Dates -->
-<<<<<<< HEAD
-      <h1 class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2">
-=======
       <!-- <h1
         class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2"
       >
->>>>>>> 54aa96eef8dee840f2fc100cde76dc335c6fa22d
         Displayed Dates:
         {{
           calendarStore.calendarDays
@@ -51,9 +41,7 @@
 
       <div class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container">
         <!-- Days of the Week Header -->
-        <div
-          class="grid grid-cols-7 text-center font-semibold text-gray-600 bg-amber-100"
-        >
+        <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
           <div v-for="day in calendarStore.daysOfWeek" :key="day" class="p-2">
             {{ day }}
           </div>
