@@ -30,9 +30,7 @@
                             class="income-item"
                         >
                             {{ item.description }}
-                            <span class="amount plus"
-                                >+ {{ item.amount.toLocaleString() }}원</span
-                            >
+                            <span class="amount plus">+ {{ item.amount.toLocaleString() }}원</span>
                             <!-- Optionally show date if needed for verification -->
                             <!-- <span class="text-xs text-gray-500 block">{{ item.date }}</span> -->
                         </li>
@@ -51,9 +49,7 @@
                             class="expense-item"
                         >
                             {{ item.description }}
-                            <span class="amount minus"
-                                >- {{ item.amount.toLocaleString() }}원</span
-                            >
+                            <span class="amount minus">- {{ item.amount.toLocaleString() }}원</span>
                             <!-- Optionally show date if needed for verification -->
                             <!-- <span class="text-xs text-gray-500 block">{{ item.date }}</span> -->
                         </li>
@@ -61,12 +57,7 @@
                 </div>
 
                 <!-- No Data Message -->
-                <div
-                    v-if="
-                        !filteredParentIncomeList.length &&
-                        !filteredParentExpenseList.length
-                    "
-                >
+                <div v-if="!filteredParentIncomeList.length && !filteredParentExpenseList.length">
                     <p>해당 날짜에는 내역이 없습니다.</p>
                 </div>
 
@@ -81,6 +72,16 @@
                     @delete="deleteItem"
                     @save="saveEdit"
                 />
+            </div>
+            <div class="addComponent">
+                <!-- 항목 추가 모달 -->
+                <AddModal
+                    :visible="showAddModal"
+                    :income-categories="incomeCategories"
+                    :expense-categories="expenseCategories"
+                    @close="showAddModal = false"
+                    @submitted="handleItemSubmitted"
+                />
                 <!-- 내역 추가 버튼 -->
                 <button
                     type="button"
@@ -92,93 +93,6 @@
                 >
                     내역 추가
                 </button>
-                <!-- 항목 추가 모달 -->
-                <div class="modal" v-if="showAddModal">
-                    <div
-                        class="modal-overlay"
-                        @click="showAddModal = false"
-                    ></div>
-                    <div class="modal-content">
-                        <div class="form-body">
-                            <div class="form-row">
-                                <div class="form-date">항목 추가</div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">날짜</div>
-                                <input
-                                    type="date"
-                                    v-model="form.date"
-                                    class="form-data"
-                                />
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">유형</div>
-                                <select v-model="mode" class="form-data">
-                                    <option value="income">수입</option>
-                                    <option value="expense">지출</option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">카테고리</div>
-                                <select
-                                    v-model="form.category"
-                                    class="form-data"
-                                >
-                                    <option disabled value="">
-                                        카테고리 선택
-                                    </option>
-                                    <option
-                                        v-for="cat in mode === 'income'
-                                            ? incomeCategories
-                                            : expenseCategories"
-                                        :key="cat.id"
-                                        :value="cat.name"
-                                    >
-                                        {{ cat.name }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">내용</div>
-                                <input
-                                    type="text"
-                                    v-model="form.description"
-                                    class="form-data"
-                                />
-                            </div>
-                            <div class="form-row" v-if="mode === 'expense'">
-                                <div class="form-title">결제 수단</div>
-                                <input
-                                    type="text"
-                                    v-model="form.payment_method"
-                                    class="form-data"
-                                />
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">금액</div>
-                                <input
-                                    type="number"
-                                    v-model="form.amount"
-                                    class="form-data"
-                                />
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <div class="left"></div>
-                            <div class="right">
-                                <button type="button" @click="handleSubmit">
-                                    저장
-                                </button>
-                                <button
-                                    type="button"
-                                    @click="showAddModal = false"
-                                >
-                                    취소
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -187,6 +101,8 @@
 <script setup>
 // 기본 Vue API
 import { ref, onMounted, computed, reactive, defineProps, watch } from 'vue';
+
+import AddModal from './AddModal.vue';
 
 // 자식 컴포넌트 (실제 UI는 숨겨놓고 데이터만 로드)
 import Income from './Income.vue';
@@ -248,9 +164,7 @@ const convertToYYYYMMDD = (dateStr) => {
 };
 
 // 변환된 날짜 값을 계산
-const targetDateYYYYMMDD = computed(() =>
-    convertToYYYYMMDD(props.selectedDate)
-);
+const targetDateYYYYMMDD = computed(() => convertToYYYYMMDD(props.selectedDate));
 
 // 자식 컴포넌트에서 emit된 수입 데이터를 저장
 const handleIncomeLoaded = (incomeData) => {
@@ -378,9 +292,7 @@ const detailForm = reactive({
 
 const openDetailModal = (item) => {
     selectedItem.value = item;
-    console.log('fix', selectedItem.value);
     Object.assign(detailForm, { ...item });
-    console.log('detailForm : ', detailForm);
     isEditing.value = false;
     showDetailModal.value = true;
 };
@@ -390,91 +302,74 @@ const closeModal = () => {
     isEditing.value = false;
 };
 
-const saveEdit = async (data) => {
+const saveEdit = async (editedItem) => {
+    const originalType = selectedItem.value.type;
+    const editedType = editedItem.type;
+    const originalId = selectedItem.value.id;
+
+    const newItem = {
+        user_id: userStore.user?.id,
+        amount: editedItem.amount,
+        category: editedItem.category,
+        description: editedItem.description,
+        date: editedItem.date,
+    };
+    // type이 'expense'일 경우, payment_method를 추가
+    if (editedType === 'expense') {
+        newItem.payment_method = editedItem.payment_method;
+    }
+
     try {
-        console.log('수정 요청 받은 데이터:', data.type);
-        const url = `/api/${data.type}s/${data.id}`;
-        const response = await axios.put(url, data);
+        if (originalType === editedType) {
+            // 같은 테이블에서 수정
+            newItem.id = originalId;
+            await axios.put(`/api/${editedType}s/${originalId}`, newItem);
+        } else {
+            // 테이블이 다르면 삭제 후 새로 생성
+            await axios.delete(`/api/${originalType}s/${originalId}`);
 
-        const targetList =
-            data.type === 'income' ? incomes.value : expenses.value;
-        const index = targetList.findIndex((i) => i.id === data.id);
+            const res = await axios.post(`/api/${editedType}s`, newItem);
 
-        if (index !== -1) {
-            targetList.splice(index, 1, response.data);
+            if (editedType === 'income') {
+                incomes.value.push({ ...res.data, type: 'income' });
+            } else {
+                expenses.value.push({ ...res.data, type: 'expense' });
+            }
         }
 
-        closeModal();
-        // filterData();
-    } catch (err) {
-        alert('수정에 실패하였습니다.');
+        await fetchData(); // 항목 갱신
+
+        closeModal(); // 모달 닫기
+    } catch (error) {
+        console.error('수정 중 오류 발생:', error);
     }
 };
-
+// 항목 삭제
 const deleteItem = async () => {
     try {
         const url = `/api/${detailForm.type}s/${detailForm.id}`;
         await axios.delete(url);
-        const targetList =
-            detailForm.type === 'income' ? incomes.value : expenses.value;
+
+        const targetList = detailForm.type === 'income' ? incomes.value : expenses.value;
         const index = targetList.findIndex((i) => i.id === detailForm.id);
         if (index !== -1) targetList.splice(index, 1);
+
         closeModal();
-        // filterData();
+        filterAndCombineData();
     } catch (err) {
         console.error('삭제 오류', err);
     }
 };
-
-// 내역 추가
+// 항목 추가 모달
 const showAddModal = ref(false);
-const mode = ref('income');
-const form = reactive({
-    amount: '',
-    category: '',
-    payment_method: '',
-    description: '',
-    date: targetDateYYYYMMDD,
-});
 
-const getNextId = (list) => {
-    const ids = list.map((item) => Number(item.id));
-    const max = ids.length ? Math.max(...ids) : 0;
-    return String(max + 1);
-};
-
-const handleSubmit = async () => {
-    const newItem = {
-        id: getNextId([...incomes.value, ...expenses.value]),
-        user_id: userStore.user?.id,
-        amount: Number(form.amount),
-        category: form.category,
-        description: form.description,
-        date: form.date,
-    };
-    if (mode.value === 'expense') newItem.payment_method = form.payment_method;
-    const url = `/api/${mode.value}s`;
-
-    try {
-        await axios.post(url, newItem);
-        if (mode.value === 'income') {
-            incomes.value.push({ ...newItem, type: 'income' });
-        } else {
-            expenses.value.push({ ...newItem, type: 'expense' });
-        }
-
-        Object.assign(form, {
-            amount: '',
-            category: '',
-            payment_method: '',
-            description: '',
-            date: '',
-        });
-        showAddModal.value = false;
-        // filterData();
-    } catch (e) {
-        console.error('저장 실패', e);
+const handleItemSubmitted = (item) => {
+    if (item.type === 'income') {
+        incomes.value.push(item);
+    } else {
+        expenses.value.push(item);
     }
+    // filterAndCombineData();
 };
 
 onMounted(async () => {
@@ -492,7 +387,8 @@ onMounted(async () => {
     justify-content: center;
     align-items: flex-start;
     padding: 20px 40px 40px;
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    max-height: 85vh;
 }
 
 /* 콘텐츠 박스 */
@@ -747,6 +643,7 @@ ul {
 }
 
 /* button */
+
 .addButton {
     width: 100px;
     height: 40px;
