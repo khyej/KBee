@@ -6,50 +6,6 @@ import { useUserStore } from './user';
 
 // --- Date Utility Code (Keep or move to utils) ---
 // ... (keep your existing date utility code) ...
-const monthNames = [
-  '1월',
-  '2월',
-  '3월',
-  '4월',
-  '5월',
-  '6월',
-  '7월',
-  '8월',
-  '9월',
-  '10월',
-  '11월',
-  '12월',
-];
-
-const convertToYYYYMMDD = (dateStr) => {
-  // ... (your existing function)
-  if (!dateStr) return null;
-  const parts = dateStr.split(/[\s,]+/).filter((part) => part);
-  if (parts.length < 3) {
-    console.error('Invalid date format for splitting:', dateStr);
-    return null;
-  }
-  const [monthStr, dayStr, yearStr] = parts;
-  const monthIndex = monthNames.indexOf(monthStr);
-  const day = parseInt(dayStr, 10);
-  const year = parseInt(yearStr, 10);
-
-  if (monthIndex === -1 || isNaN(day) || isNaN(year)) {
-    console.error('Invalid date components:', {
-      monthStr,
-      dayStr,
-      yearStr,
-      dateStr,
-    });
-    return null;
-  }
-
-  const month = (monthIndex + 1).toString().padStart(2, '0');
-  const formattedDay = day.toString().padStart(2, '0');
-  return `${year}-${month}-${formattedDay}`;
-};
-// --- End of Date Utility Code ---
-
 export const useTransactionStore = defineStore('transactions', () => {
   const userStore = useUserStore();
 

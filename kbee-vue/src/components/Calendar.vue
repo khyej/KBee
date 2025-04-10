@@ -28,12 +28,12 @@
       </div>
 
       <!-- Display User ID -->
-      <p class="text-sm mb-1 text-gray-600 w-full px-2">
+      <!-- <p class="text-sm mb-1 text-gray-600 w-full px-2">
         User ID: {{ userStore.user?.id || 'Loading...' }}
-      </p>
+      </p> -->
 
       <!-- Displayed Dates -->
-      <h1
+      <!-- <h1
         class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2"
       >
         Displayed Dates:
@@ -46,7 +46,7 @@
             })
             .join(', ')
         }}
-      </h1>
+      </h1> -->
 
       <div
         class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
