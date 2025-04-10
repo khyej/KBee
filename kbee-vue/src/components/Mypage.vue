@@ -2,12 +2,15 @@
   <main class="main">
     <div class="card">
       <div class="icon-box">
-        <img v-if="userStore.user?.profileImage" :src="userStore.user.profileImage" class="profile-img" alt="프로필 이미지" />
-        <i v-else class="user-icon fa-solid fa-circle-user"></i>
+        <!-- 반응형 프로필 이미지 표시 -->
+        <img :src="editMode
+          ? (form.profileImage || '/profile1.png')
+          : (userStore.user?.profileImage || '/profile1.png')" class="profile-img" alt="프로필 이미지" />
 
         <!-- 프로필 이미지 선택 옵션 (편집 모드에서만 보이게) -->
         <div v-if="editMode" class="profile-options">
           <img v-for="n in 4" :key="n" :src="`/profile${n}.png`" :alt="`profile${n}`" class="profile-option-img"
+            :class="{ selected: form.profileImage === `/profile${n}.png` }"
             @click="form.profileImage = `/profile${n}.png`" />
         </div>
       </div>
@@ -170,9 +173,9 @@ const toggleEdit = async () => {
   border-color: #ffc107;
 }
 
-.user-icon {
-  font-size: 60px;
-  color: #444;
+.profile-option-img.selected {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px #007bff;
 }
 
 .info-table {
