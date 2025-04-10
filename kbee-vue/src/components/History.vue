@@ -11,7 +11,7 @@
                             :class="['dropdown', isOpen.year ? 'open' : '']"
                         >
                             <div class="dropdown-toggle">
-                                {{ selected.year }}
+                                {{ dropDate.year }}
                             </div>
                             <ul class="dropdown-menu">
                                 <li
@@ -29,7 +29,7 @@
                             :class="{ open: isOpen.month }"
                         >
                             <div class="dropdown-toggle">
-                                {{ selected.month }}
+                                {{ dropDate.month }}
                             </div>
                             <ul class="dropdown-menu">
                                 <li
@@ -126,13 +126,18 @@
                     />
 
                     <!-- 내역 추가 버튼 -->
-                    <button @click="showAddModal = true" class="addButton">
+                    <button
+                        @click="
+                            showAddModal = true;
+                            showDetailModal = false;
+                        "
+                        class="addButton"
+                    >
                         내역 추가
                     </button>
                 </div>
             </div>
             <!-- 테이블 영역 -->
-
             <div class="subDiv-body results">
                 <div class="table-wrap">
                     <table>
@@ -191,129 +196,19 @@
                 </div>
             </div>
         </div>
-        <div class="subDiv-2">
+        <div class="subDiv-2" v-if="showDetailModal">
             <!-- 상세 보기 -->
-            <div class="modal2" v-if="showDetailModal">
-                <div class="modal2-overlay" @click="closeModal"></div>
-                <div class="modal2-content">
-                    <template v-if="!isEditing">
-                        <div class="form-body">
-                            <div class="form-row">
-                                <div class="form-date">
-                                    {{ selectedItem.date }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">분류</div>
-                                <div class="form-data">
-                                    {{
-                                        selectedItem.type === 'expense'
-                                            ? '지출'
-                                            : '수입'
-                                    }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">카테고리</div>
-                                <div class="form-data">
-                                    {{ selectedItem.category }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">내용</div>
-                                <div class="form-data">
-                                    {{ selectedItem.description }}
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">금액</div>
-                                <div class="form-data">
-                                    {{ selectedItem.amount.toLocaleString() }}원
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <div class="left">
-                                <button @click="isEditing = true">수정</button>
-                                <button @click="deleteItem">삭제</button>
-                            </div>
-                            <div class="right">
-                                <button @click="closeModal">닫기</button>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template v-else>
-                        <div class="form-body">
-                            <div class="form-row">
-                                <div class="form-date">수정</div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">날짜</div>
-                                <input
-                                    v-model="detailForm.date"
-                                    type="date"
-                                    class="form-data"
-                                />
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">분류</div>
-                                <select
-                                    v-model="detailForm.type"
-                                    class="form-data"
-                                >
-                                    <option value="income">수입</option>
-                                    <option value="expense">지출</option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">카테고리</div>
-                                <select
-                                    v-model="detailForm.category"
-                                    class="form-data"
-                                >
-                                    <option disabled value="">
-                                        카테고리 선택
-                                    </option>
-                                    <option
-                                        v-for="cat in detailForm.type ===
-                                        'income'
-                                            ? incomeCategories
-                                            : expenseCategories"
-                                        :key="cat.id"
-                                        :value="cat.name"
-                                    >
-                                        {{ cat.name }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">내용</div>
-                                <input
-                                    v-model="detailForm.description"
-                                    type="text"
-                                    class="form-data"
-                                />
-                            </div>
-                            <div class="form-row">
-                                <div class="form-title">금액</div>
-                                <input
-                                    v-model.number="detailForm.amount"
-                                    type="number"
-                                    class="form-data"
-                                />
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <div class="left"></div>
-                            <div class="right">
-                                <button @click="saveEdit">저장</button>
-                                <button @click="isEditing = false">취소</button>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
+            <DetailModal
+                class="body"
+                :visible="showDetailModal"
+                :selected-item="selectedItem"
+                :income-categories="incomeCategories"
+                :expense-categories="expenseCategories"
+                customClass="history"
+                @close="closeModal"
+                @delete="deleteItem"
+                @save="saveEdit"
+            />
         </div>
         <!-- 항목 추가 모달 -->
         <div class="modal" v-if="showAddModal">
@@ -391,6 +286,7 @@
 </template>
 
 <script setup>
+import DetailModal from './DetailModal.vue';
 import {
     ref,
     onMounted,
@@ -403,6 +299,13 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
+
+const currentDate = new Date();
+
+const years = Array.from(
+    { length: 5 },
+    (_, i) => currentDate.getFullYear() - 4 + i
+);
 
 const months = [
     '01',
@@ -418,14 +321,8 @@ const months = [
     '11',
     '12',
 ];
-const currentDate = new Date();
 
-const years = Array.from(
-    { length: 5 },
-    (_, i) => currentDate.getFullYear() - 4 + i
-);
-
-const selected = ref({
+const dropDate = ref({
     month: months[currentDate.getMonth()],
     year: currentDate.getFullYear(),
 });
@@ -446,7 +343,7 @@ const toggleDropdown = (type) => {
 };
 
 const selectOption = (type, value) => {
-    selected.value[type] = value;
+    dropDate.value[type] = value;
     isOpen.value[type] = false;
     filterAndCombineData();
 };
@@ -459,20 +356,6 @@ const closeAll = () => {
 const handleClickOutside = (e) => {
     if (!e.target.closest('.dropdown')) closeAll();
 };
-
-onMounted(async () => {
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('click', handleClickOutsideFilters);
-    userStore.restoreUser();
-    await userStore.fetchUser();
-    await fetchData();
-    await fetchCategories();
-});
-
-onBeforeUnmount(() => {
-    document.removeEventListener('click', handleClickOutside);
-    document.removeEventListener('click', handleClickOutsideFilters);
-});
 
 const expenses = ref([]);
 const incomes = ref([]);
@@ -532,7 +415,7 @@ const filterAndCombineData = () => {
     combinedData.value = all
         .filter((item) => {
             const matchesDate = item.date?.startsWith(
-                `${selected.value.year}-${selected.value.month}`
+                `${dropDate.value.year}-${dropDate.value.month}`
             );
             const matchesUser = item.user_id === userStore.user?.id;
             const matchesType =
@@ -720,8 +603,22 @@ const getIcon = (category) => {
     }
 };
 
+onMounted(async () => {
+    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', handleClickOutsideFilters);
+    userStore.restoreUser();
+    await userStore.fetchUser();
+    await fetchData();
+    await fetchCategories();
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside);
+    document.removeEventListener('click', handleClickOutsideFilters);
+});
+
 watch(
-    [() => selected.value.month, () => selected.value.year],
+    [() => dropDate.value.month, () => dropDate.value.year],
     filterAndCombineData
 );
 watch(() => selectedFilters.value.keyword, filterAndCombineData);
@@ -752,10 +649,21 @@ watch(
 }
 
 .subDiv-2 {
-    height: 100%;
+    flex: 1;
     align-items: center;
-    flex-direction: column;
     margin-left: 20px;
+    display: flex; /* ✅ 필수 */
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: stretch;
+}
+
+.subDiv-2 .body {
+    background-color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .subBox.has-subDiv-2 .subDiv-1 {
@@ -767,6 +675,7 @@ watch(
     display: flex;
     justify-content: space-between;
     background-color: white;
+    border-radius: 12px;
     height: 80px;
     margin-bottom: 20px;
     padding: 20px;
@@ -774,7 +683,6 @@ watch(
 
 .subDiv-header .right {
     display: flex;
-    /* width: 600px; */
 }
 
 .subDiv-header .right input {
@@ -788,6 +696,7 @@ watch(
 .subDiv-body {
     padding: 20px;
     background-color: white;
+    border-radius: 12px;
     overflow: hidden;
 }
 
@@ -800,12 +709,6 @@ watch(
     /* flex-wrap: wrap; */
     height: 40px;
 }
-
-/* .dropdown-container input {
-    border: 1px solid rgb(255, 188, 0);
-    width: 200px;
-    padding: 0 10px;
-} */
 
 .dropdown-container input:focus {
     outline: none;
@@ -906,14 +809,11 @@ table {
 
 .table-wrap::-webkit-scrollbar {
     display: none;
-    /* Chrome, Safari, Opera */
 }
 
 th,
 td {
-    /* border: 1px solid #ccc; */
     padding: 8px 12px;
-    /* text-align: left; */
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     font-size: 13px;
@@ -928,7 +828,6 @@ th {
     position: sticky;
     top: 0;
     z-index: 2;
-    /* background-color: #f0f0f0; */
     background-color: white;
     padding: 8px 12px;
 }
@@ -979,30 +878,6 @@ td:nth-child(2) {
     max-height: 500px;
 
     overflow-y: auto;
-}
-
-/* ----------------------------------------------------------------- modal */
-.modal2 {
-    width: 380px;
-    background: white;
-    height: 100%;
-}
-
-.modal2-content {
-    position: relative;
-    background: white;
-    height: 100%;
-    padding: 1rem;
-
-    display: flex;
-    flex-direction: column;
-}
-
-.modal2-content h2,
-.modal2-content h3 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
 }
 
 /* ---------------------------------------------------------------- form */
@@ -1102,7 +977,7 @@ td:nth-child(2) {
 
 @media (max-width: 1110px) {
     .subBox {
-        flex-direction: column;
+        /* flex-direction: column; */
         /* height: 100%; */
     }
 
@@ -1111,6 +986,11 @@ td:nth-child(2) {
         align-items: flex-start;
         height: auto;
         gap: 10px;
+    }
+
+    .subDiv-2 .body {
+        /* width: 380px; */
+        background-color: rgba(0, 0, 0, 0.2);
     }
     .dropdown-container {
         margin: 0;
@@ -1156,13 +1036,6 @@ td:nth-child(2) {
 }
 
 @media (max-width: 1350px) {
-    /* .subDiv-header {
-        flex-direction: column;
-        align-items: flex-start;
-        height: auto;
-        gap: 10px;
-    } */
-
     .dropdown-container {
         margin: 0;
     }
