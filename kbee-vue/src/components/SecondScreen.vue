@@ -77,6 +77,7 @@
                 <!-- 항목 추가 모달 -->
                 <AddModal
                     :visible="showAddModal"
+                    :selected-format="targetDateYYYYMMDD"
                     :income-categories="incomeCategories"
                     :expense-categories="expenseCategories"
                     @close="showAddModal = false"

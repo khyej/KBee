@@ -63,6 +63,7 @@ import { useUserStore } from '@/stores/user'; // userStore를 import
 
 const props = defineProps({
     visible: Boolean,
+    selectedFormat: String,
     incomeCategories: Array,
     expenseCategories: Array,
     customClass: {
@@ -74,7 +75,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'submitted']);
 
 const form = reactive({
-    date: '',
+    date: props.selectedFormat,
     type: 'income',
     category: '',
     description: '',
@@ -119,16 +120,17 @@ const handleSubmit = async () => {
 
 // selectedItem이 변경될 때마다 form 초기화
 watch(
-    () => props.selectedItem,
+    () => props.selectedFormat,
     (newVal) => {
         if (newVal) {
-            form.date = newVal.date;
-            form.type = newVal.type;
-            form.category = newVal.category;
-            form.description = newVal.description;
-            form.amount = newVal.amount;
-            form.payment_method = newVal.payment_method || ''; // 지출 항목에 결제 수단
+            form.date = newVal;
+            // form.type = newVal.type;
+            // form.category = newVal.category;
+            // form.description = newVal.description;
+            // form.amount = newVal.amount;
+            // form.payment_method = newVal.payment_method || '';
         }
+        console.log('ee', form.date);
     },
     { immediate: true }
 );
