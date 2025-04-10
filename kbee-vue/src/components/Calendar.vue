@@ -1,7 +1,7 @@
 <template>
   <div class="flex overflow-hidden max-h-[85vh]">
     <div
-      class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]"
+      class="flex flex-col items-center justify-center bg-white p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]"
     >
       <!-- Existing Month/Year Header -->
       <div class="flex items-center justify-between mb-4 w-full">
@@ -51,7 +51,9 @@
         class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
         <!-- Days of the Week Header -->
-        <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
+        <div
+          class="grid grid-cols-7 text-center font-semibold text-gray-600 bg-amber-100"
+        >
           <div v-for="day in calendarStore.daysOfWeek" :key="day" class="p-2">
             {{ day }}
           </div>
