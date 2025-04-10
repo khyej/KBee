@@ -13,25 +13,20 @@ const userStore = useUserStore();
         <div>
             <ul>
                 <li v-for="menu in config.menus" :key="menu.url">
-                    <div
-                        :class="
-                            currentRoute.path === menu.url
-                                ? 'activeBar'
-                                : 'defaultBar'
-                        "
-                    ></div>
+                    <div :class="currentRoute.path === menu.url
+                            ? 'activeBar'
+                            : 'defaultBar'
+                        "></div>
                     <router-link :to="menu.url">{{ menu.title }}</router-link>
                 </li>
             </ul>
         </div>
 
+
         <!-- 내 정보 영역 (사이드바 하단 고정) -->
         <div class="my-info" v-if="userStore.isLoggedIn">
-            <img
-                src="@/assets/profile.png"
-                class="my-info-img"
-                @click="router.push('/mypage')"
-            />
+            <img :src="userStore.user?.profileImage || '/profile1.png'" class="my-info-img"
+                @click="router.push('/mypage')" />
             <p class="nickname">{{ userStore.user.nickname }}</p>
         </div>
     </aside>

@@ -43,15 +43,14 @@ const totalExpense = computed(() =>
 
 <style scoped>
 .summary-wrapper {
-  margin-left: 24px; /* 달력과의 거리 */
-  margin-top: 16px;
+  margin-left: 40px; /* 달력과의 거리 */
+  width: 83%;
 }
 
 .summary-card {
   padding: 16px;
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 8px;

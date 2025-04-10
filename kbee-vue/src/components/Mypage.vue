@@ -2,8 +2,16 @@
   <main class="main">
     <div class="card">
       <div class="icon-box">
-        <i class="user-icon fa-solid fa-circle-user"></i>
+        <img v-if="userStore.user?.profileImage" :src="userStore.user.profileImage" class="profile-img" alt="프로필 이미지" />
+        <i v-else class="user-icon fa-solid fa-circle-user"></i>
+
+        <!-- 프로필 이미지 선택 옵션 (편집 모드에서만 보이게) -->
+        <div v-if="editMode" class="profile-options">
+          <img v-for="n in 4" :key="n" :src="`/profile${n}.png`" :alt="`profile${n}`" class="profile-option-img"
+            @click="form.profileImage = `/profile${n}.png`" />
+        </div>
       </div>
+
       <table class="info-table">
         <tbody>
           <tr>
@@ -43,6 +51,7 @@
           </tr>
         </tbody>
       </table>
+
       <div class="btn-wrapper">
         <button @click="toggleEdit" class="edit-button">
           {{ editMode ? '저장' : '수정' }}
@@ -63,19 +72,23 @@ const editMode = ref(false);
 onMounted(async () => {
   try {
     await userStore.fetchUser();
-    form.value = { ...userStore.user }; // 초기값 복사
+    form.value = {
+      ...userStore.user,
+      profileImage: userStore.user?.profileImage || ''
+    };
   } catch (err) {
     console.error('유저 정보 불러오기 실패:', err);
-    // 필요하면 에러 메시지 표시 로직 추가
   }
 });
 
-// userStore.user가 바뀌면 form도 같이 바뀌게
 watch(
   () => userStore.user,
   (newVal) => {
     if (newVal) {
-      form.value = { ...newVal };
+      form.value = {
+        ...newVal,
+        profileImage: newVal.profileImage || ''
+      };
     }
   }
 );
@@ -86,8 +99,7 @@ const toggleEdit = async () => {
       await userStore.updateUser(form.value);
     } catch (err) {
       console.error('유저 정보 업데이트 실패:', err);
-      // 필요시 사용자에게 알림
-      return; // 실패했으면 수정 모드 유지
+      return;
     }
   }
   editMode.value = !editMode.value;
@@ -123,8 +135,39 @@ const toggleEdit = async () => {
 }
 
 .icon-box {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 24px;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.profile-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.profile-option-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s ease-in-out;
+}
+
+.profile-option-img:hover {
+  border-color: #ffc107;
 }
 
 .user-icon {
