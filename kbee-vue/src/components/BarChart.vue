@@ -1,4 +1,5 @@
 <template>
+  <!--화면에 꽉차게 설정하되 최대높이를 모바일에서는 400px 일반은 300px로 제한-->
   <div class="relative w-full h-[300px] md:h-[400px]">
     <canvas ref="barCanvas" class="w-full h-full"></canvas>
   </div>
@@ -27,21 +28,24 @@ Chart.register(
   Legend
 );
 
-const userStore = useUserStore();
-const barCanvas = ref(null);
+const userStore = useUserStore(); //스토어를 받아오기
+const barCanvas = ref(null); //bar 캔버스를 반응형으로 사용하기 위함
 let chartInstance = null;
 
+//chart를 보여주는 객체
 const renderChart = async () => {
   try {
     if (!userStore.user?.id) return;
 
+    //프록시에서 수입과 지출을 받아오기
     const [expensesRes, incomesRes] = await Promise.all([
       axios.get('/api/expenses'),
       axios.get('/api/incomes'),
     ]);
 
-    const userId = userStore.user.id;
+    const userId = userStore.user.id; //userId 변수에 스토어에 있는 유저아이디 받아오기
 
+    // 연도별 차트 제작을 위한 12달 배열
     const monthLabels = [
       '1월',
       '2월',
@@ -57,9 +61,10 @@ const renderChart = async () => {
       '12월',
     ];
 
-    const monthlyExpenses = Array(12).fill(0);
-    const monthlyIncomes = Array(12).fill(0);
+    const monthlyExpenses = Array(12).fill(0); // 막대제작을 위한 지출 배열
+    const monthlyIncomes = Array(12).fill(0); // 막대 제작을 위한 수입 배열
 
+    //달별로 출력하기 위한 분류작업
     expensesRes.data.forEach((item) => {
       if (item.user_id === userId) {
         const month = new Date(item.date).getMonth(); // 0~11
@@ -76,10 +81,11 @@ const renderChart = async () => {
 
     if (chartInstance) {
       chartInstance.destroy();
-    }
+    } //기존 차트가 있으면 먼저 없앤다
 
+    //그래프 제작 인스턴스
     chartInstance = new Chart(barCanvas.value, {
-      type: 'bar',
+      type: 'bar', //그래프 형태
       data: {
         labels: monthLabels,
         datasets: [
@@ -97,10 +103,10 @@ const renderChart = async () => {
             categoryPercentage: 0.6,
             barPercentage: 0.8,
           },
-        ],
+        ], //막대 그래프의 데이터셋
       },
       options: {
-        responsive: true,
+        responsive: true, //반응성 true
         maintainAspectRatio: false,
         plugins: {
           legend: {
@@ -111,7 +117,7 @@ const renderChart = async () => {
               font: {
                 size: 12,
               },
-            },
+            }, //막대그래프의 밑에 뜨는 레전드 스타일
           },
           tooltip: {
             callbacks: {
