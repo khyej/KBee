@@ -233,7 +233,7 @@ const getIcon = (category) => {
   max-width: 600px;
   text-align: center;
 
-  height: 770px;
+  height: 630px;
   max-height: 770px;
   /* 스크롤 제거 */
   overflow: hidden;
