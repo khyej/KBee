@@ -72,6 +72,16 @@
                     @delete="deleteItem"
                     @save="saveEdit"
                 />
+            </div>
+            <div class="addComponent">
+                <!-- 항목 추가 모달 -->
+                <AddModal
+                    :visible="showAddModal"
+                    :income-categories="incomeCategories"
+                    :expense-categories="expenseCategories"
+                    @close="showAddModal = false"
+                    @submitted="handleItemSubmitted"
+                />
                 <!-- 내역 추가 버튼 -->
                 <button
                     type="button"
@@ -83,14 +93,6 @@
                 >
                     내역 추가
                 </button>
-                <!-- 항목 추가 모달 -->
-                <AddModal
-                    :visible="showAddModal"
-                    :income-categories="incomeCategories"
-                    :expense-categories="expenseCategories"
-                    @close="showAddModal = false"
-                    @submitted="handleItemSubmitted"
-                />
             </div>
         </div>
     </div>
@@ -385,7 +387,8 @@ onMounted(async () => {
     justify-content: center;
     align-items: flex-start;
     padding: 20px 40px 40px;
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    max-height: 85vh;
 }
 
 /* 콘텐츠 박스 */
@@ -640,6 +643,7 @@ ul {
 }
 
 /* button */
+
 .addButton {
     width: 100px;
     height: 40px;

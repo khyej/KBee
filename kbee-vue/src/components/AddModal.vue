@@ -240,7 +240,7 @@ watch(
 
     width: 90%;
     max-width: 350px;
-    max-height: 500px;
+    max-height: 600px;
     overflow-y: auto;
 }
 </style>

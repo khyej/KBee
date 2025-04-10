@@ -852,7 +852,7 @@ td:nth-child(2) {
         background: white;
         width: 90%;
         max-width: 350px;
-        max-height: 500px;
+        max-height: 600px;
         padding: 1.5rem;
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
