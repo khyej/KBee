@@ -83,6 +83,7 @@
                 />
                 <!-- 내역 추가 버튼 -->
                 <button
+                    type="button"
                     @click="
                         showAddModal = true;
                         showDetailModal = false;
@@ -165,8 +166,13 @@
                         <div class="form-actions">
                             <div class="left"></div>
                             <div class="right">
-                                <button @click="handleSubmit">저장</button>
-                                <button @click="showAddModal = false">
+                                <button type="button" @click="handleSubmit">
+                                    저장
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="showAddModal = false"
+                                >
                                     취소
                                 </button>
                             </div>
@@ -180,7 +186,7 @@
 
 <script setup>
 // 기본 Vue API
-import { ref, onMounted, computed, reactive, defineProps } from 'vue';
+import { ref, onMounted, computed, reactive, defineProps, watch } from 'vue';
 
 // 자식 컴포넌트 (실제 UI는 숨겨놓고 데이터만 로드)
 import Income from './Income.vue';
@@ -428,7 +434,7 @@ const form = reactive({
     category: '',
     payment_method: '',
     description: '',
-    date: '',
+    date: targetDateYYYYMMDD,
 });
 
 const getNextId = (list) => {
