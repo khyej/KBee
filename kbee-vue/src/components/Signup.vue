@@ -11,7 +11,8 @@ const form = ref({
     email: '',
     password: '',
     confirmPassword: '',
-    phone: ''
+    phone: '',
+    profileImage: '/profile1.png' // 기본값 지정
 })
 
 const fields = {
@@ -50,6 +51,7 @@ const signup = async () => {
             email: form.value.email,
             password: form.value.password,
             phone: form.value.phone,
+            profileImage: form.value.profileImage, // 추가
             budget: '0'
         }
 
@@ -68,6 +70,16 @@ const signup = async () => {
         <div class="card">
             <div class="logo-box">
                 <img src="@/assets/logo.png" />
+            </div>
+
+            <!-- 프로필 이미지 선택 UI -->
+            <div class="profile-img-section">
+                <img :src="form.profileImage" class="selected-profile" />
+                <div class="profile-options">
+                    <img v-for="n in 4" :key="n" :src="`/profile${n}.png`" :alt="`profile${n}`"
+                        class="profile-option-img" :class="{ selected: form.profileImage === `/profile${n}.png` }"
+                        @click="form.profileImage = `/profile${n}.png`" />
+                </div>
             </div>
 
             <div class="input-group">
@@ -115,13 +127,54 @@ const signup = async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .logo-box img {
     width: 200px;
     height: auto;
 }
+
+/* 🔽 프로필 이미지 선택 스타일 */
+.profile-img-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.selected-profile {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    border: 2px solid #ccc;
+}
+
+.profile-options {
+    display: flex;
+    gap: 10px;
+}
+
+.profile-option-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border 0.2s ease-in-out;
+}
+
+.profile-option-img:hover {
+    border-color: #aaa;
+}
+
+.profile-option-img.selected {
+    border-color: #333;
+}
+
+/* 🔼 프로필 이미지 선택 스타일 끝 */
 
 .input-group {
     width: 100%;

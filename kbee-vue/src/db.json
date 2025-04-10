@@ -8,7 +8,8 @@
       "password": "admin",
       "phone": "010-0000-0001",
       "Set Budget": 937652,
-      "budget": "2717020"
+      "budget": "2717020",
+      "profileImage": "/profile3.png"
     },
     {
       "id": "2",
@@ -99,6 +100,16 @@
       "phone": "010-0000-0010",
       "Set Budget": 725132,
       "budget": "1602676"
+    },
+    {
+      "id": "11",
+      "nickname": "test",
+      "username": "test",
+      "email": "test",
+      "password": "test",
+      "phone": "test",
+      "profileImage": "/profile3.png",
+      "budget": "100000"
     }
   ],
   "incomes": [
@@ -13393,65 +13404,65 @@
   ],
   "incomeCategory": [
     {
-      "id": 1,
+      "id": "1",
       "name": "급여"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "상여"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "이자"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "투자수익"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "프리랜서"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "기타"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "상금"
     }
   ],
   "expenseCategory": [
     {
-      "id": 1,
+      "id": "1",
       "name": "식비"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "카페/디저트"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "교통"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "문화생활"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "쇼핑"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "주거/공과금"
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "통신비"
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "의료/건강"
     }
   ]
