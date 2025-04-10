@@ -104,7 +104,9 @@
                 <div class="form-actions">
                     <div class="left"></div>
                     <div class="right">
-                        <button @click="$emit('save', form)">저장</button>
+                        <button @click="$emit('save', { ...form })">
+                            저장
+                        </button>
                         <button @click="isEditing = false">취소</button>
                     </div>
                 </div>
@@ -127,7 +129,6 @@ const props = defineProps({
     },
 });
 
-console.log(props.visible, props.customClass);
 const emit = defineEmits(['close', 'delete', 'save']);
 
 const isEditing = ref(false);
@@ -241,19 +242,42 @@ watch(
     flex-direction: column;
     flex: 1;
 }
-/*
-.modal2-content.history h2,
-.modal2-content.history h3 {
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-} */
+
+::v-deep(.modal2.cal) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+::v-deep(.modal2-overlay.cal) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+::v-deep(.modal2-content.cal) {
+    position: relative;
+    z-index: 2;
+    background: white;
+    width: 90%;
+    max-width: 350px;
+    max-height: 500px;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
 
 @media (max-width: 1110px) {
-    /* .subBox {
-        flex-direction: column;
-    } */
-
     ::v-deep(.modal2.history) {
         position: fixed;
         top: 0;
@@ -288,20 +312,4 @@ watch(
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 }
-
-/* @media (max-width: 1350px) {
-    .dropdown-container {
-        margin: 0;
-    }
-
-    .dropdown-toggle {
-        height: 100%;
-    }
-    .subBox.has-subDiv-2 .subDiv-1 .subDiv-header {
-        flex-direction: column;
-        align-items: flex-start;
-        height: auto;
-        gap: 10px;
-    }
-} */
 </style>
