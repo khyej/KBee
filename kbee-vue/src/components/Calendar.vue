@@ -4,6 +4,9 @@
       class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7"
       style="height: 100vh"
     >
+      <h1 class="text-2xl font-bold mb-4">
+        {{ userStore.isLoggedIn }}님의 월별 수입/지출
+      </h1>
       <!-- Existing Month/Year Header -->
       <div class="flex items-center justify-between mb-4 w-full">
         <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
@@ -95,6 +98,9 @@ import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore'; // Import the new store
 import MonthInEx from './MonthInEx.vue';
 import { useTransactionStore } from '../stores/TransactionStore';
+import { useUserStore } from '../stores/user';
+
+const userStore = useUserStore();
 
 const calendarStore = useCalendarStore();
 const transactionStore = useTransactionStore();
