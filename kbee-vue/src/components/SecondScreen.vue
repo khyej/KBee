@@ -1,71 +1,72 @@
 <template>
   <div class="wrapper">
     <div class="main">
-      <h2>Second Screen</h2>
-      <h1 class="text-2xl font-bold">User ID: {{ userStore.user?.id }}</h1>
-      <!-- Display formatted date -->
-      <p>{{ formattedSelectedDateForDisplay }}</p>
-      <!-- Display raw selected date prop (for debugging or context) -->
-      <!-- <p>Raw Prop: {{ selectedDate }}</p> -->
-      <hr />
+      <div class="scroll-container">
+        <!-- Display formatted date -->
+        <p>{{ formattedSelectedDateForDisplay }}</p>
+        <!-- Display raw selected date prop (for debugging or context) -->
+        <!-- <p>Raw Prop: {{ selectedDate }}</p> -->
+        <hr />
 
-      <!-- Hidden components still trigger fetching based on selectedDate -->
-      <Income
-        style="display: none"
-        @income-loaded="handleIncomeLoaded"
-        :selectedDate="selectedDate"
-      />
-      <Expense
-        style="display: none"
-        @expense-loaded="handleExpenseLoaded"
-        :selectedDate="selectedDate"
-      />
+        <!-- Hidden components still trigger fetching based on selectedDate -->
+        <Income
+          style="display: none"
+          @income-loaded="handleIncomeLoaded"
+          :selectedDate="selectedDate"
+        />
+        <Expense
+          style="display: none"
+          @expense-loaded="handleExpenseLoaded"
+          :selectedDate="selectedDate"
+        />
 
-      <!-- Display Income List (filtered by user AND date within this component) -->
-      <div v-if="filteredParentIncomeList.length > 0">
-        <h2 class="subtitle">수입</h2>
-        <ul>
-          <li
-            v-for="item in filteredParentIncomeList"
-            :key="item.id"
-            class="income-item"
-          >
-            {{ item.description }}
-            <span class="amount plus"
-              >+ {{ item.amount.toLocaleString() }}원</span
+        <!-- Display Income List (filtered by user AND date within this component) -->
+        <div v-if="filteredParentIncomeList.length > 0">
+          <h2 class="subtitle">수입</h2>
+          <ul>
+            <li
+              v-for="item in filteredParentIncomeList"
+              :key="item.id"
+              class="income-item"
             >
-            <!-- Optionally show date if needed for verification -->
-            <!-- <span class="text-xs text-gray-500 block">{{ item.date }}</span> -->
-          </li>
-        </ul>
-      </div>
+              {{ item.description }}
+              <span class="amount plus"
+                >+ {{ item.amount.toLocaleString() }}원</span
+              >
+              <!-- Optionally show date if needed for verification -->
+              <!-- <span class="text-xs text-gray-500 block">{{ item.date }}</span> -->
+            </li>
+          </ul>
+        </div>
 
-      <!-- Display Expense List (filtered by user AND date within this component) -->
-      <div v-if="filteredParentExpenseList.length > 0">
-        <h2 class="subtitle">지출</h2>
-        <ul>
-          <li
-            v-for="item in filteredParentExpenseList"
-            :key="item.id"
-            class="expense-item"
-          >
-            {{ item.description }}
-            <span class="amount minus"
-              >- {{ item.amount.toLocaleString() }}원</span
+        <!-- Display Expense List (filtered by user AND date within this component) -->
+        <div v-if="filteredParentExpenseList.length > 0">
+          <h2 class="subtitle">지출</h2>
+          <ul>
+            <li
+              v-for="item in filteredParentExpenseList"
+              :key="item.id"
+              class="expense-item"
             >
-            <!-- Optionally show date if needed for verification -->
-            <!-- <span class="text-xs text-gray-500 block">{{ item.date }}</span> -->
-          </li>
-        </ul>
-      </div>
+              {{ item.description }}
+              <span class="amount minus"
+                >- {{ item.amount.toLocaleString() }}원</span
+              >
+              <!-- Optionally show date if needed for verification -->
+              <!-- <span class="text-xs text-gray-500 block">{{ item.date }}</span> -->
+            </li>
+          </ul>
+        </div>
 
-      <!-- No Data Message -->
-      <div
-        v-if="
-          !filteredParentIncomeList.length && !filteredParentExpenseList.length
-        "
-      >
-        <p>해당 날짜에는 내역이 없습니다.</p>
+        <!-- No Data Message -->
+        <div
+          v-if="
+            !filteredParentIncomeList.length &&
+            !filteredParentExpenseList.length
+          "
+        >
+          <p>해당 날짜에는 내역이 없습니다.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -232,8 +233,12 @@ const getIcon = (category) => {
   max-width: 600px;
   text-align: center;
 
-  height: 800px;
-  overflow-y: auto;
+  height: 630px;
+  max-height: 770px;
+  /* 스크롤 제거 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .income-item,
@@ -283,7 +288,7 @@ hr {
 }
 
 .subtitle {
-  margin-bottom: 12px;
+  margin-bottom: 25px;
   /* 제목 아래 간격 */
   margin-top: 24px;
   /* 위쪽 간격 추가 (필요시) */
@@ -311,5 +316,12 @@ ul {
 .minus {
   color: #c62828;
   /* 진한 빨강 */
+}
+
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(800px - 64px);
+  padding-right: 4px; /* 스크롤바 영역 여유 */
 }
 </style>

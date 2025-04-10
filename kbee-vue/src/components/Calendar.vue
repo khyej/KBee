@@ -1,6 +1,13 @@
 <template>
+<<<<<<< HEAD
   <div class="h-screen flex overflow-hidden">
     <div class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7" style="height: 100vh">
+=======
+  <div class="flex overflow-hidden max-h-[85vh]">
+    <div
+      class="flex flex-col items-center justify-center bg-amber-100 p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]"
+    >
+>>>>>>> 54aa96eef8dee840f2fc100cde76dc335c6fa22d
       <!-- Existing Month/Year Header -->
       <div class="flex items-center justify-between mb-4 w-full">
         <h5 class="text-xl leading-8 font-semibold text-gray-900 mr-4">
@@ -18,12 +25,18 @@
       </div>
 
       <!-- Display User ID -->
-      <p class="text-sm mb-1 text-gray-600 w-full px-2">
+      <!-- <p class="text-sm mb-1 text-gray-600 w-full px-2">
         User ID: {{ userStore.user?.id || 'Loading...' }}
-      </p>
+      </p> -->
 
       <!-- Displayed Dates -->
+<<<<<<< HEAD
       <h1 class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2">
+=======
+      <!-- <h1
+        class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2"
+      >
+>>>>>>> 54aa96eef8dee840f2fc100cde76dc335c6fa22d
         Displayed Dates:
         {{
           calendarStore.calendarDays
@@ -34,7 +47,7 @@
             })
             .join(', ')
         }}
-      </h1>
+      </h1> -->
 
       <div class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container">
         <!-- Days of the Week Header -->
