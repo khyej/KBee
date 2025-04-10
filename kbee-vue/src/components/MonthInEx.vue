@@ -43,8 +43,8 @@ const totalExpense = computed(() =>
 
 <style scoped>
 .summary-wrapper {
-  margin-left: 24px; /* 달력과의 거리 */
-  margin-top: 16px;
+  margin-left: 40px; /* 달력과의 거리 */
+  width: 83%;
 }
 
 .summary-card {
