@@ -27,29 +27,8 @@
         </div>
       </div>
 
-      <!-- Display User ID -->
-      <!-- <p class="text-sm mb-1 text-gray-600 w-full px-2">
-        User ID: {{ userStore.user?.id || 'Loading...' }}
-      </p> -->
-
-      <!-- Displayed Dates -->
-      <!-- <h1
-        class="text-sm mb-2 text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap w-full px-2"
-      >
-        Displayed Dates:
-        {{
-          calendarStore.calendarDays
-            .map((date) => {
-              const month = String(date.monthIndex + 1).padStart(2, '0');
-              const day = String(date.day).padStart(2, '0');
-              return `${date.year}-${month}-${day}`;
-            })
-            .join(', ')
-        }}
-      </h1> -->
-
       <div
-        class="w-full max-w-screen mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
+        class="w-full max-w-screen min-w-sm mx-auto shadow-blue-950 rounded-lg bg-white calendar-grid-container"
       >
         <!-- Days of the Week Header -->
         <div class="grid grid-cols-7 text-center font-semibold text-gray-600">
@@ -59,10 +38,11 @@
         </div>
         <!-- Calendar Grid -->
         <div class="grid grid-cols-7 divide-gray-200">
+          <!-- <div class="flex divide-gray-200"> -->
           <button
             v-for="date in calendarStore.calendarDays"
             :key="date.id"
-            class="p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none"
+            class="p-3.5 bg-gray-50 xl:aspect-auto lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100 focus:outline-none divide-y divide-gray-200"
             :class="{
               'text-gray-400': date.outside,
               'bg-indigo-100': date.isToday,
@@ -76,16 +56,16 @@
             >
               {{ date.day }}
             </span>
-            <div class="flex flex-col text-xs">
+            <div class="flex flex-col text-xs mt-1">
               <span
                 v-if="getDailyTotals(date).income > 0"
-                class="text-green-600"
+                class="text-green-600 bg-green-100 rounded-2xl"
               >
                 +{{ getDailyTotals(date).income.toLocaleString() }}
               </span>
               <span
                 v-if="getDailyTotals(date).expense > 0"
-                class="text-red-600"
+                class="text-red-600 bg-red-100 rounded-2xl"
               >
                 -{{ getDailyTotals(date).expense.toLocaleString() }}
               </span>
@@ -114,11 +94,9 @@ import { ref } from 'vue';
 import SecondScreen from './SecondScreen.vue';
 import { useCalendarStore } from '../stores/CalendarStore'; // Import the new store
 import MonthInEx from './MonthInEx.vue';
-import { useUserStore } from '../stores/user';
 import { useTransactionStore } from '../stores/TransactionStore';
 
 const calendarStore = useCalendarStore();
-const userStore = useUserStore();
 const transactionStore = useTransactionStore();
 const showSecondScreen = ref(true);
 

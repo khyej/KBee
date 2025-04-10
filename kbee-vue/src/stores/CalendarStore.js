@@ -100,7 +100,7 @@ export const useCalendarStore = defineStore('calendar', () => {
   );
 
   const nextMonthDays = computed(() =>
-    Array.from({ length: 42 - totalDays.value }, (_, i) => {
+    Array.from({ length: 35 - totalDays.value }, (_, i) => {
       const day = i + 1;
       let nextMonth = month.value + 1;
       let nextYear = year.value;
