@@ -51,7 +51,6 @@ const totalExpense = computed(() =>
   padding: 16px;
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 8px;
