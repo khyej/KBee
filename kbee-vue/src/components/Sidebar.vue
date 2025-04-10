@@ -29,8 +29,6 @@ const userStore = useUserStore();
         @click="router.push('/mypage')"
       />
       <p class="nickname">{{ userStore.user.nickname }}</p>
-      <p>{{ userStore.isLoggedIn }}</p>
-      <p>{{ userStore }}</p>
       <!-- <p>{{ userStore.fetchUser }}</p> -->
     </div>
   </aside>

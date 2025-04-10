@@ -1,7 +1,5 @@
 <template>
   <div class="flex overflow-hidden max-h-[85vh]">
-    <h1>{{ userStore.isLoggedIn }}</h1>
-    <h1>{{ userStore }}</h1>
     <div
       class="flex flex-col items-center justify-center bg-white p-4 w-5/7 rounded-2xl overflow-hidden max-h-[85vh]"
     >
