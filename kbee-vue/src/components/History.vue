@@ -1,110 +1,119 @@
 <template>
-    <div class="subBox">
+    <div class="subBox" :class="{ 'has-subDiv-2': showDetailModal }">
         <div class="subDiv-1">
             <!-- 날짜 드롭다운 -->
             <div class="subDiv-header">
-                <div class="dropdown-container">
-                    <div
-                        class="dropdown"
-                        @click="toggleDropdown('year')"
-                        :class="['dropdown', isOpen.year ? 'open' : '']"
-                    >
-                        <div class="dropdown-toggle">{{ selected.year }}</div>
-                        <ul class="dropdown-menu">
-                            <li
-                                v-for="year in years"
-                                :key="year"
-                                @click.stop="selectOption('year', year)"
-                            >
-                                {{ year }}
-                            </li>
-                        </ul>
-                    </div>
-                    <div
-                        class="dropdown"
-                        @click="toggleDropdown('month')"
-                        :class="{ open: isOpen.month }"
-                    >
-                        <div class="dropdown-toggle">{{ selected.month }}</div>
-                        <ul class="dropdown-menu">
-                            <li
-                                v-for="month in months"
-                                :key="month"
-                                @click.stop="selectOption('month', month)"
-                            >
-                                {{ month }}
-                            </li>
-                        </ul>
+                <div class="left">
+                    <div class="dropdown-container">
+                        <div
+                            class="dropdown"
+                            @click="toggleDropdown('year')"
+                            :class="['dropdown', isOpen.year ? 'open' : '']"
+                        >
+                            <div class="dropdown-toggle">
+                                {{ selected.year }}
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li
+                                    v-for="year in years"
+                                    :key="year"
+                                    @click.stop="selectOption('year', year)"
+                                >
+                                    {{ year }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="dropdown"
+                            @click="toggleDropdown('month')"
+                            :class="{ open: isOpen.month }"
+                        >
+                            <div class="dropdown-toggle">
+                                {{ selected.month }}
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li
+                                    v-for="month in months"
+                                    :key="month"
+                                    @click.stop="selectOption('month', month)"
+                                >
+                                    {{ month }}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-
-                <!-- 필터 영역 -->
-                <div class="dropdown-container">
-                    <!-- 타입 드롭다운 -->
-                    <!-- 타입 필터 -->
-                    <div
-                        class="dropdown"
-                        @click="toggleFilterDropdown('type')"
-                        :class="{ open: isFilterDropdownOpen.type }"
-                    >
-                        <div class="dropdown-toggle">
-                            {{
-                                filterDropdownLabels[selectedFilters.type] ||
-                                '전체'
-                            }}
+                <div class="right">
+                    <div class="dropdown-container">
+                        <div
+                            class="dropdown"
+                            @click="toggleFilterDropdown('type')"
+                            :class="{ open: isFilterDropdownOpen.type }"
+                        >
+                            <div class="dropdown-toggle">
+                                {{
+                                    filterDropdownLabels[
+                                        selectedFilters.type
+                                    ] || '전체'
+                                }}
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li
+                                    @click.stop="
+                                        selectFilterOption('type', 'all')
+                                    "
+                                >
+                                    전체
+                                </li>
+                                <li
+                                    @click.stop="
+                                        selectFilterOption('type', 'income')
+                                    "
+                                >
+                                    수입
+                                </li>
+                                <li
+                                    @click.stop="
+                                        selectFilterOption('type', 'expense')
+                                    "
+                                >
+                                    지출
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="dropdown-menu">
-                            <li @click.stop="selectFilterOption('type', 'all')">
-                                전체
-                            </li>
-                            <li
-                                @click.stop="
-                                    selectFilterOption('type', 'income')
-                                "
-                            >
-                                수입
-                            </li>
-                            <li
-                                @click.stop="
-                                    selectFilterOption('type', 'expense')
-                                "
-                            >
-                                지출
-                            </li>
-                        </ul>
-                    </div>
 
-                    <!-- 카테고리 필터 -->
-                    <div
-                        class="dropdown"
-                        @click="toggleFilterDropdown('category')"
-                        :class="{ open: isFilterDropdownOpen.category }"
-                    >
-                        <div class="dropdown-toggle">
-                            {{
-                                selectedFilters.category === 'all'
-                                    ? '카테고리'
-                                    : selectedFilters.category
-                            }}
+                        <!-- 카테고리 필터 -->
+                        <div
+                            class="dropdown"
+                            @click="toggleFilterDropdown('category')"
+                            :class="{ open: isFilterDropdownOpen.category }"
+                        >
+                            <div class="dropdown-toggle">
+                                {{
+                                    selectedFilters.category === 'all'
+                                        ? '카테고리'
+                                        : selectedFilters.category
+                                }}
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li
+                                    @click.stop="
+                                        selectFilterOption('category', 'all')
+                                    "
+                                >
+                                    카테고리
+                                </li>
+                                <li
+                                    v-for="cat in categoryOptions"
+                                    :key="cat"
+                                    @click.stop="
+                                        selectFilterOption('category', cat)
+                                    "
+                                >
+                                    {{ cat }}
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="dropdown-menu">
-                            <li
-                                @click.stop="
-                                    selectFilterOption('category', 'all')
-                                "
-                            >
-                                카테고리
-                            </li>
-                            <li
-                                v-for="cat in categoryOptions"
-                                :key="cat"
-                                @click.stop="
-                                    selectFilterOption('category', cat)
-                                "
-                            >
-                                {{ cat }}
-                            </li>
-                        </ul>
                     </div>
                     <!-- 키워드 검색 입력 -->
                     <input
@@ -115,11 +124,12 @@
                         @input="onInput"
                         placeholder="내용 검색"
                     />
-                </div>
 
-                <button @click="showAddModal = true" class="addButton">
-                    내역 추가
-                </button>
+                    <!-- 내역 추가 버튼 -->
+                    <button @click="showAddModal = true" class="addButton">
+                        내역 추가
+                    </button>
+                </div>
             </div>
             <!-- 테이블 영역 -->
 
@@ -181,9 +191,9 @@
                 </div>
             </div>
         </div>
-        <div class="subDiv-2" v-if="showDetailModal">
+        <div class="subDiv-2">
             <!-- 상세 보기 -->
-            <div class="modal2">
+            <div class="modal2" v-if="showDetailModal">
                 <div class="modal2-overlay" @click="closeModal"></div>
                 <div class="modal2-content">
                     <template v-if="!isEditing">
@@ -218,7 +228,7 @@
                             <div class="form-row">
                                 <div class="form-title">금액</div>
                                 <div class="form-data">
-                                    {{ selectedItem.amount }}
+                                    {{ selectedItem.amount.toLocaleString() }}원
                                 </div>
                             </div>
                         </div>
@@ -725,6 +735,7 @@ watch(
 /* subBox */
 .subBox {
     width: 100%;
+    min-width: 400px;
     height: calc(100vh - 90px);
     display: flex;
     flex-direction: row;
@@ -734,7 +745,7 @@ watch(
 .subDiv-1 {
     flex-grow: 1;
     height: 100%;
-    min-width: 800px;
+    min-width: 560px;
     display: flex;
     flex-direction: column;
     transition: width 0.3s ease;
@@ -761,6 +772,19 @@ watch(
     padding: 20px;
 }
 
+.subDiv-header .right {
+    display: flex;
+    /* width: 600px; */
+}
+
+.subDiv-header .right input {
+    border-top: 1px solid rgb(255, 188, 0);
+    border-right: 1px solid rgb(255, 188, 0);
+    border-bottom: 1px solid rgb(255, 188, 0);
+    width: 200px;
+    padding: 0 10px;
+}
+
 .subDiv-body {
     padding: 20px;
     background-color: white;
@@ -773,15 +797,15 @@ watch(
     border: 1px solid rgb(255, 188, 0);
     width: fit-content;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     height: 40px;
 }
 
-.dropdown-container input {
-    border-left: 1px solid rgb(255, 188, 0);
+/* .dropdown-container input {
+    border: 1px solid rgb(255, 188, 0);
     width: 200px;
     padding: 0 10px;
-}
+} */
 
 .dropdown-container input:focus {
     outline: none;
@@ -949,9 +973,11 @@ td:nth-child(2) {
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    max-width: 500px;
+
     width: 90%;
-    max-height: 90vh;
+    max-width: 350px;
+    max-height: 500px;
+
     overflow-y: auto;
 }
 
@@ -967,7 +993,6 @@ td:nth-child(2) {
     background: white;
     height: 100%;
     padding: 1rem;
-    border: 1px solid black;
 
     display: flex;
     flex-direction: column;
@@ -1072,9 +1097,21 @@ td:nth-child(2) {
     background-color: rgb(255, 204, 0);
     color: white;
     font-weight: bold;
+    margin-left: 10px;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1110px) {
+    .subBox {
+        flex-direction: column;
+        /* height: 100%; */
+    }
+
+    .subDiv-header {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        gap: 10px;
+    }
     .dropdown-container {
         margin: 0;
     }
@@ -1082,11 +1119,62 @@ td:nth-child(2) {
     .dropdown-toggle {
         height: 100%;
     }
-    .subDiv-header {
+
+    .modal2 {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .modal2-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .modal2-content {
+        position: relative;
+        z-index: 2;
+        background: white;
+        width: 90%;
+        max-width: 350px;
+        max-height: 500px;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+}
+
+@media (max-width: 1350px) {
+    /* .subDiv-header {
         flex-direction: column;
-        align-items: flex-start; /* 좌측 정렬로 변경 */
-        height: auto; /* 높이 자동으로 */
-        gap: 10px; /* 요소 사이 간격 주기 */
+        align-items: flex-start;
+        height: auto;
+        gap: 10px;
+    } */
+
+    .dropdown-container {
+        margin: 0;
+    }
+
+    .dropdown-toggle {
+        height: 100%;
+    }
+    .subBox.has-subDiv-2 .subDiv-1 .subDiv-header {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        gap: 10px;
     }
 }
 </style>
