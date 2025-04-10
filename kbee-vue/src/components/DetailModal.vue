@@ -1,10 +1,6 @@
 <template>
     <div class="modal2" :class="customClass" v-if="visible">
-        <div
-            class="modal2-overlay"
-            @click="$emit('close')"
-            :class="customClass"
-        ></div>
+        <div class="modal2-overlay" @click="$emit('close')" :class="customClass"></div>
         <div class="modal2-content" :class="customClass">
             <template v-if="!isEditing">
                 <div class="form-body">
@@ -14,11 +10,7 @@
                     <div class="form-row">
                         <div class="form-title">분류</div>
                         <div class="form-data">
-                            {{
-                                selectedItem.type === 'expense'
-                                    ? '지출'
-                                    : '수입'
-                            }}
+                            {{ selectedItem.type === 'expense' ? '지출' : '수입' }}
                         </div>
                     </div>
                     <div class="form-row">
@@ -33,9 +25,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-title">금액</div>
-                        <div class="form-data">
-                            {{ selectedItem.amount.toLocaleString() }}원
-                        </div>
+                        <div class="form-data">{{ selectedItem.amount.toLocaleString() }}원</div>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -56,11 +46,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-title">날짜</div>
-                        <input
-                            v-model="form.date"
-                            type="date"
-                            class="form-data"
-                        />
+                        <input v-model="form.date" type="date" class="form-data" />
                     </div>
                     <div class="form-row">
                         <div class="form-title">분류</div>
@@ -86,27 +72,17 @@
                     </div>
                     <div class="form-row">
                         <div class="form-title">내용</div>
-                        <input
-                            v-model="form.description"
-                            type="text"
-                            class="form-data"
-                        />
+                        <input v-model="form.description" type="text" class="form-data" />
                     </div>
                     <div class="form-row">
                         <div class="form-title">금액</div>
-                        <input
-                            v-model.number="form.amount"
-                            type="number"
-                            class="form-data"
-                        />
+                        <input v-model.number="form.amount" type="number" class="form-data" />
                     </div>
                 </div>
                 <div class="form-actions">
                     <div class="left"></div>
                     <div class="right">
-                        <button @click="$emit('save', { ...form })">
-                            저장
-                        </button>
+                        <button @click="$emit('save', { ...form })">저장</button>
                         <button @click="isEditing = false">취소</button>
                     </div>
                 </div>
