@@ -219,7 +219,6 @@ const getIcon = (category) => {
   justify-content: center;
   align-items: flex-start;
   padding: 20px 40px 40px;
-  background-color: #f4f4f4;
   /* 전체 배경 */
   min-height: 100vh;
 }
@@ -228,7 +227,6 @@ const getIcon = (category) => {
   background-color: white;
   padding: 32px;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 600px;
   text-align: center;
