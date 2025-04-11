@@ -12,7 +12,7 @@ const props = defineProps({
   },
   duration: {
     type: Number,
-    default: 1000, // 애니메이션 시간(ms)
+    default: 1000, // 애니메이션 시간
   },
 });
 
