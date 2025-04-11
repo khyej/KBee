@@ -175,17 +175,6 @@
 
         <!-- 상세 보기 모달 -->
         <div class="subDiv-2" v-if="showDetailModal">
-            <!-- <DetailModal
-                class="body"
-                :visible="showDetailModal"
-                :selected-item="selectedItem"
-                :income-categories="incomeCategories"
-                :expense-categories="expenseCategories"
-                customClass="history"
-                @close="closeModal"
-                @delete="deleteItem"
-                @save="saveEdit"
-            /> -->
             <DetailModal
                 class="body"
                 :visible="showDetailModal"
@@ -207,15 +196,6 @@
             @close="showAddModal = false"
             @submitted="handleItemSubmitted"
         />
-        <!-- <AddModal
-            :visible="showAddModal"
-            :incomes="incomes"
-            :expenses="expenses"
-            :income-categories="incomeCategories"
-            :expense-categories="expenseCategories"
-            @close="showAddModal = false"
-            @submitted="handleItemSubmitted"
-        /> -->
     </div>
 </template>
 
@@ -563,7 +543,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
 
 <style scoped>
 /* ============================== */
-/* ✅ 메인 구조: subBox와 영역 분할 */
+/*  메인 구조: subBox와 영역 분할 */
 /* ============================== */
 
 .subBox {
@@ -612,7 +592,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
 }
 
 /* ============================== */
-/* ✅ 상단 필터 영역 */
+/*   상단 필터 영역 */
 /* ============================== */
 .subDiv-header {
     display: flex;
@@ -637,7 +617,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
 }
 
 /* ============================== */
-/* ✅ 메인 테이블 영역 */
+/*    메인 테이블 영역 */
 /* ============================== */
 .subDiv-body {
     padding: 20px;
@@ -647,7 +627,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
 }
 
 /* ============================== */
-/* ✅ 드롭다운 공통 스타일 */
+/*    드롭다운 공통 스타일 */
 /* ============================== */
 .dropdown-container {
     display: flex;
@@ -730,7 +710,7 @@ watch(() => [selectedFilters.value.type, selectedFilters.value.category], filter
 }
 
 /* ============================== */
-/* ✅ 테이블 스타일 */
+/*   테이블 스타일 */
 /* ============================== */
 .results {
     flex-grow: 1;
@@ -801,7 +781,7 @@ td:nth-child(2) {
 }
 
 /* ============================== */
-/* ✅ 반응형 (모바일 대응) */
+/*   반응형  */
 /* ============================== */
 @media (max-width: 1110px) {
     .subDiv-header {

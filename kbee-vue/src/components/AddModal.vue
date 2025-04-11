@@ -59,7 +59,7 @@
 <script setup>
 import { reactive, ref, watch } from 'vue';
 import axios from 'axios';
-import { useUserStore } from '@/stores/user'; // userStore를 import
+import { useUserStore } from '@/stores/user';
 
 const props = defineProps({
     visible: Boolean,
@@ -81,10 +81,8 @@ const form = reactive({
     description: '',
     amount: '',
     payment_method: '', // 지출 항목에만 추가
-    user_id: '', // user_id 추가
+    user_id: '',
 });
-
-// const mode = ref('income'); // 기본값은 'income'
 
 // userStore에서 user_id를 가져오기
 const userStore = useUserStore();
@@ -118,26 +116,19 @@ const handleSubmit = async () => {
     }
 };
 
-// selectedItem이 변경될 때마다 form 초기화
+// selectedFormat이 변경될 때마다 form 초기화
 watch(
     () => props.selectedFormat,
     (newVal) => {
         if (newVal) {
             form.date = newVal;
-            // form.type = newVal.type;
-            // form.category = newVal.category;
-            // form.description = newVal.description;
-            // form.amount = newVal.amount;
-            // form.payment_method = newVal.payment_method || '';
         }
-        console.log('ee', form.date);
     },
     { immediate: true }
 );
 </script>
 
 <style scoped>
-/* 필요 시 스타일 추가 */
 .form-row {
     display: flex;
     flex-direction: row;
