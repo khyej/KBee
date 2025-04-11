@@ -43,17 +43,26 @@ const totalExpense = computed(() =>
 
 <style scoped>
 .summary-wrapper {
-  margin-left: 40px; /* 달력과의 거리 */
-  width: 83%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px 40px;
+  /* min-height: 100vh; */
+  width: 90%;
 }
 
 .summary-card {
-  padding: 16px;
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: white;
+  padding: 32px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+
+  height: 150px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 /* 반응형 대응 (선택사항) */
