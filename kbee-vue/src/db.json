@@ -772,22 +772,6 @@
       "category": "급여",
       "description": "77",
       "date": "2025-05-08"
-    },
-    {
-      "id": "355",
-      "user_id": "2",
-      "amount": 110,
-      "category": "이자",
-      "description": "110",
-      "date": null
-    },
-    {
-      "id": "356",
-      "user_id": "2",
-      "amount": 21,
-      "category": "상여",
-      "description": "21",
-      "date": null
     }
   ],
   "expenses": [
