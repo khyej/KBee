@@ -63,17 +63,14 @@ const noLayoutPages = ['/', '/login', '/signup'];
   /* 사이드바 너비 */
   width: calc(100% - 160px);
   height: calc(100vh - 50px);
-  /* overflow-y: auto; */
-  overflow: hidden;
+  overflow-y: auto;
   padding: 20px;
   background-color: #f0f4f9;
 }
 
 .fullPage {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background-color: white !important;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
 }
 </style>
