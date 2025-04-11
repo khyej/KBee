@@ -19,7 +19,7 @@
       "phone": "010-1234-5678",
       "budget": "2000000",
       "profile": "2",
-      "profileImage": "/profile4.png"
+      "profileImage": "/profile3.png"
     },
     {
       "id": "3",
@@ -756,6 +756,38 @@
       "category": "프리랜서",
       "description": "프리랜서 수익",
       "date": "2025-03-27"
+    },
+    {
+      "id": "353",
+      "user_id": "2",
+      "amount": 12,
+      "category": "급여",
+      "description": "aa",
+      "date": "2025-05-02"
+    },
+    {
+      "id": "354",
+      "user_id": "2",
+      "amount": 77,
+      "category": "급여",
+      "description": "77",
+      "date": "2025-05-08"
+    },
+    {
+      "id": "355",
+      "user_id": "2",
+      "amount": 110,
+      "category": "이자",
+      "description": "110",
+      "date": null
+    },
+    {
+      "id": "356",
+      "user_id": "2",
+      "amount": 21,
+      "category": "상여",
+      "description": "21",
+      "date": null
     }
   ],
   "expenses": [
