@@ -19,7 +19,7 @@
       "phone": "010-1234-5678",
       "budget": "2000000",
       "profile": "2",
-      "profileImage": "/profile3.png"
+      "profileImage": "/profile4.png"
     },
     {
       "id": "3",
@@ -772,6 +772,96 @@
       "category": "급여",
       "description": "77",
       "date": "2025-05-08"
+    },
+    {
+      "id": "ed99",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "qq",
+      "amount": 123,
+      "user_id": "2"
+    },
+    {
+      "id": "46fe",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "d10b",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "4e5f",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "6a74",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "00d5",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "a136",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "e931",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "70cc",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
+    },
+    {
+      "id": "6d00",
+      "date": "2025-04-14",
+      "type": "income",
+      "category": "급여",
+      "description": "1324",
+      "amount": 1341334143211,
+      "user_id": "2"
     }
   ],
   "expenses": [
@@ -3942,6 +4032,46 @@
       "payment_method": "이체",
       "description": "버스",
       "date": "2025-03-28"
+    },
+    {
+      "id": "53f2",
+      "date": "2025-04-14",
+      "type": "expense",
+      "category": "식비",
+      "description": "qq",
+      "amount": "",
+      "user_id": "2",
+      "payment_method": "qq"
+    },
+    {
+      "id": "dcb0",
+      "date": "2025-04-14",
+      "type": "expense",
+      "category": "식비",
+      "description": "qq",
+      "amount": "",
+      "user_id": "2",
+      "payment_method": "qq"
+    },
+    {
+      "id": "4757",
+      "date": "2025-04-14",
+      "type": "expense",
+      "category": "식비",
+      "description": "qq",
+      "amount": "",
+      "user_id": "2",
+      "payment_method": "qq"
+    },
+    {
+      "id": "865a",
+      "date": "2025-04-14",
+      "type": "expense",
+      "category": "식비",
+      "description": "qq",
+      "amount": 123,
+      "user_id": "2",
+      "payment_method": "qq"
     }
   ],
   "incomeCategory": [
