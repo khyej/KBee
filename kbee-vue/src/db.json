@@ -879,6 +879,42 @@
       "description": "1231324",
       "amount": 132414,
       "user_id": "4"
+    },
+    {
+      "id": "9d5a",
+      "date": "2025-04-15",
+      "type": "income",
+      "category": "이자",
+      "description": "1234",
+      "amount": 1234123,
+      "user_id": "4"
+    },
+    {
+      "id": "688d",
+      "date": "2025-04-16",
+      "type": "income",
+      "category": "이자",
+      "description": "1234111",
+      "amount": 1234123,
+      "user_id": "4"
+    },
+    {
+      "id": "2046",
+      "date": "2025-04-09",
+      "type": "income",
+      "category": "이자",
+      "description": "1234111",
+      "amount": 1234123,
+      "user_id": "4"
+    },
+    {
+      "id": "8f44",
+      "date": "2025-04-30",
+      "type": "income",
+      "category": "이자",
+      "description": "1234111",
+      "amount": 1234123,
+      "user_id": "4"
     }
   ],
   "expenses": [
@@ -4129,6 +4165,16 @@
       "amount": 132414,
       "user_id": "4",
       "payment_method": "1324123"
+    },
+    {
+      "id": "be5f",
+      "date": "2025-04-15",
+      "type": "expense",
+      "category": "교통",
+      "description": "",
+      "amount": "",
+      "user_id": "4",
+      "payment_method": ""
     }
   ],
   "incomeCategory": [

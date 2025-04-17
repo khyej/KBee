@@ -127,6 +127,22 @@ watch(
     },
     { immediate: true }
 );
+
+// visible이 true로 바뀔 때 form 전체 초기화
+watch(
+    () => props.visible,
+    (val) => {
+        if (val) {
+            form.date = props.selectedFormat;
+            form.type = 'income';
+            form.category = '';
+            form.description = '';
+            form.amount = '';
+            form.payment_method = '';
+            form.user_id = userStore.user?.id;
+        }
+    }
+);
 </script>
 
 <style scoped>
