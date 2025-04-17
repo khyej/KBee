@@ -19,11 +19,11 @@
         />
 
         <!-- Display Income List (filtered by user AND date within this component) -->
-        <div v-if="filteredParentIncomeList.length > 0">
+        <div v-if="filteredIncomeList.length > 0">
           <h2 class="subtitle">수입</h2>
           <ul>
             <li
-              v-for="item in filteredParentIncomeList"
+              v-for="item in filteredIncomeList"
               :key="item.id"
               @click="openDetailModal(item)"
               style="cursor: pointer"
@@ -40,11 +40,11 @@
         </div>
 
         <!-- Display Expense List (filtered by user AND date within this component) -->
-        <div v-if="filteredParentExpenseList.length > 0">
+        <div v-if="filteredExpenseList.length > 0">
           <h2 class="subtitle">지출</h2>
           <ul>
             <li
-              v-for="item in filteredParentExpenseList"
+              v-for="item in filteredExpenseList"
               :key="item.id"
               @click="openDetailModal(item)"
               style="cursor: pointer"
@@ -63,8 +63,8 @@
         <!-- No Data Message -->
         <div
           v-if="
-            !filteredParentIncomeList.length &&
-            !filteredParentExpenseList.length
+            !filteredIncomeList.length &&
+            !filteredExpenseList.length
           "
         >
           <p>해당 날짜에는 내역이 없습니다.</p>
@@ -136,10 +136,6 @@ const props = defineProps({
   },
 });
 
-// 자식 컴포넌트로부터 받은 원본 수입/지출 내역 저장
-const parentIncomeList = ref([]);
-const parentExpenseList = ref([]);
-
 // 날짜 문자열을 'YYYY-MM-DD' 형식으로 변환
 const monthNames = [
   '1월',
@@ -201,22 +197,19 @@ const handleExpenseLoaded = (expenseData) => {
 };
 
 // 로그인된 유저 + 해당 날짜 기준 수입 필터링
-const filteredParentIncomeList = computed(() => {
+const filteredIncomeList = computed(() => {
   const targetDate = targetDateYYYYMMDD.value;
   if (!userStore.user?.id || !targetDate) return [];
-  return parentIncomeList.value.filter(
+  return transactionStore.incomeList.filter(
     (item) => item.user_id === userStore.user.id && item.date === targetDate
   );
 });
 
 // 로그인된 유저 + 해당 날짜 기준 지출 필터링
-const filteredParentExpenseList = computed(() => {
-  const targetDate = targetDateYYYYMMDD.value; // Get "YYYY-MM-DD" format
-  if (!userStore.user?.id || !targetDate) {
-    return []; // Return empty if no user or no valid target date
-  }
-  // Filter the list stored locally by user_id AND the specific date
-  return parentExpenseList.value.filter(
+const filteredExpenseList = computed(() => {
+  const targetDate = targetDateYYYYMMDD.value;
+  if (!userStore.user?.id || !targetDate) return [];
+  return transactionStore.expenseList.filter(
     (item) => item.user_id === userStore.user.id && item.date === targetDate
   );
 });
@@ -320,7 +313,6 @@ const saveEdit = async (editedItem) => {
   const originalType = selectedItem.value.type;
   const editedType = editedItem.type;
   const originalId = selectedItem.value.id;
-
   const newItem = {
     user_id: userStore.user?.id,
     amount: editedItem.amount,
@@ -328,50 +320,34 @@ const saveEdit = async (editedItem) => {
     description: editedItem.description,
     date: editedItem.date,
   };
-  // type이 'expense'일 경우, payment_method를 추가
   if (editedType === 'expense') {
     newItem.payment_method = editedItem.payment_method;
   }
-
   try {
     if (originalType === editedType) {
-      // 같은 테이블에서 수정
       newItem.id = originalId;
       await axios.put(`/api/${editedType}s/${originalId}`, newItem);
     } else {
-      // 테이블이 다르면 삭제 후 새로 생성
       await axios.delete(`/api/${originalType}s/${originalId}`);
-
-      const res = await axios.post(`/api/${editedType}s`, newItem);
-
-      if (editedType === 'income') {
-        incomes.value.push({ ...res.data, type: 'income' });
-      } else {
-        expenses.value.push({ ...res.data, type: 'expense' });
-      }
+      await axios.post(`/api/${editedType}s`, newItem);
     }
-
-    await fetchData(); // 항목 갱신
-
-    closeModal(); // 모달 닫기
+    await transactionStore.fetchIncome(props.selectedDate);
+    await transactionStore.fetchExpense(props.selectedDate);
+    closeModal();
   } catch (error) {
+    alert('수정 중 오류 발생: ' + error.message);
     console.error('수정 중 오류 발생:', error);
   }
 };
-// 항목 삭제
 const deleteItem = async () => {
   try {
     const url = `/api/${detailForm.type}s/${detailForm.id}`;
     await axios.delete(url);
-
-    const targetList =
-      detailForm.type === 'income' ? incomes.value : expenses.value;
-    const index = targetList.findIndex((i) => i.id === detailForm.id);
-    if (index !== -1) targetList.splice(index, 1);
-
+    await transactionStore.fetchIncome(props.selectedDate);
+    await transactionStore.fetchExpense(props.selectedDate);
     closeModal();
-    filterAndCombineData();
   } catch (err) {
+    alert('삭제 오류: ' + err.message);
     console.error('삭제 오류', err);
   }
 };
@@ -379,12 +355,6 @@ const deleteItem = async () => {
 const showAddModal = ref(false);
 
 const handleItemSubmitted = async (item) => {
-  if (item.type === 'income') {
-    incomes.value.push(item);
-  } else {
-    expenses.value.push(item);
-  }
-  // 트랜잭션 새로고침 (선택된 날짜 기준)
   await transactionStore.fetchIncome(props.selectedDate);
   await transactionStore.fetchExpense(props.selectedDate);
 };
@@ -392,7 +362,8 @@ const handleItemSubmitted = async (item) => {
 onMounted(async () => {
   userStore.restoreUser();
   await userStore.fetchUser();
-  await fetchData();
+  await transactionStore.fetchIncome(props.selectedDate);
+  await transactionStore.fetchExpense(props.selectedDate);
   await fetchCategories();
 });
 </script>
