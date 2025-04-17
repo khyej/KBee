@@ -122,9 +122,11 @@ import Expense from './Expense.vue';
 import { useUserStore } from '../stores/user';
 import DetailModal from './DetailModal.vue';
 import axios from 'axios';
+import { useTransactionStore } from '../stores/TransactionStore';
 // Removed unused import: import Hiya from './Hiya.vue';
 
 const userStore = useUserStore();
+const transactionStore = useTransactionStore();
 
 // 부모 컴포넌트에서 전달받은 선택된 날짜 (예: '10월 26, 2023')
 const props = defineProps({
@@ -376,13 +378,15 @@ const deleteItem = async () => {
 // 항목 추가 모달
 const showAddModal = ref(false);
 
-const handleItemSubmitted = (item) => {
+const handleItemSubmitted = async (item) => {
   if (item.type === 'income') {
     incomes.value.push(item);
   } else {
     expenses.value.push(item);
   }
-  // filterAndCombineData();
+  // 트랜잭션 새로고침 (선택된 날짜 기준)
+  await transactionStore.fetchIncome(props.selectedDate);
+  await transactionStore.fetchExpense(props.selectedDate);
 };
 
 onMounted(async () => {

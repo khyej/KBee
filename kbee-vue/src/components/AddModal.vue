@@ -110,7 +110,8 @@ const handleSubmit = async () => {
         emit('submitted', response.data);
 
         // 모달 닫기
-        props.visible = false;
+        // props.visible = false;
+        emit(`close`);
     } catch (error) {
         console.error('아이템 추가 실패:', error);
     }

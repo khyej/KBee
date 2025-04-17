@@ -862,6 +862,23 @@
       "description": "1324",
       "amount": 1341334143211,
       "user_id": "2"
+    },
+    {
+      "user_id": "4",
+      "amount": 123412343,
+      "category": "상여",
+      "description": "13241234321",
+      "date": "2025-04-17",
+      "id": "016a"
+    },
+    {
+      "id": "b0d2",
+      "date": "2025-04-18",
+      "type": "income",
+      "category": "상여",
+      "description": "1231324",
+      "amount": 132414,
+      "user_id": "4"
     }
   ],
   "expenses": [
@@ -4072,6 +4089,46 @@
       "amount": 123,
       "user_id": "2",
       "payment_method": "qq"
+    },
+    {
+      "id": "e14d",
+      "date": "2025-04-17",
+      "type": "expense",
+      "category": "문화생활",
+      "description": "1234",
+      "amount": 1234,
+      "user_id": "4",
+      "payment_method": "1234"
+    },
+    {
+      "id": "c690",
+      "date": "2025-04-17",
+      "type": "expense",
+      "category": "카페/디저트",
+      "description": "132413241",
+      "amount": 12431241234,
+      "user_id": "4",
+      "payment_method": "1324132412324"
+    },
+    {
+      "id": "8a0e",
+      "date": "2025-04-17",
+      "type": "expense",
+      "category": "교통",
+      "description": "123",
+      "amount": 132414,
+      "user_id": "4",
+      "payment_method": "1324123"
+    },
+    {
+      "id": "61d0",
+      "date": "2025-04-18",
+      "type": "expense",
+      "category": "식비",
+      "description": "1231324",
+      "amount": 132414,
+      "user_id": "4",
+      "payment_method": "1324123"
     }
   ],
   "incomeCategory": [
